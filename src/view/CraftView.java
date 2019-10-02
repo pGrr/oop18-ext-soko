@@ -1,6 +1,6 @@
 package view;
 
-public interface Craft {
+public interface CraftView {
 	
 	void show();
 

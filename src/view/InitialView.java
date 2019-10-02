@@ -1,6 +1,6 @@
 package view;
 
-public interface Initial {
+public interface InitialView {
 	
 	void show();
 	

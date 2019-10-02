@@ -3,7 +3,7 @@ package view;
 import model.Direction;
 import model.Level;
 
-public interface Play {
+public interface PlayView {
 		
 	void show(Level level, String sequenceName);
 	
