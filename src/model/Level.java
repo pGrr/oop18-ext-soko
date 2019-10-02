@@ -1,6 +1,6 @@
 package model;
 
-public interface Model {
+public interface Level {
 	
 	// initial view
 
@@ -35,17 +35,5 @@ public interface Model {
 	void validateTarget(Position position);
 	
 	boolean areAllTargetValidated();
-			
-	interface Level {
-		
-	}
-		
-	interface Position {
-		
-	}
-	
-	interface Direction {
-		
-	}
-	
+
 }
