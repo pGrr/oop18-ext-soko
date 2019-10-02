@@ -1,29 +1,50 @@
 package view;
 
+import model.Model.Direction;
+import model.Model.Level;
+
 public interface View {
 	
-	void initialView();
+	// initial view
 	
-	void craftLevelView();
+	void showInitialView();
 	
-	void playLevelView();
+	void showSaveSuccessDialog();
 	
-	void saveSucceded();
+	void showSaveFailedDialog();
 	
-	void saveFailed();
+	void showLoadSuccessDialog();
 	
-	void loadSucceded();
+	void showLoadFailedDialog();
 	
-	void loadFailed();
+	void showLevelNotValidDialog();
+	
+	// craft level
+	
+	void showCraftLevelView();
+
+	void showNoInitialPointDialog();
+	
+	void showTooManyInitialPointDialog();
+	
+	void showNoTargetDialog();
+	
+	void showUnequalBoxAndTargetDialog();
+	
+	void showUnForeSeenErrorDialog(String message);
+	
+	// play sequence
 		
-	void noInitialPointError();
+	void showPlayLevelView(Level level, String sequenceName);
 	
-	void tooManyInitialPointError();
+	void moveFree(Direction direction);
 	
-	void noTargetError();
+	void movePushing(Direction direction);
 	
-	void unequalBoxAndTargetError();
+	void impact();
+				
+	void showlevelFinishedDialog();
 	
-	void unForeSeenError(String message);
+	void showSequenceFinishedDialog(boolean success);
 
 }

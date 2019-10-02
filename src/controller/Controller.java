@@ -1,21 +1,28 @@
 package controller;
 
 import java.util.List;
+
+import model.Model.Direction;
 import model.Model.Level;
 
 public interface Controller {
 	
-	void initialView();
+	// initial view
 		
-	void craftLevel();
-		
-	void playSequence();
+	List<String> load(String path);
 	
-	List<Level> loadSequence(String path);
+	void saveLevelSequence(List<String> levelSequence, String path);
 	
-	void saveSequence(List<Level> levelSequence, String path);
+	void startSequence(List<String> levelSequence);	
 	
-	interface Element {
-		
-	}
+	// craft level
+			
+	void saveLevel(Level level);
+	
+	void backToInitialView();
+	
+	// play level
+	
+	void move(Direction direction);
+					
 }
