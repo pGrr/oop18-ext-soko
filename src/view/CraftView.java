@@ -1,8 +1,12 @@
 package view;
 
+import controller.CraftObserver;
+
 public interface CraftView {
 	
 	void show();
+	
+	void setObserver(CraftObserver controller);
 
 	void showNoInitialPointDialog();
 	

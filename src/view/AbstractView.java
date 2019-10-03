@@ -25,13 +25,12 @@ public abstract class AbstractView {
 		this.frame = createFrame(title, heightToScreenSizeRatio, widthToHeightRatio);
 	}
 	
-	
 	public JFrame getFrame() {
 		return this.frame;
 	}
 	
 	protected JFrame createFrame(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
-		JFrame f = new JFrame();
+		JFrame f = new JFrame(title);
 		f.setLocationByPlatform(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setSize(computeFrameDimension(heightToScreenSizeRatio, widthToHeightRatio));
@@ -86,6 +85,10 @@ public abstract class AbstractView {
 		l.setFixedCellHeight(padding);
 		return l;		
 
+	}
+	
+	protected ImageIcon createImageIcon(String path) {
+		return new ImageIcon(ClassLoader.getSystemResource(path));
 	}
 		
 	protected Border createEmptyPaddingBorder(int defaultPadding) {
