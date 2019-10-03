@@ -8,6 +8,8 @@ public interface InitialObserver {
 	
 	void saveLevelSequence(List<String> levelSequence, String path);
 	
-	void startSequence(List<String> levelSequence);	
+	void craftLevel();
+	
+	void play(List<String> levelSequence);	
 	
 }
