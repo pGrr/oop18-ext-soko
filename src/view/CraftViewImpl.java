@@ -7,13 +7,17 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import controller.CraftObserver;
+import model.Level;
 
 public final class CraftViewImpl extends AbstractView implements CraftView {
 	
@@ -42,10 +46,12 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private CraftObserver controller;
 	private final List<JToggleButton> selectionList;
 	private final List<List<JButton>> grid;
+	private final Level level;
 	
-	public CraftViewImpl(int nRows, CraftObserver controller) {
+	public CraftViewImpl(int nRows, CraftObserver controller, Level level) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.setObserver(controller);
+		this.level = level;
 		this.selectionList = toggleButtons();
 		this.grid = this.createGrid(nRows);
 		this.getFrame().add(mainPanel());
@@ -158,7 +164,9 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	
 	private ActionListener gridButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-
+			ImageIcon selectedIcon = CraftViewImpl.this.selectionList.stream()
+					.filter(b -> b.isSelected())
+					.ge;
 		});
 	}
 	
@@ -173,7 +181,9 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	
 	private ActionListener saveButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-
+			JFileChooser fc = new JFileChooser();
+			fc.showSaveDialog(getFrame());
+			controller.saveLevel(level, fc.getSelectedFile().getAbsolutePath());
 		});
 	}
 	
@@ -183,13 +193,13 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	
 	private ActionListener resetButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			
+			this.grid.stream().flatMap(List::stream).forEach(b -> b = new JButton());
 		});
 	}
 	
 	private ActionListener backButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			
+			controller.backToInitialView();
 		});
 	}	
 }
