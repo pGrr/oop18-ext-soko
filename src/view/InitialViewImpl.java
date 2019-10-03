@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -121,14 +120,13 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	}
 	
 	private JPanel levelListPanel() {
-		JPanel p = new JPanel(new GridLayout(2,1));
+		JPanel p = new JPanel(new BorderLayout());
 		JPanel levelListPanel = new JPanel(new BorderLayout());
 		levelListPanel.setBorder(createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
 
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		listModel.addAll(this.levels);
 		JList<String> levelList = new JList<String>(listModel);
-		levelList.setFixedCellHeight(DEFAULT_PADDING);
 		JScrollPane scrollPane = new JScrollPane(levelList); 
 		levelListPanel.add(scrollPane);
 		
@@ -136,17 +134,22 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 		editListPanel.setBorder(createTitledPaddingBorder(PANEL_EDIT_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
 		JButton upButton = createButton("", ICON_UP, 
 				e -> SwingUtilities.invokeLater(() -> {
-					Collections.swap(this.levels, levelList.getSelectedIndex(), levelList.getSelectedIndex() - 1);
-					listModel.removeAllElements();
-					listModel.addAll(InitialViewImpl.this.levels);
+					if (levelList.getSelectedIndex() > 0) {
+						Collections.swap(this.levels, levelList.getSelectedIndex(), levelList.getSelectedIndex() - 1);
+						listModel.removeAllElements();
+						listModel.addAll(InitialViewImpl.this.levels);
+					}
 				}));
 		editListPanel.add(upButton);
 		
 		JButton downButton = createButton("", ICON_DOWN, 
 				e -> SwingUtilities.invokeLater(() -> {
-					Collections.swap(this.levels, levelList.getSelectedIndex(), levelList.getSelectedIndex() + 1);
-					listModel.removeAllElements();
-					listModel.addAll(InitialViewImpl.this.levels);
+					levelList.getSelectedIndex();
+					if (levelList.getSelectedIndex() + 1 < listModel.size()) {
+						Collections.swap(this.levels, levelList.getSelectedIndex(), levelList.getSelectedIndex() + 1);
+						listModel.removeAllElements();
+						listModel.addAll(InitialViewImpl.this.levels);
+					}
 				}));
 		editListPanel.add(downButton);
 		
@@ -155,8 +158,8 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 					listModel.removeAllElements();
 				}));
 		editListPanel.add(cancelButton);
-		p.add(levelListPanel);
-		p.add(editListPanel);
+		p.add(levelListPanel, BorderLayout.CENTER);
+		p.add(editListPanel, BorderLayout.PAGE_END);
 		return p;
 	}
 
