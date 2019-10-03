@@ -5,7 +5,8 @@ public interface ElementModel {
 	enum Type {
 		USER, 
 		MOVABLE, 
-		UNMOVABLE, 
+		UNMOVABLE,
+		TARGET,
 		EMPTY
 	}
 	

@@ -1,10 +1,12 @@
 package controller;
 
-import model.Level;
+import java.util.List;
+
+import model.ElementModel.Type;
 
 public interface CraftObserver {
 	
-	void saveLevel(Level level, String path);
+	void saveLevel(List<List<Type>> level, String path);
 	
 	void backToInitialView();
 

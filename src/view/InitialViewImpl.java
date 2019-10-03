@@ -8,12 +8,12 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import static view.Views.*;
 import controller.InitialObserver;
 
 public class InitialViewImpl extends AbstractView implements InitialView {
@@ -51,13 +51,17 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 		String[] fakeData = {"Prova1", "Prova2", "Prova3", "Prova1", "Prova2", "Prova3", "Prova1", "Prova2", "Prova3", "Prova1", "Prova2", "Prova3"};
 		// -------------------------------------------------
 		this.levels = Arrays.asList(fakeData);
-		JFrame frame = this.getFrame();
+		this.getFrame().add(createMainPanel());
+	}
+
+	@Override
+	protected JPanel createMainPanel() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		mainPanel.setBorder(this.createEmptyPaddingBorder(DEFAULT_PADDING));
+		mainPanel.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		mainPanel.add(welcomePanel(), BorderLayout.PAGE_START);
 		mainPanel.add(levelSequencePanel(), BorderLayout.CENTER);
 		mainPanel.add(choicesPanel(), BorderLayout.PAGE_END);
-		frame.add(mainPanel);
+		return mainPanel;
 	}
 
 	@Override
@@ -78,17 +82,17 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 
 	@Override
 	public void showSaveFailedDialog() {
-		createDialog(DIALOG_SAVE_FAILED_TITLE, DIALOG_SAVE_FAILED_TEXT).setVisible(true);
+		createDialog(this.getFrame(), DIALOG_SAVE_FAILED_TITLE, DIALOG_SAVE_FAILED_TEXT).setVisible(true);
 	}
 
 	@Override
 	public void showLoadFailedDialog() {
-		createDialog(DIALOG_LOAD_FAILED_TITLE, DIALOG_LOAD_FAILED_TEXT).setVisible(true);
+		createDialog(this.getFrame(), DIALOG_LOAD_FAILED_TITLE, DIALOG_LOAD_FAILED_TEXT).setVisible(true);
 	}
 
 	@Override
 	public void showLevelNotValidDialog() {
-		createDialog(DIALOG_LEVEL_NOT_CORRECT_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT).setVisible(true);
+		createDialog(this.getFrame(), DIALOG_LEVEL_NOT_CORRECT_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT).setVisible(true);
 	}
 	
 	private JPanel welcomePanel() {
@@ -100,7 +104,7 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	private JPanel levelSequencePanel() {
 		JPanel p = new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
-		p.setBorder(this.createEmptyPaddingBorder(DEFAULT_PADDING));
+		p.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		p.add(levelListPanel());
 		p.add(saveOrLoadListPanel());
 		return p;
@@ -109,7 +113,7 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	private JPanel choicesPanel() {
 		int littlePadding = Math.round(DEFAULT_PADDING / 5);
 		JPanel p = new JPanel(new BorderLayout(littlePadding, littlePadding));
-		p.setBorder(this.createEmptyPaddingBorder(DEFAULT_PADDING));
+		p.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		JButton craftButton = createButton(BUTTON_CRAFT_TEXT, ICON_CRAFT, 
 				e -> SwingUtilities.invokeLater(() -> controller.craftLevel()));
 		p.add(craftButton, BorderLayout.PAGE_START);

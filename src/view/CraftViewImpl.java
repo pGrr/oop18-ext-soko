@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.swing.ImageIcon;
@@ -17,7 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import controller.CraftObserver;
-import model.Level;
+import model.ElementModel.Type;
+import static view.Views.*;
 
 public final class CraftViewImpl extends AbstractView implements CraftView {
 	
@@ -43,20 +45,32 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private static final String ICON_BACK_PATH = "back.png";
 	
 	private static final int N_ROW_ELEMENTS = 15; // just for testing, is to be asked to the model
-	private CraftObserver controller;
-	private final List<JToggleButton> selectionList;
-	private final List<List<JButton>> grid;
-	private final Level level;
 	
-	public CraftViewImpl(int nRows, CraftObserver controller, Level level) {
+	private CraftObserver controller;
+	private final List<JToggleButton> toggleButtonSelectionList;
+	private final List<Type> typeSelectionList;
+	private final List<List<JButton>> buttonGrid;
+	private final List<List<Type>> typeGrid;
+	
+	public CraftViewImpl(CraftObserver controller) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.setObserver(controller);
-		this.level = level;
-		this.selectionList = toggleButtons();
-		this.grid = this.createGrid(nRows);
-		this.getFrame().add(mainPanel());
-		this.getFrame().setVisible(true);
+		this.toggleButtonSelectionList = createToggleButtonSelectionList();
+		this.typeSelectionList = createTypeSelectionList();
+		this.buttonGrid = createButtonGrid(N_ROW_ELEMENTS);
+		this.typeGrid = createElementGrid(N_ROW_ELEMENTS);
+		this.getFrame().add(createMainPanel());
 	}
+	
+	@Override
+	protected JPanel createMainPanel() {
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
+		mainPanel.add(upperPanel(), BorderLayout.PAGE_START);
+		mainPanel.add(gridPanel(), BorderLayout.CENTER);
+		mainPanel.add(choicesPanel(), BorderLayout.PAGE_END);
+		return mainPanel;
+	}	
 	
 	@Override
 	public void setObserver(CraftObserver controller) {
@@ -98,7 +112,7 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 
 	}
 	
-	private List<List<JButton>> createGrid(int nRows) {
+	private List<List<JButton>> createButtonGrid(int nRows) {
 		List<List<JButton>> grid = new ArrayList<>();
 		IntStream.range(0, nRows)
 		 .forEach(i -> {
@@ -111,16 +125,20 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 		return grid;
 	}
 	
-	private JPanel mainPanel() {
-		JPanel mainPanel = new JPanel(new BorderLayout());
-		mainPanel.setBorder(this.createEmptyPaddingBorder(DEFAULT_PADDING));
-		mainPanel.add(upperPanel(), BorderLayout.PAGE_START);
-		mainPanel.add(gridPanel(), BorderLayout.CENTER);
-		mainPanel.add(choicesPanel(), BorderLayout.PAGE_END);
-		return mainPanel;
+	private List<List<Type>> createElementGrid(int nRows) {
+		List<List<Type>> grid = new ArrayList<>();
+		IntStream.range(0, nRows)
+		 .forEach(i -> {
+			grid.add(new ArrayList<>());
+			IntStream.range(0, nRows)
+					 .forEach(j -> {
+						 grid.get(i).add(Type.EMPTY);
+					 });
+		 });
+		return grid;
 	}
-	
-	private List<JToggleButton> toggleButtons() {
+
+	private List<JToggleButton> createToggleButtonSelectionList() {
 		List<JToggleButton> l = new ArrayList<>();
 		l.add(createToggleButton("", createImageIcon(ICON_WALL_PATH), toggleButtonActionListener()));
 		l.add(createToggleButton("", createImageIcon(ICON_BOX_PATH), toggleButtonActionListener()));
@@ -129,33 +147,48 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 		return l; 
 	}
 	
+	private List<Type> createTypeSelectionList() {
+		List<Type> l = new ArrayList<>();
+		l.add(Type.UNMOVABLE);
+		l.add(Type.MOVABLE);
+		l.add(Type.TARGET);
+		l.add(Type.USER);
+		return l; 
+	}
+	
 	private ActionListener toggleButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			CraftViewImpl.this.selectionList.forEach(b -> b.setSelected(false));
+			CraftViewImpl.this.toggleButtonSelectionList.forEach(b -> b.setSelected(false));
 			((JToggleButton) e.getSource()).setSelected(true);
 		});
 	}
 	
-	private JToggleButton getSelectionElement() {
-		return this.selectionList.stream()
-								 .filter(e -> e.isSelected())
-								 .findFirst()
-								 .orElse(new JToggleButton());
+	private JToggleButton getSelectedToggleButton() {
+		return  this.toggleButtonSelectionList.stream()
+				 .filter(e -> e.isSelected())
+				 .findFirst()
+				 .orElse(new JToggleButton());
+	}
+	
+	private Type getSelectedType() {
+		JToggleButton selectedButton = getSelectedToggleButton();
+		int index = this.toggleButtonSelectionList.indexOf(selectedButton);
+		return this.typeSelectionList.get(index);
 	}
 	
 	private JPanel upperPanel() {
 		JPanel upperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel welcomeLabel = new JLabel(LABEL_WELCOME_TEXT);
-		welcomeLabel.setBorder(this.createEmptyPaddingBorder(DEFAULT_PADDING));
+		welcomeLabel.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		upperPanel.add(welcomeLabel);
-		this.selectionList.stream().forEach(upperPanel::add);
+		this.toggleButtonSelectionList.stream().forEach(upperPanel::add);
 		return upperPanel;
 	}
 	
 	private final JPanel gridPanel() {
 		JPanel p = new JPanel(new GridLayout(N_ROW_ELEMENTS, N_ROW_ELEMENTS));
 		p.setBorder(createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
-		this.grid.stream().flatMap(List::stream).forEach(b -> {
+		this.buttonGrid.stream().flatMap(List::stream).forEach(b -> {
 			b.addActionListener(gridButtonActionListener());
 			p.add(b);
 		});
@@ -164,9 +197,20 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	
 	private ActionListener gridButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			ImageIcon selectedIcon = CraftViewImpl.this.selectionList.stream()
-					.filter(b -> b.isSelected())
-					.ge;
+			JButton clickedButton = (JButton)e.getSource();
+			for(int r=0; r<N_ROW_ELEMENTS; r++) {
+				for(int c=0; c<N_ROW_ELEMENTS; c++) {
+					if (this.buttonGrid.get(r).get(c) == clickedButton) {
+						if (typeGrid.get(r).get(c).equals(getSelectedType())) {
+							typeGrid.get(r).set(c, Type.EMPTY);
+							buttonGrid.get(r).get(c).setIcon(new ImageIcon()); 
+						} else {
+							typeGrid.get(r).set(c, getSelectedType());
+							buttonGrid.get(r).get(c).setIcon(getSelectedToggleButton().getIcon());
+						}
+					}
+				}
+			}
 		});
 	}
 	
@@ -183,17 +227,17 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 		return e -> SwingUtilities.invokeLater(() -> {
 			JFileChooser fc = new JFileChooser();
 			fc.showSaveDialog(getFrame());
-			controller.saveLevel(level, fc.getSelectedFile().getAbsolutePath());
+			controller.saveLevel(typeGrid, fc.getSelectedFile().getAbsolutePath());
 		});
 	}
 	
 	private JDialog errorDialog(String message) {
-		return createDialog(DIALOG_ERROR_TITLE, message);
+		return createDialog(this.getFrame(), DIALOG_ERROR_TITLE, message);
 	}
 	
 	private ActionListener resetButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			this.grid.stream().flatMap(List::stream).forEach(b -> b = new JButton());
+			this.buttonGrid.stream().flatMap(List::stream).forEach(b -> b.setIcon(new ImageIcon()));
 		});
 	}
 	
