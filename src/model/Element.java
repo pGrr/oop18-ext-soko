@@ -1,17 +1,16 @@
 package model;
 
-public interface ElementModel {
+import java.io.Serializable;
+
+public interface Element extends Serializable {
 	
 	enum Type {
 		USER, 
 		MOVABLE, 
 		UNMOVABLE,
 		TARGET,
-		EMPTY
+		EMPTY;
 	}
 	
 	Type getType();
-	
-	boolean canMove();
-
 }

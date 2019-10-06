@@ -3,7 +3,7 @@ package view;
 import java.util.List;
 
 import controller.CraftObserver;
-import model.ElementModel.Type;
+import model.Type.Type;
 
 public class TestCraftView {
 

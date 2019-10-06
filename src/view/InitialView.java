@@ -1,21 +1,7 @@
 package view;
 
-import controller.InitialObserver;
+public interface InitialView extends View {
 
-public interface InitialView {
+	public void showLevelNotValidDialog();
 	
-	void show();
-	
-	void setObserver(InitialObserver controller);
-	
-	void showSaveSuccessDialog();
-	
-	void showSaveFailedDialog();
-	
-	void showLoadSuccessDialog();
-	
-	void showLoadFailedDialog();
-	
-	void showLevelNotValidDialog();
-
 }

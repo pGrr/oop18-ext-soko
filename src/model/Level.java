@@ -1,39 +1,21 @@
 package model;
 
-public interface Level {
-	
-	// initial view
+import java.io.Serializable;
+import java.util.List;
 
-	boolean isLevelValid(Level level);
-	
-	// Craft level
-	
-	boolean isThereInitialPoint(Level level);
-	
-	boolean isInitialPointSingular(Level level);
-	
-	boolean isBoxAndTargetNumberEqual(Level level);
-	
-	boolean isThereTarget(Level level);
-	
-	// play
+import model.Element.Type;
+import model.LevelImpl.LevelNotValidException;
+
+public interface Level extends Serializable {
 		
-	void play(Level level);
+	String getName();
 	
-	boolean canMoveFree(Direction direction);
+	Type get(int rowIndex, int columnIndex);
 	
-	boolean canMovePushing(Direction direction);
+	void set(Type element, int rowIndex, int columnIndex);
 	
-	void moveFreely(Direction direction);
+	void accept(List<List<Type>> typeGrid) throws LevelNotValidException;
 	
-	void movePushing(Direction direction);
+	List<List<Type>> getTypeGrid();
 	
-	boolean isPushedObjectOnTarget();
-	
-	void unValidateTarget(Position position);
-	
-	void validateTarget(Position position);
-	
-	boolean areAllTargetValidated();
-
 }

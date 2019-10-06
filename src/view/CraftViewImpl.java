@@ -4,21 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
-import controller.CraftObserver;
-import model.ElementModel.Type;
+import controller.SokobanController;
+import model.Element.Type;
+import model.LevelImpl.LevelNotValidException;
+
 import static view.Views.*;
 
 public final class CraftViewImpl extends AbstractView implements CraftView {
@@ -31,36 +31,44 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private static final String PANEL_OPTIONS_TITLE = "Edit level options";
 	private static final String LABEL_WELCOME_TEXT = "Welcome! Click on a element to select it and then the cell's grid to mark them.";
 	private static final String BUTTON_SAVE_TEXT = "SAVE";
+	private static final String BUTTON_LOAD_TEXT = "LOAD";
 	private static final String BUTTON_RESET_TEXT = "RESET";
 	private static final String BUTTON_BACK_TEXT = "BACK TO INITIAL VIEW";
-	private static final String DIALOG_ERROR_TITLE = "ERROR";
-	private static final String ERROR_INITIAL_POSITION_TEXT = "You must choose a singular initial point";
-	private static final String ERROR_BOX_AND_TARGET_TEXT = "You must choose an equal number of boxes and targets";
 	private static final String ICON_WALL_PATH = "wall-30px.png";
 	private static final String ICON_BOX_PATH = "box-30px.png";
 	private static final String ICON_TARGET_PATH = "target-30px.png";
 	private static final String ICON_USER_PATH = "user-30px.png";
 	private static final String ICON_SAVE_PATH = "download.png";
+	private static final String ICON_LOAD_PATH = "upload.png";
 	private static final String ICON_CANCEL_PATH = "cross.png";
 	private static final String ICON_BACK_PATH = "back.png";
+	private static final String DIALOG_ERROR_TITLE = "ERROR";
+	private static final String DIALOG_LEVEL_NOT_CORRECT_TITLE = "LEVEL NOT SAVED";
+	private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
+	private static final String DIALOG_IOERROR_TEXT = "An error occurred during input / output operation";
+
 	
-	private static final int N_ROW_ELEMENTS = 15; // just for testing, is to be asked to the model
+	private static final int N_ROW_ELEMENTS = 15; // TODO just for testing, is to be asked to the model
 	
-	private CraftObserver controller;
-	private final List<JToggleButton> toggleButtonSelectionList;
-	private final List<Type> typeSelectionList;
-	private final List<List<JButton>> buttonGrid;
-	private final List<List<Type>> typeGrid;
+	private SokobanController controller;
+	private final List<Pair<Type,JToggleButton>> toggleButtons;
+	private final List<List<Pair<JButton, Type>>> buttonGrid;
+	private final List<Pair<Type,ImageIcon>> icons;
 	
-	public CraftViewImpl(CraftObserver controller) {
+	public CraftViewImpl(SokobanController controller) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
-		this.setObserver(controller);
-		this.toggleButtonSelectionList = createToggleButtonSelectionList();
-		this.typeSelectionList = createTypeSelectionList();
+		this.controller = controller;
+		this.icons = createIcons();
+		this.toggleButtons = createToggleButtonSelectionList();
 		this.buttonGrid = createButtonGrid(N_ROW_ELEMENTS);
-		this.typeGrid = createElementGrid(N_ROW_ELEMENTS);
 		this.getFrame().add(createMainPanel());
 	}
+	
+	@Override
+	public void showLevelNotValidDialog() {
+		showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT);
+	}
+
 	
 	@Override
 	protected JPanel createMainPanel() {
@@ -71,109 +79,42 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 		mainPanel.add(choicesPanel(), BorderLayout.PAGE_END);
 		return mainPanel;
 	}	
-	
-	@Override
-	public void setObserver(CraftObserver controller) {
-		this.controller = controller;
-	}
 
 	@Override
 	public void show() {
 		this.getFrame().setVisible(true);
 	}
-
-	@Override
-	public void showNoInitialPointDialog() {
-		// TODO Auto-generated method stub
-
+	
+	private List<Pair<Type, ImageIcon>> createIcons() {
+		List<Pair<Type, ImageIcon>> l = new ArrayList<>();
+		l.add(new Pair<>(Type.EMPTY, createImageIcon("")));
+		l.add(new Pair<>(Type.MOVABLE, createImageIcon(ICON_BOX_PATH)));
+		l.add(new Pair<>(Type.UNMOVABLE, createImageIcon(ICON_WALL_PATH)));
+		l.add(new Pair<>(Type.TARGET, createImageIcon(ICON_TARGET_PATH)));
+		l.add(new Pair<>(Type.USER, createImageIcon(ICON_USER_PATH)));
+		return l;
 	}
 
-	@Override
-	public void showTooManyInitialPointDialog() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void showNoTargetDialog() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void showUnequalBoxAndTargetDialog() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void showUnForeSeenErrorDialog(String message) {
-		// TODO Auto-generated method stub
-
+	private List<Pair<Type,JToggleButton>> createToggleButtonSelectionList() {
+		List<Pair<Type,JToggleButton>> l = new ArrayList<>();
+		l.add(new Pair<>(Type.MOVABLE, createToggleButton("", createImageIcon(ICON_BOX_PATH), toggleButtonActionListener())));
+		l.add(new Pair<>(Type.UNMOVABLE, createToggleButton("", createImageIcon(ICON_WALL_PATH), toggleButtonActionListener())));
+		l.add(new Pair<>(Type.TARGET, createToggleButton("", createImageIcon(ICON_TARGET_PATH), toggleButtonActionListener())));
+		l.add(new Pair<>(Type.USER, createToggleButton("", createImageIcon(ICON_USER_PATH), toggleButtonActionListener())));
+		return l; 
 	}
 	
-	private List<List<JButton>> createButtonGrid(int nRows) {
-		List<List<JButton>> grid = new ArrayList<>();
+	private List<List<Pair<JButton,Type>>> createButtonGrid(int nRows) {
+		List<List<Pair<JButton,Type>>> grid = new ArrayList<>();
 		IntStream.range(0, nRows)
 		 .forEach(i -> {
 			grid.add(new ArrayList<>());
 			IntStream.range(0, nRows)
 					 .forEach(j -> {
-						 grid.get(i).add(new JButton());
+						 grid.get(i).add(new Pair<JButton,Type>(new JButton(), Type.EMPTY));
 					 });
 		 });
 		return grid;
-	}
-	
-	private List<List<Type>> createElementGrid(int nRows) {
-		List<List<Type>> grid = new ArrayList<>();
-		IntStream.range(0, nRows)
-		 .forEach(i -> {
-			grid.add(new ArrayList<>());
-			IntStream.range(0, nRows)
-					 .forEach(j -> {
-						 grid.get(i).add(Type.EMPTY);
-					 });
-		 });
-		return grid;
-	}
-
-	private List<JToggleButton> createToggleButtonSelectionList() {
-		List<JToggleButton> l = new ArrayList<>();
-		l.add(createToggleButton("", createImageIcon(ICON_WALL_PATH), toggleButtonActionListener()));
-		l.add(createToggleButton("", createImageIcon(ICON_BOX_PATH), toggleButtonActionListener()));
-		l.add(createToggleButton("", createImageIcon(ICON_TARGET_PATH), toggleButtonActionListener()));
-		l.add(createToggleButton("", createImageIcon(ICON_USER_PATH), toggleButtonActionListener()));
-		return l; 
-	}
-	
-	private List<Type> createTypeSelectionList() {
-		List<Type> l = new ArrayList<>();
-		l.add(Type.UNMOVABLE);
-		l.add(Type.MOVABLE);
-		l.add(Type.TARGET);
-		l.add(Type.USER);
-		return l; 
-	}
-	
-	private ActionListener toggleButtonActionListener() {
-		return e -> SwingUtilities.invokeLater(() -> {
-			CraftViewImpl.this.toggleButtonSelectionList.forEach(b -> b.setSelected(false));
-			((JToggleButton) e.getSource()).setSelected(true);
-		});
-	}
-	
-	private JToggleButton getSelectedToggleButton() {
-		return  this.toggleButtonSelectionList.stream()
-				 .filter(e -> e.isSelected())
-				 .findFirst()
-				 .orElse(new JToggleButton());
-	}
-	
-	private Type getSelectedType() {
-		JToggleButton selectedButton = getSelectedToggleButton();
-		int index = this.toggleButtonSelectionList.indexOf(selectedButton);
-		return this.typeSelectionList.get(index);
 	}
 	
 	private JPanel upperPanel() {
@@ -181,69 +122,154 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 		JLabel welcomeLabel = new JLabel(LABEL_WELCOME_TEXT);
 		welcomeLabel.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		upperPanel.add(welcomeLabel);
-		this.toggleButtonSelectionList.stream().forEach(upperPanel::add);
+		this.toggleButtons.stream()
+						  .map(Pair::getY)
+						  .forEach(upperPanel::add);
 		return upperPanel;
 	}
 	
 	private final JPanel gridPanel() {
-		JPanel p = new JPanel(new GridLayout(N_ROW_ELEMENTS, N_ROW_ELEMENTS));
-		p.setBorder(createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
-		this.buttonGrid.stream().flatMap(List::stream).forEach(b -> {
-			b.addActionListener(gridButtonActionListener());
-			p.add(b);
+		JPanel panel = new JPanel(new GridLayout(N_ROW_ELEMENTS, N_ROW_ELEMENTS));
+		panel.setBorder(createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
+		this.buttonGrid.stream()
+					   .flatMap(List::stream)
+					   .map(Pair::getX)
+					   .forEach(button -> {
+							button.addActionListener(gridButtonActionListener());
+							panel.add(button);
+						});
+		return panel;
+	}
+	
+	private JPanel choicesPanel() {
+		JPanel choicesPanel = new JPanel(new GridLayout(1,4, DEFAULT_PADDING, DEFAULT_PADDING));
+		choicesPanel.setBorder(createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
+		choicesPanel.add(createButton(BUTTON_SAVE_TEXT, ICON_SAVE_PATH, saveButtonActionListener()));
+		choicesPanel.add(createButton(BUTTON_LOAD_TEXT, ICON_LOAD_PATH, loadButtonActionListener()));
+		choicesPanel.add(createButton(BUTTON_RESET_TEXT, ICON_CANCEL_PATH, resetButtonActionListener()));
+		choicesPanel.add(createButton(BUTTON_BACK_TEXT, ICON_BACK_PATH, backButtonActionListener()));
+		return choicesPanel;
+	}
+
+	private ActionListener toggleButtonActionListener() {
+		return e -> SwingUtilities.invokeLater(() -> {
+			CraftViewImpl.this.toggleButtons.forEach(b -> b.getY().setSelected(false));
+			((JToggleButton) e.getSource()).setSelected(true);
 		});
-		return p;
 	}
 	
 	private ActionListener gridButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
 			JButton clickedButton = (JButton)e.getSource();
-			for(int r=0; r<N_ROW_ELEMENTS; r++) {
-				for(int c=0; c<N_ROW_ELEMENTS; c++) {
-					if (this.buttonGrid.get(r).get(c) == clickedButton) {
-						if (typeGrid.get(r).get(c).equals(getSelectedType())) {
-							typeGrid.get(r).set(c, Type.EMPTY);
-							buttonGrid.get(r).get(c).setIcon(new ImageIcon()); 
-						} else {
-							typeGrid.get(r).set(c, getSelectedType());
-							buttonGrid.get(r).get(c).setIcon(getSelectedToggleButton().getIcon());
-						}
-					}
-				}
+			Pair<JButton, Type> clickedPair = this.buttonGrid.stream()
+												  .flatMap(List::stream)
+												  .filter(pair -> pair.getX().equals(clickedButton))
+												  .findFirst()
+												  .orElse(new Pair<>(new JButton(), Type.EMPTY));
+			if (clickedPair.getY().equals(getSelectedType())) {
+				clickedPair.getX().setIcon(new ImageIcon());
+				clickedPair.setY(Type.EMPTY);
+			} else {
+				clickedPair.getX().setIcon(getSelectedToggleButton().getIcon());
+				clickedPair.setY(getSelectedType());
+			}
+		});
+	}
+
+	private ActionListener saveButtonActionListener() {
+		return e -> SwingUtilities.invokeLater(() -> {
+			JFileChooser fc = createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
+			fc.showSaveDialog(getFrame());
+			List<List<Type>> typeGrid = getCurrentTypeGrid();
+			try {
+				controller.saveLevelButtonPressed(typeGrid, fc.getSelectedFile().getAbsolutePath() + controller.getLevelFileExtension());
+			} catch (IOException ioException) {
+				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
+				ioException.printStackTrace();
+			} catch (LevelNotValidException levelNotValidException) {
+				showErrorDialog(DIALOG_LEVEL_NOT_CORRECT_TITLE, levelNotValidException.toString());
 			}
 		});
 	}
 	
-	private JPanel choicesPanel() {
-		JPanel choicesPanel = new JPanel(new GridLayout(1,3, DEFAULT_PADDING, DEFAULT_PADDING));
-		choicesPanel.setBorder(createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
-		choicesPanel.add(createButton(BUTTON_SAVE_TEXT, ICON_SAVE_PATH, saveButtonActionListener()));
-		choicesPanel.add(createButton(BUTTON_RESET_TEXT, ICON_CANCEL_PATH, resetButtonActionListener()));
-		choicesPanel.add(createButton(BUTTON_BACK_TEXT, ICON_BACK_PATH, backButtonActionListener()));
-		return choicesPanel;
-	}
-	
-	private ActionListener saveButtonActionListener() {
+	private ActionListener loadButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = new JFileChooser();
-			fc.showSaveDialog(getFrame());
-			controller.saveLevel(typeGrid, fc.getSelectedFile().getAbsolutePath());
+			JFileChooser fc = createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
+			fc.showOpenDialog(getFrame());
+			List<List<Type>> typeGrid;
+			try {
+				typeGrid = controller.loadLevelButtonPressed(fc.getSelectedFile().getAbsolutePath());
+				CraftViewImpl.this.acceptTypeGrid(typeGrid);
+			} catch (ClassNotFoundException | IOException  inputError) {
+				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
+				System.err.println(inputError.toString());
+			} catch (LevelNotValidException levelNotValidException) {
+				showErrorDialog(DIALOG_LEVEL_NOT_CORRECT_TITLE, levelNotValidException.toString());
+			}			
 		});
 	}
 	
-	private JDialog errorDialog(String message) {
-		return createDialog(this.getFrame(), DIALOG_ERROR_TITLE, message);
+	private List<List<Type>> getCurrentTypeGrid() {
+		List<List<Type>> typeGrid = new ArrayList<>();
+		this.buttonGrid.stream()
+					   .forEach(row -> {
+						   List<Type> newRow = new ArrayList<>();
+						   row.stream()
+						   	  .map(Pair::getY)
+						   	  .forEach(newRow::add);
+						   typeGrid.add(newRow);
+					   });
+		return typeGrid;
+	}
+	
+	private void acceptTypeGrid(List<List<Type>> typeGrid) {
+		for(int i=0; i<N_ROW_ELEMENTS; i++) {
+			for(int j=0; j<N_ROW_ELEMENTS; j++) {
+				this.buttonGrid.get(i).get(j).getX().setIcon(findTypeIcon(typeGrid.get(i).get(j)));
+				this.buttonGrid.get(i).get(j).setY(typeGrid.get(i).get(j));
+			}
+		}
 	}
 	
 	private ActionListener resetButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			this.buttonGrid.stream().flatMap(List::stream).forEach(b -> b.setIcon(new ImageIcon()));
+			this.buttonGrid.stream()
+				.flatMap(List::stream)
+				.forEach(pair -> {
+					pair.getX().setIcon(new ImageIcon());
+					pair.setY(Type.EMPTY);
+				});
 		});
 	}
 	
 	private ActionListener backButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			controller.backToInitialView();
+			this.controller.backToInitialViewButtonPressed();
 		});
-	}	
+	}
+	
+	private JToggleButton getSelectedToggleButton() {
+		return  this.toggleButtons.stream()
+				  				  .map(Pair::getY)
+								  .filter(e -> e.isSelected())
+								  .findFirst()
+								  .orElse(new JToggleButton());
+	}
+	
+	private Type getSelectedType() {
+		return  this.toggleButtons.stream()
+				  .filter(e -> e.getY().isSelected())
+				  .map(Pair::getX)
+				  .findFirst()
+				  .orElse(Type.EMPTY);
+	}
+	
+	
+	private ImageIcon findTypeIcon(Type type) {
+		return this.icons.stream()
+				   .filter(pair -> pair.getX().equals(type))
+				   .map(Pair::getY)
+				   .findFirst()
+				   .orElse(new ImageIcon());
+	}
 }
