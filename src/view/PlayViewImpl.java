@@ -8,7 +8,7 @@ import model.Element.Type;
 
 public class PlayViewImpl extends AbstractView implements PlayView {
 	
-	private static final double HEIGHT_TO_SCREENSIZE_RATIO = 0.9;
+	private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
 	private static final double WIDTH_TO_HEIGHT_RATIO = 1;
 	private static final String DEFAULT_TITLE = "Sokoban - Play";
 	
@@ -20,7 +20,7 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 		this.controller = controller;
 		this.schema = Optional.empty();
 		this.getFrame().add(createMainPanel());
-		this.getFrame().pack();
+		this.getFrame().setResizable(false);;
 	}
 
 	public PlayViewImpl(SokobanController controller, String name, List<List<Type>> schema) {

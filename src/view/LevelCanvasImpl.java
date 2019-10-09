@@ -45,7 +45,7 @@ class LevelCanvasImpl extends JPanel implements LevelCanvas {
     public Dimension getPreferredSize() {
 		int frameHeight = (int) Math.round(this.ownerFrame.getSize().getHeight()) - this.ownerFrame.getInsets().top;
 		int frameWidth = (int) Math.round(this.ownerFrame.getSize().getWidth());
-		return new Dimension(frameHeight, frameHeight);		
+		return new Dimension(frameWidth, frameHeight);		
     }
 
 	@Override
