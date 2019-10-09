@@ -1,8 +1,10 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -15,11 +17,13 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import controller.SokobanController;
+import model.LevelImpl.LevelNotValidException;
+
 import static view.Views.*;
 
 public class InitialViewImpl extends AbstractView implements InitialView {
 
-	private static final double HEIGHT_TO_SCREENSIZE_RATIO = 0.8;
+	private static final double HEIGHT_TO_SCREENSIZE_RATIO = 0.9;
 	private static final double WIDTH_TO_HEIGHT_RATIO = 1;
 	private static final int DEFAULT_PADDING = 20;
 	private static final String ICON_CRAFT = "craft.png";
@@ -38,6 +42,8 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	private static final String LABEL_WELCOME_TEXT = "Welcome to Sokoban! What would you like to do?";
 	private static final String BUTTON_CRAFT_TEXT = "CRAFT A LEVEL";
 	private static final String BUTTON_PLAY_TEXT = "PLAY";
+	private static final String DIALOG_ERROR_TITLE = "ERROR";
+	private static final String DIALOG_IOERROR_TEXT = "An error occurred during an input/output operation";
 	private static final String DIALOG_LEVEL_NOT_CORRECT_TITLE = "LEVEL NOT CORRECT";
 	private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
 
@@ -47,10 +53,7 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	public InitialViewImpl(SokobanController controller) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
-		// --------- fakeData for testing purposes ---------
-		String[] fakeData = {"Prova1", "Prova2", "Prova3", "Prova1", "Prova2", "Prova3", "Prova1", "Prova2", "Prova3", "Prova1", "Prova2", "Prova3"};
-		// -------------------------------------------------
-		this.levels = Arrays.asList(fakeData);
+		this.levels = new ArrayList<>();
 		this.getFrame().add(createMainPanel());
 	}
 	
@@ -81,7 +84,6 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
 		p.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		p.add(levelListPanel());
-		p.add(saveOrLoadListPanel());
 		return p;
 	}
 	
@@ -98,15 +100,19 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	
 	private JPanel levelListPanel() {
 		JPanel p = new JPanel(new BorderLayout());
+		// level list panel
 		JPanel levelListPanel = new JPanel(new BorderLayout());
 		levelListPanel.setBorder(createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
 		DefaultListModel<String> listModel = new DefaultListModel<>();
-		listModel.addAll(this.levels);
+		this.levels.forEach(listModel::addElement);
 		JList<String> levelList = new JList<String>(listModel);
 		JScrollPane scrollPane = new JScrollPane(levelList); 
 		levelListPanel.add(scrollPane);
+		p.add(levelListPanel, BorderLayout.CENTER);
+		// edit list panel
+		JPanel p2 = new JPanel(new GridLayout(2,1));
 		JPanel editListPanel = new JPanel();
-		JButton addLevelButton = createButton("", ICON_PLUS, addLevelButtonActionListener());
+		JButton addLevelButton = createButton("", ICON_PLUS, addLevelButtonActionListener(listModel));
 		editListPanel.add(addLevelButton);
 		JButton removeLevelButton = createButton("", ICON_MINUS, removeLevelButtonActionListener(levelList, listModel));
 		editListPanel.add(removeLevelButton);
@@ -117,18 +123,16 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 		editListPanel.add(downButton);
 		JButton cancelButton = createButton("", ICON_RESET, resetButtonActionListener(listModel));
 		editListPanel.add(cancelButton);
-		p.add(levelListPanel, BorderLayout.CENTER);
-		p.add(editListPanel, BorderLayout.PAGE_END);
-		return p;
-	}
-
-	private JPanel saveOrLoadListPanel() {
-		JPanel p = new JPanel();
-		p.setBorder(createTitledPaddingBorder(PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE, DEFAULT_PADDING));
-		JButton saveButton = createButton("", ICON_DOWNLOAD, saveButtonActionListener());
-		p.add(saveButton);
-		JButton loadButton = createButton("", ICON_UPLOAD, loadButtonActionListener());
-		p.add(loadButton);
+		p2.add(editListPanel);
+		// save or load panel	
+		JPanel saveOrLoadListPanel = new JPanel();
+		saveOrLoadListPanel.setBorder(createTitledPaddingBorder(PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE, DEFAULT_PADDING));
+		JButton saveButton = createButton("", ICON_DOWNLOAD, saveSequenceActionListener(this.levels));
+		saveOrLoadListPanel.add(saveButton);
+		JButton loadButton = createButton("", ICON_UPLOAD, loadSequenceActionListener(listModel));
+		saveOrLoadListPanel.add(loadButton);
+		p2.add(saveOrLoadListPanel);
+		p.add(p2, BorderLayout.PAGE_END);
 		return p;
 	}
 	
@@ -140,14 +144,24 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	
 	private ActionListener playButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			//TODO
+			try {
+				this.controller.playLevelSequence(this.controller.createLevelSequence("", this.levels));
+			} catch (LevelNotValidException levelNotValidException) {
+				showLevelNotValidDialog();
+			} catch (ClassNotFoundException | IOException ioException) {
+				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
+				System.err.println(ioException);
+			} 
 		});
 	}
 
-	private ActionListener addLevelButtonActionListener() {
+	private ActionListener addLevelButtonActionListener(DefaultListModel<String> listModel) {
 		return e -> SwingUtilities.invokeLater(() -> {
 			JFileChooser fc = createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
-			fc.showSaveDialog(getFrame());
+			fc.showOpenDialog(getFrame());
+			String path = fc.getSelectedFile().getAbsolutePath();
+			this.levels.add(path);
+			listModel.addElement(path);
 		});
 	}
 	
@@ -160,9 +174,12 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	private ActionListener upButtonActionListener(JList<String> levelList, DefaultListModel<String> listModel) {
 		return e -> SwingUtilities.invokeLater(() -> {
 			if (levelList.getSelectedIndex() > 0) {
-				Collections.swap(this.levels, levelList.getSelectedIndex(), levelList.getSelectedIndex() - 1);
-				listModel.removeAllElements();
-				listModel.addAll(InitialViewImpl.this.levels);
+				int selectedIndex = levelList.getSelectedIndex();
+				Collections.swap(this.levels, selectedIndex, selectedIndex - 1);
+				String tmp = listModel.get(selectedIndex);
+				listModel.set(selectedIndex, listModel.get(selectedIndex - 1));
+				listModel.set(selectedIndex - 1, tmp);
+				levelList.setSelectedIndex(selectedIndex - 1);
 			}
 		});
 	}
@@ -171,9 +188,12 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 		return e -> SwingUtilities.invokeLater(() -> {
 			levelList.getSelectedIndex();
 			if (levelList.getSelectedIndex() + 1 < listModel.size()) {
-				Collections.swap(this.levels, levelList.getSelectedIndex(), levelList.getSelectedIndex() + 1);
-				listModel.removeAllElements();
-				listModel.addAll(InitialViewImpl.this.levels);
+				int selectedIndex = levelList.getSelectedIndex();
+				Collections.swap(this.levels, selectedIndex, selectedIndex + 1);
+				String tmp = listModel.get(selectedIndex);
+				listModel.set(selectedIndex, listModel.get(selectedIndex + 1));
+				listModel.set(selectedIndex + 1, tmp);
+				levelList.setSelectedIndex(selectedIndex + 1);
 			}
 		});
 	}
@@ -184,21 +204,33 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 		});
 	}
 	
-	private ActionListener saveButtonActionListener() {
+	private ActionListener saveSequenceActionListener(List<String> levels) {
 		return e -> SwingUtilities.invokeLater(() -> {
 			JFileChooser fc = createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
 			fc.showSaveDialog(getFrame());
-			// TODO
-			// controller.saveLevelSequence(this.levels, fc.getSelectedFile().getAbsolutePath());
+			try {
+				this.controller.saveLevelSequence(fc.getSelectedFile().getAbsolutePath(), levels);
+			} catch (LevelNotValidException levelNotValidException) {
+				showLevelNotValidDialog();
+			} catch (IOException | ClassNotFoundException ioException) {
+				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
+				System.err.println(e);
+			}
 		});
 	}
 	
-	private ActionListener loadButtonActionListener() {
+	private ActionListener loadSequenceActionListener(DefaultListModel<String> listModel) {
 		return e -> SwingUtilities.invokeLater(() -> {
 			JFileChooser fc = createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
 			fc.showOpenDialog(getFrame());
-			// TODO
-			// controller.load(fc.getSelectedFile().getAbsolutePath());
+			try {
+				List<String> paths = this.controller.loadLevelSequence(fc.getSelectedFile().getAbsolutePath()).getPathList();
+				paths.stream().forEach(this.levels::add);
+				paths.stream().forEach(listModel::addElement);
+			} catch (ClassNotFoundException | IOException ioException) {
+				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
+				System.err.println(ioException);
+			}
 		});
 	}
 

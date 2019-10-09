@@ -1,7 +1,7 @@
 package view;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
@@ -22,7 +22,7 @@ import javax.swing.filechooser.FileFilter;
 
 public class Views {
 
-	private static final int DEFAULT_PADDING = 20;
+	public static final int DEFAULT_PADDING = 20;
 
 	private Views() {} // not instantiable
 
@@ -30,12 +30,12 @@ public class Views {
 		JFrame f = new JFrame(title);
 		f.setLocationByPlatform(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(computeFrameDimension(heightToScreenSizeRatio, widthToHeightRatio));
+		f.setSize(computeAbsoluteDimension(heightToScreenSizeRatio, widthToHeightRatio));
 		return f;
 	}
 
-	public static final Dimension computeFrameDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
-		double screenSize = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	public static final Dimension computeAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
+		double screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight();
 		int height = (int) Math.round(screenSize * heightToScreenSizeRatio);
 		int width = (int) Math.round(height * widthToHeightRatio);
 		return new Dimension(width, height);
@@ -99,14 +99,14 @@ public class Views {
 
 	public static final JList<String> createStringList(List<String> list, int padding) {
 		DefaultListModel<String> listModel = new DefaultListModel<>();
-		listModel.addAll(list);
+		list.forEach(listModel::addElement);
 		JList<String> l = new JList<String>(listModel);
 		l.setFixedCellHeight(padding);
 		return l;
 	}
 
 	public static final ImageIcon createImageIcon(String path) {
-		return path.isBlank() ? new ImageIcon() : new ImageIcon(ClassLoader.getSystemResource(path));
+		return path.isEmpty() ? new ImageIcon() : new ImageIcon(ClassLoader.getSystemResource(path));
 	}
 
 	public static final Border createEmptyPaddingBorder(int defaultPadding) {

@@ -16,8 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import controller.SokobanController;
+import model.PairImpl;
 import model.Element.Type;
 import model.LevelImpl.LevelNotValidException;
+import model.Pair;
 
 import static view.Views.*;
 
@@ -87,20 +89,20 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	
 	private List<Pair<Type, ImageIcon>> createIcons() {
 		List<Pair<Type, ImageIcon>> l = new ArrayList<>();
-		l.add(new Pair<>(Type.EMPTY, createImageIcon("")));
-		l.add(new Pair<>(Type.MOVABLE, createImageIcon(ICON_BOX_PATH)));
-		l.add(new Pair<>(Type.UNMOVABLE, createImageIcon(ICON_WALL_PATH)));
-		l.add(new Pair<>(Type.TARGET, createImageIcon(ICON_TARGET_PATH)));
-		l.add(new Pair<>(Type.USER, createImageIcon(ICON_USER_PATH)));
+		l.add(new PairImpl<>(Type.EMPTY, createImageIcon("")));
+		l.add(new PairImpl<>(Type.MOVABLE, createImageIcon(ICON_BOX_PATH)));
+		l.add(new PairImpl<>(Type.UNMOVABLE, createImageIcon(ICON_WALL_PATH)));
+		l.add(new PairImpl<>(Type.TARGET, createImageIcon(ICON_TARGET_PATH)));
+		l.add(new PairImpl<>(Type.USER, createImageIcon(ICON_USER_PATH)));
 		return l;
 	}
 
 	private List<Pair<Type,JToggleButton>> createToggleButtonSelectionList() {
 		List<Pair<Type,JToggleButton>> l = new ArrayList<>();
-		l.add(new Pair<>(Type.MOVABLE, createToggleButton("", createImageIcon(ICON_BOX_PATH), toggleButtonActionListener())));
-		l.add(new Pair<>(Type.UNMOVABLE, createToggleButton("", createImageIcon(ICON_WALL_PATH), toggleButtonActionListener())));
-		l.add(new Pair<>(Type.TARGET, createToggleButton("", createImageIcon(ICON_TARGET_PATH), toggleButtonActionListener())));
-		l.add(new Pair<>(Type.USER, createToggleButton("", createImageIcon(ICON_USER_PATH), toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.MOVABLE, createToggleButton("", createImageIcon(ICON_BOX_PATH), toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.UNMOVABLE, createToggleButton("", createImageIcon(ICON_WALL_PATH), toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.TARGET, createToggleButton("", createImageIcon(ICON_TARGET_PATH), toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.USER, createToggleButton("", createImageIcon(ICON_USER_PATH), toggleButtonActionListener())));
 		return l; 
 	}
 	
@@ -111,7 +113,7 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 			grid.add(new ArrayList<>());
 			IntStream.range(0, nRows)
 					 .forEach(j -> {
-						 grid.get(i).add(new Pair<JButton,Type>(new JButton(), Type.EMPTY));
+						 grid.get(i).add(new PairImpl<JButton,Type>(new JButton(), Type.EMPTY));
 					 });
 		 });
 		return grid;
@@ -165,7 +167,7 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 												  .flatMap(List::stream)
 												  .filter(pair -> pair.getX().equals(clickedButton))
 												  .findFirst()
-												  .orElse(new Pair<>(new JButton(), Type.EMPTY));
+												  .orElse(new PairImpl<>(new JButton(), Type.EMPTY));
 			if (clickedPair.getY().equals(getSelectedType())) {
 				clickedPair.getX().setIcon(new ImageIcon());
 				clickedPair.setY(Type.EMPTY);
@@ -182,7 +184,7 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 			fc.showSaveDialog(getFrame());
 			List<List<Type>> typeGrid = getCurrentTypeGrid();
 			try {
-				controller.saveLevelButtonPressed(typeGrid, fc.getSelectedFile().getAbsolutePath() + controller.getLevelFileExtension());
+				controller.saveLevel(typeGrid, fc.getSelectedFile().getAbsolutePath() + controller.getLevelFileExtension());
 			} catch (IOException ioException) {
 				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
 				ioException.printStackTrace();
@@ -198,7 +200,7 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 			fc.showOpenDialog(getFrame());
 			List<List<Type>> typeGrid;
 			try {
-				typeGrid = controller.loadLevelButtonPressed(fc.getSelectedFile().getAbsolutePath());
+				typeGrid = controller.loadLevel(fc.getSelectedFile().getAbsolutePath()).getTypeGrid();
 				CraftViewImpl.this.acceptTypeGrid(typeGrid);
 			} catch (ClassNotFoundException | IOException  inputError) {
 				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);

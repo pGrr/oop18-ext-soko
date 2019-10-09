@@ -2,7 +2,10 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import model.Element.Type;
 import model.LevelImpl.LevelNotValidException;
 
@@ -29,7 +32,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
 	}
 
 	@Override
-	public List<Level> getSequence() {
+	public List<Level> getLevelSequence() {
 		return sequence;
 	}
 
@@ -42,6 +45,21 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
 	public void add(List<List<Type>> typeGrid, String name) throws LevelNotValidException {
 		Level level = new LevelImpl(typeGrid, name);
 		this.add(level);
+	}
+
+	@Override
+	public List<String> getPathList() {
+		return this.sequence.stream().map(l -> l.getName()).collect(Collectors.toList());
+	}
+	
+	@Override
+	public String toString() {
+		return this.getName() + ": " + this.getPathList();
+	}
+
+	@Override
+	public Iterator<Level> iterator() {
+		return this.getLevelSequence().iterator();
 	}
 
 }

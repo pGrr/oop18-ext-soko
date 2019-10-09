@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import model.LevelSequence;
 import model.Element.Type;
+import model.Level;
 import model.LevelImpl.LevelNotValidException;
 
 public interface SokobanController {
@@ -25,10 +26,29 @@ public interface SokobanController {
 	
 	String getLevelFileExtension();
 	
-	public List<List<Type>> loadLevelButtonPressed(String path) 
+	Level loadLevel(String path) 
 			throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException;
 	
-	public void saveLevelButtonPressed(List<List<Type>> typeGrid, String path) 
+	void saveLevel(List<List<Type>> typeGrid, String path) 
 			throws LevelNotValidException, FileNotFoundException, IOException;
+	
+	LevelSequence createLevelSequence(String name, List<String> paths) 
+			throws LevelNotValidException, IOException, ClassNotFoundException;
+	
+	void saveLevelSequence(String name, List<String> levels) 
+			throws LevelNotValidException, ClassNotFoundException, IOException;
+	
+	LevelSequence loadLevelSequence(String path) 
+			throws IOException, ClassNotFoundException;
+	
+	void moveUp();
+	
+	void moveDown();
+	
+	void moveLeft();
+	
+	void moveRight();
+
+	void playLevel(Level level);
 	
 }

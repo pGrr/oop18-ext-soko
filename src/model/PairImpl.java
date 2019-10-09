@@ -1,14 +1,14 @@
-package view;
+package model;
 
 /*
- * A standard generic Pair<X,Y>, with getters, hashCode, equals, and toString. 
+ * A standard generic Pair<X,Y>, with getters, setters, hashCode, equals, and toString. 
  */
-public class Pair<X, Y> {
+public class PairImpl<X, Y> implements Pair<X,Y>{
 
 	private X x;
 	private Y y;
 
-	public Pair(X x, Y y) {
+	public PairImpl(X x, Y y) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -48,7 +48,7 @@ public class Pair<X, Y> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pair other = (Pair) obj;
+		PairImpl other = (PairImpl) obj;
 		if (x == null) {
 			if (other.x != null)
 				return false;

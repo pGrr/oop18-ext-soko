@@ -3,25 +3,31 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import model.Element.Type;
 
 public class LevelImpl implements Level, Serializable {
 
 	private static final long serialVersionUID = 4977549842323813470L;
-	private static final int N_ROWS = 15;
 	
 	private final String name;
 	private List<List<Type>> grid;
+	private transient Optional<Integer> width;
+	private transient Optional<Integer> height;
 
 	public LevelImpl() {
 		this.grid = initializeGrid(N_ROWS);
 		this.name = new String();
+		width = Optional.empty();
+		height = Optional.empty();
 	}
 	
 	public LevelImpl(List<List<Type>> typeGrid, String name) throws LevelNotValidException {
 		this.name = name;
 		this.accept(typeGrid);
+		width = Optional.empty();
+		height = Optional.empty();
 	}
 
 	@Override
@@ -137,6 +143,25 @@ public class LevelImpl implements Level, Serializable {
 	public List<List<Type>> getTypeGrid() {
 		return this.grid;
 	}
+
+	@Override
+	public Optional<Integer> getWidth() {
+		return width;
+	}
 	
-	
+	@Override
+	public void setWidth(int width) {
+		this.width = Optional.of(width);
+	}
+
+	@Override
+	public Optional<Integer> getHeight() {
+		return height;
+	}
+
+	@Override
+	public void setHeight(int height) {
+		this.height = Optional.of(height);
+	}
+
 }
