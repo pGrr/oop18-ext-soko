@@ -1,12 +1,12 @@
 package model;
 
 import java.util.List;
-import model.Element.Type;
-import model.LevelSchemaImpl.LevelNotValidException;
 
-public interface SokobanModel {
-						
-	void startLevel(LevelInstance levelInstance);
+public interface LevelInstance {
+
+	int getWidth();
+	
+	int getHeight();
 	
 	List<Element> moveUserUp();
 	
@@ -15,4 +15,7 @@ public interface SokobanModel {
 	List<Element> moveUserLeft();
 	
 	List<Element> moveUserRight();
+
+	List<Element> getElements();
+
 }

@@ -2,16 +2,18 @@ package view;
 
 import java.util.List;
 import java.util.Optional;
-
 import controller.SokobanController;
-import model.Element.Type;
+import model.Element;
+import view.craft.CraftView;
+import view.craft.CraftViewImpl;
+import view.initial.InitialView;
+import view.initial.InitialViewImpl;
+import view.play.PlayView;
+import view.play.PlayViewImpl;
 
 public class SokobanViewImpl implements SokobanView {
 	
-	@SuppressWarnings("unused")
-	private static final String ERROR_DIALOG_TITLE = "ERROR";
-	@SuppressWarnings("unused")
-	private static final String ERROR_DIALOG_LEVEL_NOT_VALID = "It seems like the level is not valid. Please check the following: 1) A singular initial point exists; 2) At least one target exists; 3) An equal number of boxes and targets exists.";
+	private static final String LEVEL_NOT_INITIALIZED_ERROR_TEXT = "Level has not been initialized.";
 
 	private final SokobanController controller;
 	private final InitialView initialView;
@@ -38,12 +40,39 @@ public class SokobanViewImpl implements SokobanView {
 	}
 
 	@Override
-	public void showPlayLevelView(String name, List<List<Type>> typeGrid) {
+	public void showPlayLevelView(String name) {
 		this.hideAll();
-		this.playView = Optional.of(new PlayViewImpl(this.controller, name, typeGrid));
+		this.playView = Optional.of(new PlayViewImpl(this.controller, name));
 		this.playView.get().show();
 	}
-	
+
+	@Override
+	public int getPlayableAreaWidth() {
+		if (this.playView.isPresent()) {
+			return this.playView.get().getPlayAreaWidth();			
+		} else {
+			throw new RuntimeException(LEVEL_NOT_INITIALIZED_ERROR_TEXT);
+		}
+	}
+
+	@Override
+	public int getPlayableAreaHeight() {
+		if (this.playView.isPresent()) {
+			return this.playView.get().getPlayAreaHeight();
+		} else {
+			throw new RuntimeException(LEVEL_NOT_INITIALIZED_ERROR_TEXT);
+		}
+	}
+
+	@Override
+	public void showElements(List<Element> elements) {
+		if (this.playView.isPresent()) {
+			this.playView.get().showElements(elements);			
+		} else {
+			throw new RuntimeException(LEVEL_NOT_INITIALIZED_ERROR_TEXT);
+		}
+	}
+
 	private void hideAll() {
 		this.initialView.hide();
 		this.craftView.hide();
@@ -51,5 +80,5 @@ public class SokobanViewImpl implements SokobanView {
 			this.playView.get().hide();			
 		}
 	}
-	
+
 }

@@ -8,9 +8,14 @@ import static view.Views.*;
 public abstract  class AbstractView implements View {
 		
 	private final JFrame frame;
+	
+	public AbstractView(String title) {
+		this.frame = this.createFrame(title);
+	}
 
 	public AbstractView(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
-		this.frame = createFrame(title, heightToScreenSizeRatio, widthToHeightRatio);
+		this.frame = this.createFrame(title);
+		this.setFrameAbsoluteDimension(heightToScreenSizeRatio, widthToHeightRatio);
 	}
 
 	@Override
@@ -38,6 +43,16 @@ public abstract  class AbstractView implements View {
 	}
 	
 	protected abstract JPanel createMainPanel();
-
+	
+	protected final JFrame createFrame(String title) {
+		JFrame f = new JFrame(title);
+		f.setLocationByPlatform(true);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		return f;
+	}
+	
+	protected final void setFrameAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
+		this.frame.setSize(computeAbsoluteDimension(heightToScreenSizeRatio, widthToHeightRatio));
+	}
 	
 }

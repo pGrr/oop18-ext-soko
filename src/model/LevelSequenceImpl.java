@@ -7,23 +7,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import model.Element.Type;
-import model.LevelImpl.LevelNotValidException;
+import model.LevelSchemaImpl.LevelNotValidException;
 
-public class LevelSequenceImpl implements LevelSequence, Serializable {
+public class LevelSequenceImpl implements LevelSequence, Serializable, Iterable<LevelSchema> {
 	
 	private static final long serialVersionUID = -6586784395736453900L;
+	
 	private final String name;
-	private final List<Level> sequence;
+	private final List<LevelSchema> schemaList;
 	
-	public LevelSequenceImpl() {
-		this.name = new String();
-		this.sequence = new ArrayList<>();
-	}
-	
-	public LevelSequenceImpl(String name) {
-		super();
+	public LevelSequenceImpl(String name, List<LevelSchema> schemaList) {
 		this.name = name;
-		this.sequence = new ArrayList<>();
+		this.schemaList = schemaList;
 	}
 	
 	@Override
@@ -32,34 +27,18 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
 	}
 
 	@Override
-	public List<Level> getLevelSequence() {
-		return sequence;
-	}
-
-	@Override
-	public void add(Level level) {
-		this.sequence.add(level);
-	}
-
-	@Override
-	public void add(List<List<Type>> typeGrid, String name) throws LevelNotValidException {
-		Level level = new LevelImpl(typeGrid, name);
-		this.add(level);
-	}
-
-	@Override
-	public List<String> getPathList() {
-		return this.sequence.stream().map(l -> l.getName()).collect(Collectors.toList());
+	public List<String> getNames() {
+		return this.schemaList.stream().map(l -> l.getName() ).collect(Collectors.toList());
 	}
 	
 	@Override
 	public String toString() {
-		return this.getName() + ": " + this.getPathList();
+		return this.getName() + ": " + this.getNames();
 	}
 
 	@Override
-	public Iterator<Level> iterator() {
-		return this.getLevelSequence().iterator();
+	public Iterator<LevelSchema> iterator() {
+		return this.schemaList.iterator();
 	}
 
 }

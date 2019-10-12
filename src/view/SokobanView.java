@@ -1,8 +1,7 @@
 package view;
 
 import java.util.List;
-
-import model.Element.Type;
+import model.Element;
 
 public interface SokobanView {
 	
@@ -10,6 +9,12 @@ public interface SokobanView {
 	
 	public void showCraftLevelView();
 	
-	public void showPlayLevelView(String name, List<List<Type>> typeGrid);
+	public void showPlayLevelView(String name);
+
+	int getPlayableAreaWidth();
+	
+	int getPlayableAreaHeight();
+	
+	void showElements(List<Element> elements);
 	
 }

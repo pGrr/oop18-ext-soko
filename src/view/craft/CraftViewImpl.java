@@ -1,4 +1,4 @@
-package view;
+package view.craft;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -18,7 +18,10 @@ import javax.swing.SwingUtilities;
 import controller.SokobanController;
 import model.PairImpl;
 import model.Element.Type;
-import model.LevelImpl.LevelNotValidException;
+import model.LevelSchema;
+import model.LevelSchemaImpl;
+import model.LevelSchemaImpl.LevelNotValidException;
+import view.AbstractView;
 import model.Pair;
 
 import static view.Views.*;
@@ -48,11 +51,8 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private static final String DIALOG_LEVEL_NOT_CORRECT_TITLE = "LEVEL NOT SAVED";
 	private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
 	private static final String DIALOG_IOERROR_TEXT = "An error occurred during input / output operation";
-
 	
-	private static final int N_ROW_ELEMENTS = 15; // TODO just for testing, is to be asked to the model
-	
-	private SokobanController controller;
+	private final SokobanController controller;
 	private final List<Pair<Type,JToggleButton>> toggleButtons;
 	private final List<List<Pair<JButton, Type>>> buttonGrid;
 	private final List<Pair<Type,ImageIcon>> icons;
@@ -62,7 +62,7 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 		this.controller = controller;
 		this.icons = createIcons();
 		this.toggleButtons = createToggleButtonSelectionList();
-		this.buttonGrid = createButtonGrid(N_ROW_ELEMENTS);
+		this.buttonGrid = createButtonGrid(LevelSchema.N_ROWS);
 		this.getFrame().add(createMainPanel());
 	}
 	
@@ -131,7 +131,7 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	}
 	
 	private final JPanel gridPanel() {
-		JPanel panel = new JPanel(new GridLayout(N_ROW_ELEMENTS, N_ROW_ELEMENTS));
+		JPanel panel = new JPanel(new GridLayout(LevelSchema.N_ROWS, LevelSchema.N_ROWS));
 		panel.setBorder(createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
 		this.buttonGrid.stream()
 					   .flatMap(List::stream)
@@ -182,9 +182,9 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 		return e -> SwingUtilities.invokeLater(() -> {
 			JFileChooser fc = createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
 			fc.showSaveDialog(getFrame());
-			List<List<Type>> typeGrid = getCurrentTypeGrid();
 			try {
-				controller.saveLevel(typeGrid, fc.getSelectedFile().getAbsolutePath() + controller.getLevelFileExtension());
+				String fileName = fc.getSelectedFile().getAbsolutePath() + controller.getLevelFileExtension();
+				controller.saveLevel(fileName, new LevelSchemaImpl(fileName, getCurrentTypeGrid()));
 			} catch (IOException ioException) {
 				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
 				ioException.printStackTrace();
@@ -200,7 +200,7 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 			fc.showOpenDialog(getFrame());
 			List<List<Type>> typeGrid;
 			try {
-				typeGrid = controller.loadLevel(fc.getSelectedFile().getAbsolutePath()).getTypeGrid();
+				typeGrid = controller.loadLevel(fc.getSelectedFile().getAbsolutePath()).getSchema();
 				CraftViewImpl.this.acceptTypeGrid(typeGrid);
 			} catch (ClassNotFoundException | IOException  inputError) {
 				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
@@ -225,8 +225,8 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	}
 	
 	private void acceptTypeGrid(List<List<Type>> typeGrid) {
-		for(int i=0; i<N_ROW_ELEMENTS; i++) {
-			for(int j=0; j<N_ROW_ELEMENTS; j++) {
+		for(int i=0; i<LevelSchema.N_ROWS; i++) {
+			for(int j=0; j<LevelSchema.N_ROWS; j++) {
 				this.buttonGrid.get(i).get(j).getX().setIcon(findTypeIcon(typeGrid.get(i).get(j)));
 				this.buttonGrid.get(i).get(j).setY(typeGrid.get(i).get(j));
 			}
@@ -246,7 +246,7 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	
 	private ActionListener backButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			this.controller.backToInitialViewButtonPressed();
+			this.controller.backToInitialView();
 		});
 	}
 	

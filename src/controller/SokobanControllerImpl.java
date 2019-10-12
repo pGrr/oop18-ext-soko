@@ -9,10 +9,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import model.Element;
 import model.Element.Type;
-import model.Level;
-import model.LevelImpl.LevelNotValidException;
+import model.LevelInstance;
+import model.LevelInstanceImpl;
+import model.LevelSchema;
+import model.LevelSchemaImpl;
+import model.LevelSchemaImpl.LevelNotValidException;
 import model.LevelSequence;
 import model.LevelSequenceImpl;
 import model.SokobanModel;
@@ -31,7 +37,7 @@ public class SokobanControllerImpl implements SokobanController {
 	private final SokobanModel model;
 
 	public SokobanControllerImpl() {
-		this.model = new SokobanModelImpl(this);
+		this.model = new SokobanModelImpl();
 		this.view = new SokobanViewImpl(this);
 	}
 
@@ -41,28 +47,13 @@ public class SokobanControllerImpl implements SokobanController {
 	}
 	
 	@Override
-	public void craftLevelButtonPressed() {
+	public void craftLevel() {
 		this.view.showCraftLevelView();
 	}
 	
 	@Override
-	public void backToInitialViewButtonPressed() {
+	public void backToInitialView() {
 		this.view.showInitialView();
-	}
-	
-	@Override
-	public String getLevelFileDescription() {
-		return LEVEL_FILE_DESCRIPTION;
-	}
-
-	@Override
-	public String getLevelFileExtension() {
-		return LEVEL_FILE_EXTENSION;
-	}
-
-	@Override
-	public String getLevelSequenceFileDescription() {
-		return LEVEL_SEQUENCE_FILE_DESCRIPTION;
 	}
 
 	@Override
@@ -71,40 +62,37 @@ public class SokobanControllerImpl implements SokobanController {
 	}
 
 	@Override
-	public void playLevelSequence(LevelSequence levelSequence) {
-		this.model.playLevelSequence(levelSequence);
+	public String getLevelSequenceFileDescription() {
+		return LEVEL_SEQUENCE_FILE_DESCRIPTION;
 	}
 
 	@Override
-	public void playLevel(Level level) {
-		this.view.showPlayLevelView(level.getName(), level.getTypeGrid());
-	}
-	
-	@Override
-	public void saveLevel(List<List<Type>> typeGrid, String path) 
-			throws LevelNotValidException, FileNotFoundException, IOException {
-		Level level = model.convertFromTypeGrid(path, typeGrid);
-		try(ObjectOutputStream o = new ObjectOutputStream(
-				new BufferedOutputStream(
-						new FileOutputStream(path)))) {
-			o.writeObject(level);
-		}
+	public String getLevelFileExtension() {
+		return LEVEL_FILE_EXTENSION;
 	}
 
 	@Override
-	public Level loadLevel(String path) 
-			throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException {
-		try (ObjectInputStream inputStream = new ObjectInputStream(
-				new BufferedInputStream(
-						new FileInputStream(path)))) {
-			return (Level) inputStream.readObject();
-		}
+	public String getLevelFileDescription() {
+		return LEVEL_FILE_DESCRIPTION;
 	}
-	
+
+	@Override
+	public LevelSequence createLevelSequence(String name, List<String> paths) 
+			throws LevelNotValidException, IOException, ClassNotFoundException {		
+		List<LevelSchema> levelSchemaList = new ArrayList<>();
+		for (String path : paths) {
+			levelSchemaList.add(loadLevel(path));
+		}
+		return new LevelSequenceImpl(name, levelSchemaList);
+	}
+
 	@Override
 	public void saveLevelSequence(String name, List<String> levels) 
 			throws LevelNotValidException, ClassNotFoundException, IOException {
-		try (ObjectOutputStream o = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(new File(name + this.getLevelSequenceFileExtension()))))) {
+		try (ObjectOutputStream o = new ObjectOutputStream(
+				new BufferedOutputStream(
+						new FileOutputStream(
+								new File(name))))) {
 			o.writeObject(createLevelSequence(name, levels));
 		}
 	}
@@ -112,43 +100,67 @@ public class SokobanControllerImpl implements SokobanController {
 	@Override
 	public LevelSequence loadLevelSequence(String path) 
 			throws IOException, ClassNotFoundException {
-		try (ObjectInputStream o = new ObjectInputStream(new BufferedInputStream(new FileInputStream(new File(path))))) {
+		try (ObjectInputStream o = new ObjectInputStream(
+				new BufferedInputStream(
+						new FileInputStream(
+								new File(path))))) {
 			return (LevelSequence) o.readObject();
 		}
 	}
 
 	@Override
-	public LevelSequence createLevelSequence(String name, List<String> paths) 
-			throws LevelNotValidException, IOException, ClassNotFoundException {
-		LevelSequence levelSequence = new LevelSequenceImpl(name);
-		for (String path : paths) {
-			levelSequence.add(loadLevel(path));
+	public void playLevelSequence(LevelSequence levelSequence) {
+		Iterator<LevelSchema> levels = levelSequence.iterator();
+		LevelSchema levelSchema = levels.next();
+		this.view.showPlayLevelView(levelSchema.getName());
+		LevelInstance levelInstance = new LevelInstanceImpl(levelSchema, 
+				this.view.getPlayableAreaWidth(), this.view.getPlayableAreaHeight());
+		this.model.startLevel(levelInstance);
+		this.view.showElements(levelInstance.getElements());
+	}
+
+	@Override
+	public void saveLevel(String path, LevelSchema schema) 
+			throws LevelNotValidException, FileNotFoundException, IOException {
+		try(ObjectOutputStream o = new ObjectOutputStream(
+				new BufferedOutputStream(
+						new FileOutputStream(path)))) {
+			o.writeObject(schema);
 		}
-		return levelSequence;
+	}
+
+	@Override
+	public LevelSchema loadLevel(String path) 
+			throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException {
+		try (ObjectInputStream inputStream = new ObjectInputStream(
+				new BufferedInputStream(
+						new FileInputStream(path)))) {
+			return (LevelSchema) inputStream.readObject();
+		}
 	}
 	
 	@Override
 	public void moveUp() {
-		// TODO Auto-generated method stub
-		
+		List<Element> updatedElements = this.model.moveUserUp();
+		this.view.showElements(updatedElements);
 	}
 	
 	@Override
 	public void moveDown() {
-		// TODO Auto-generated method stub
-		
+		List<Element> updatedElements = this.model.moveUserDown();
+		this.view.showElements(updatedElements);
 	}
 	
 	@Override
 	public void moveLeft() {
-		// TODO Auto-generated method stub
-		
+		List<Element> updatedElements = this.model.moveUserLeft();
+		this.view.showElements(updatedElements);
 	}
 	
 	@Override
 	public void moveRight() {
-		// TODO Auto-generated method stub
-		
+		List<Element> updatedElements = this.model.moveUserRight();
+		this.view.showElements(updatedElements);
 	}
-	
+
 }

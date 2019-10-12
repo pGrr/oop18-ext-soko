@@ -1,6 +1,8 @@
 package view;
 
 import controller.SokobanControllerImpl;
+import view.initial.InitialView;
+import view.initial.InitialViewImpl;
 
 public class TestInitialView {
 

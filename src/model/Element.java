@@ -17,11 +17,12 @@ public interface Element extends Serializable {
 	int getWidth();
 	
 	int getHeight();
-	
+
 	int getXPosition();
 	
 	int getYPosition();
-	
-	void setPosition(int x, int y);
 
+	void setXPosition(int xPosition);
+
+	void setYPosition(int yPosition);	
 }

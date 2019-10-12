@@ -1,6 +1,8 @@
 package view;
 
 import controller.SokobanControllerImpl;
+import view.craft.CraftView;
+import view.craft.CraftViewImpl;
 
 public class TestCraftView {
 

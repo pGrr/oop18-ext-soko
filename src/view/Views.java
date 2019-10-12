@@ -26,14 +26,6 @@ public class Views {
 
 	private Views() {} // not instantiable
 
-	public static final JFrame createFrame(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
-		JFrame f = new JFrame(title);
-		f.setLocationByPlatform(true);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(computeAbsoluteDimension(heightToScreenSizeRatio, widthToHeightRatio));
-		return f;
-	}
-
 	public static final Dimension computeAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
 		double screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight();
 		int height = (int) Math.round(screenSize * heightToScreenSizeRatio);

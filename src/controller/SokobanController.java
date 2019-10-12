@@ -5,32 +5,24 @@ import java.io.IOException;
 import java.util.List;
 import model.LevelSequence;
 import model.Element.Type;
-import model.Level;
-import model.LevelImpl.LevelNotValidException;
+import model.LevelSchema;
+import model.LevelSchemaImpl.LevelNotValidException;
 
 public interface SokobanController {
 	
 	void start();
 		
-	void craftLevelButtonPressed();
+	void craftLevel();
 	
-	void backToInitialViewButtonPressed();
-	
-	void playLevelSequence(LevelSequence levelSequence);
+	void backToInitialView();
 	
 	String getLevelSequenceFileDescription();
 	
 	String getLevelSequenceFileExtension();
-		
+	
 	String getLevelFileDescription();
 	
 	String getLevelFileExtension();
-	
-	Level loadLevel(String path) 
-			throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException;
-	
-	void saveLevel(List<List<Type>> typeGrid, String path) 
-			throws LevelNotValidException, FileNotFoundException, IOException;
 	
 	LevelSequence createLevelSequence(String name, List<String> paths) 
 			throws LevelNotValidException, IOException, ClassNotFoundException;
@@ -41,6 +33,14 @@ public interface SokobanController {
 	LevelSequence loadLevelSequence(String path) 
 			throws IOException, ClassNotFoundException;
 	
+	void playLevelSequence(LevelSequence levelSequence);
+	
+	void saveLevel(String path, LevelSchema schema) 
+			throws LevelNotValidException, FileNotFoundException, IOException;
+
+	LevelSchema loadLevel(String path) 
+			throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException;
+		
 	void moveUp();
 	
 	void moveDown();
@@ -49,6 +49,4 @@ public interface SokobanController {
 	
 	void moveRight();
 
-	void playLevel(Level level);
-	
 }
