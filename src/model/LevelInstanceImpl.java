@@ -2,10 +2,11 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
 import model.Element.Type;
 
 public class LevelInstanceImpl implements LevelInstance {
@@ -27,7 +28,7 @@ public class LevelInstanceImpl implements LevelInstance {
 		this.height = height;
 		this.elementWidth = computeElementWidth();
 		this.elementHeight = computeElementHeight();
-		this.deltaMovement = (elementWidth + elementHeight) / 2;
+		this.deltaMovement = (elementWidth + elementHeight) / 10;
 		this.user = createUser();
 		this.targets = createElementList(Type.TARGET);
 		this.boxes = createElementList(Type.MOVABLE);
@@ -46,28 +47,92 @@ public class LevelInstanceImpl implements LevelInstance {
 
 	@Override
 	public List<Element> moveUserUp() {
-		this.user.setYPosition(this.user.getYPosition() - deltaMovement);
+		move(this.user, up());
 		return this.getElements();
 	}
 
 	@Override
 	public List<Element> moveUserDown() {
-		this.user.setYPosition(this.user.getYPosition() + deltaMovement);
+		move(this.user, down());
 		return this.getElements();
 	}
 
 	@Override
 	public List<Element> moveUserLeft() {
-		this.user.setXPosition(this.user.getXPosition() - deltaMovement);
+		move(this.user, left());
 		return this.getElements();
 	}
 
 	@Override
 	public List<Element> moveUserRight() {
-		this.user.setXPosition(this.user.getXPosition() + deltaMovement);
+		move(this.user, right());
 		return this.getElements();
 	}
-
+	
+	private boolean move(Element element, BiFunction<Integer,Integer,Pair<Integer,Integer>> computeTargetPoint) {
+		Pair<Integer, Integer> newPoint = computeTargetPoint.apply(element.getX(), element.getY());
+		int x = newPoint.getX();
+		int y = newPoint.getY();
+		if (isNewPositionAcceptable(x,y)) {
+			boolean notCollidedWithWalls = !collision(this.walls, x, y).isPresent();
+			if (notCollidedWithWalls) {
+				Optional<Element> possibleBox = collision(this.boxes, x, y);
+				if (possibleBox.isPresent() && !possibleBox.get().equals(element)) {
+					boolean boxMoved = move(possibleBox.get(), computeTargetPoint);
+					if (boxMoved) {
+						updateElementPosition(element, x, y);
+						return true;
+					}
+				} else {
+					updateElementPosition(element, x, y);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private void updateElementPosition(Element element, int x, int y) {
+		if (element.getType().equals(Type.USER)) {			
+			this.user.setXPosition(x);
+			this.user.setYPosition(y);
+		} else if (element.getType().equals(Type.MOVABLE)) {
+			int index = this.boxes.indexOf(element);
+			this.boxes.get(index).setXPosition(x);
+			this.boxes.get(index).setYPosition(y);			
+		}
+	}
+	
+	private boolean isNewPositionAcceptable(int x, int y) {
+		return x >= 0 && x < this.width - elementWidth && y >= 0 && y < this.height - elementHeight;
+	}
+	
+	private Optional<Element> collision(List<Element> elements, int x, int y) {
+		int tolerance = 5;
+		Optional<Element> collisionELement = elements.stream().filter(el ->
+		y > el.getY() - elementHeight + tolerance
+		&& y < el.getY() + elementHeight - tolerance
+		&& x > el.getX() - elementWidth + tolerance
+		&& x < el.getX() + elementWidth	- tolerance
+				).findAny();
+		return collisionELement;
+	}
+	
+	private BiFunction<Integer,Integer,Pair<Integer,Integer>> up() {
+		return (x, y) -> new PairImpl<>(x, y - deltaMovement);
+	}
+	
+	private BiFunction<Integer,Integer,Pair<Integer,Integer>> down() {
+		return (x, y) -> new PairImpl<>(x, y + deltaMovement);
+	}
+	
+	private BiFunction<Integer,Integer,Pair<Integer,Integer>> left() {
+		return (x, y) -> new PairImpl<>(x - deltaMovement, y);
+	}
+	
+	private BiFunction<Integer,Integer,Pair<Integer,Integer>> right() {
+		return (x, y) -> new PairImpl<>(x + deltaMovement, y);
+	}
 
 	private int computeElementHeight() {
 		return (int) Math.round(Math.ceil(this.height / LevelSchema.N_ROWS));
@@ -111,5 +176,5 @@ public class LevelInstanceImpl implements LevelInstance {
 				Stream.of(this.user), this.targets.stream()), this.boxes.stream()), this.walls.stream())
 				.collect(Collectors.toList());
 	}
-	
+		
 }

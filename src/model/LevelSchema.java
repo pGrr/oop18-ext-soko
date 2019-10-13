@@ -6,7 +6,7 @@ import model.Element.Type;
 
 public interface LevelSchema extends Serializable {
 	
-	static int N_ROWS = 15;
+	static int N_ROWS = 25;
 		
 	String getName();
 

@@ -1,7 +1,8 @@
-package view;
+package view.play;
 
 import java.awt.Image;
 import model.Element.Type;
+import view.Views;
 
 public class ViewElementImpl implements ViewElement {
 

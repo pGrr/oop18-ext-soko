@@ -18,9 +18,9 @@ public interface Element extends Serializable {
 	
 	int getHeight();
 
-	int getXPosition();
+	int getX();
 	
-	int getYPosition();
+	int getY();
 
 	void setXPosition(int xPosition);
 

@@ -29,7 +29,7 @@ class LevelPanel extends JPanel {
 	private static final String TARGET_IMAGE = "target-original.png";
 	private static final String BOX_IMAGE = "box-original.png";
 	private static final String WALL_IMAGE = "wall-original.png";
-	private static final int TIMER_DELAY_MS = 100;
+	private static final int TIMER_DELAY_MS = 1;
 	
 	private final SokobanController controller;
 	private final JFrame ownerFrame;
@@ -61,7 +61,7 @@ class LevelPanel extends JPanel {
 	@Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        this.elements.forEach(el -> g.drawImage(getImageByType(el.getType()), el.getXPosition(), el.getYPosition(), this));
+        this.elements.forEach(el -> g.drawImage(getImageByType(el.getType()), el.getX(), el.getY(), this));
 	}  
 	
 	public void setElements(List<Element> elements) {
@@ -109,6 +109,7 @@ class LevelPanel extends JPanel {
 		for (Type type : Type.values()) {
 			if (type.equals(Type.USER)) {
 				Image image = createImageIcon(USER_IMAGE).getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT); 
+				
 				this.scaledImages.get().add(new PairImpl<>(type, image));	
 			} else if (type.equals(Type.TARGET)) {
 				Image image = createImageIcon(TARGET_IMAGE).getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT); 

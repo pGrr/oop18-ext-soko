@@ -35,12 +35,12 @@ public class ElementImpl implements Element {
 	}
 	
 	@Override
-	public int getXPosition() {
+	public int getX() {
 		return xPosition;
 	}
 	
 	@Override
-	public int getYPosition() {
+	public int getY() {
 		return yPosition;
 	}
 
