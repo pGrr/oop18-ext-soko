@@ -13,11 +13,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import model.Element;
-import model.Element.Type;
 import model.LevelInstance;
 import model.LevelInstanceImpl;
 import model.LevelSchema;
-import model.LevelSchemaImpl;
 import model.LevelSchemaImpl.LevelNotValidException;
 import model.LevelSequence;
 import model.LevelSequenceImpl;
@@ -116,7 +114,7 @@ public class SokobanControllerImpl implements SokobanController {
 		LevelInstance levelInstance = new LevelInstanceImpl(levelSchema, 
 				this.view.getPlayableAreaWidth(), this.view.getPlayableAreaHeight());
 		this.model.startLevel(levelInstance);
-		this.view.showElements(levelInstance.getElements());
+		this.view.initializePlayView(levelInstance.getElements());
 	}
 
 	@Override
@@ -143,24 +141,33 @@ public class SokobanControllerImpl implements SokobanController {
 	public void moveUp() {
 		List<Element> updatedElements = this.model.moveUserUp();
 		this.view.showElements(updatedElements);
+		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
 	}
 	
 	@Override
 	public void moveDown() {
 		List<Element> updatedElements = this.model.moveUserDown();
 		this.view.showElements(updatedElements);
+		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
 	}
 	
 	@Override
 	public void moveLeft() {
 		List<Element> updatedElements = this.model.moveUserLeft();
 		this.view.showElements(updatedElements);
+		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
 	}
 	
 	@Override
 	public void moveRight() {
 		List<Element> updatedElements = this.model.moveUserRight();
 		this.view.showElements(updatedElements);
+		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
+	}
+
+	@Override
+	public void updateElements() {
+		this.view.initializePlayView(this.model.getAllElements());
 	}
 
 }

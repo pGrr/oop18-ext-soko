@@ -21,6 +21,7 @@ public class LevelInstanceImpl implements LevelInstance {
 	private final List<Element> targets;
 	private final List<Element> boxes;
 	private final List<Element> walls;
+	private final List<Element> lastModified;
 
 	public LevelInstanceImpl(LevelSchema schema, int width, int height) {
 		this.schema = schema;
@@ -33,6 +34,7 @@ public class LevelInstanceImpl implements LevelInstance {
 		this.targets = createElementList(Type.TARGET);
 		this.boxes = createElementList(Type.MOVABLE);
 		this.walls = createElementList(Type.UNMOVABLE);
+		this.lastModified = new ArrayList<>();
 	}
 	
 	@Override
@@ -48,28 +50,45 @@ public class LevelInstanceImpl implements LevelInstance {
 	@Override
 	public List<Element> moveUserUp() {
 		move(this.user, up());
-		return this.getElements();
+		return this.lastModified;
 	}
 
 	@Override
 	public List<Element> moveUserDown() {
 		move(this.user, down());
-		return this.getElements();
+		return this.lastModified;
 	}
 
 	@Override
 	public List<Element> moveUserLeft() {
 		move(this.user, left());
-		return this.getElements();
+		return this.lastModified;
 	}
 
 	@Override
 	public List<Element> moveUserRight() {
 		move(this.user, right());
-		return this.getElements();
+		return this.lastModified;
 	}
 	
+	@Override
+	public List<Element> getElements() {
+		return Stream.concat(Stream.concat(Stream.concat(
+				Stream.of(this.user), this.targets.stream()), this.boxes.stream()), this.walls.stream())
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Element> getBoxesOnTarget() {
+		return this.targets.stream()
+				  		   .map(target -> collision(this.boxes, target.getX(), target.getY()))
+				  		   .filter(Optional::isPresent)
+				  		   .map(Optional::get)
+				  		   .collect(Collectors.toList());
+	}
+
 	private boolean move(Element element, BiFunction<Integer,Integer,Pair<Integer,Integer>> computeTargetPoint) {
+		this.lastModified.clear();
 		Pair<Integer, Integer> newPoint = computeTargetPoint.apply(element.getX(), element.getY());
 		int x = newPoint.getX();
 		int y = newPoint.getY();
@@ -78,15 +97,15 @@ public class LevelInstanceImpl implements LevelInstance {
 			if (notCollidedWithWalls) {
 				Optional<Element> possibleBox = collision(this.boxes, x, y);
 				if (possibleBox.isPresent() && !possibleBox.get().equals(element)) {
-					boolean boxMoved = move(possibleBox.get(), computeTargetPoint);
+					Element box = possibleBox.get(); 
+					boolean boxMoved = move(box, computeTargetPoint);
 					if (boxMoved) {
-						updateElementPosition(element, x, y);
-						return true;
+						this.lastModified.add(possibleBox.get());
 					}
-				} else {
-					updateElementPosition(element, x, y);
-					return true;
 				}
+				this.lastModified.add(element);
+				updateElementPosition(element, x, y);
+				return true;
 			}
 		}
 		return false;
@@ -168,13 +187,6 @@ public class LevelInstanceImpl implements LevelInstance {
 	 		  });
 		 });
 		return l;
-	}
-
-	@Override
-	public List<Element> getElements() {
-		return Stream.concat(Stream.concat(Stream.concat(
-				Stream.of(this.user), this.targets.stream()), this.boxes.stream()), this.walls.stream())
-				.collect(Collectors.toList());
 	}
 		
 }

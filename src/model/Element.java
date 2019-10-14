@@ -25,4 +25,10 @@ public interface Element extends Serializable {
 	void setXPosition(int xPosition);
 
 	void setYPosition(int yPosition);	
+	
+	@Override
+	public boolean equals(Object obj);
+	
+	@Override
+	public int hashCode();
 }

@@ -1,24 +1,15 @@
 package view.play;
 
 import java.awt.Image;
-import model.Element.Type;
+
+import model.Element;
 
 public interface ViewElement {
 	
-	public Type getType();
+	public Element getElement();
 	
 	public Image getImage();
 	
-	public int getXposition();
-
-	public void setXposition(int xPosition);
-
-	public int getYposition();
-
-	public void setYposition(int yPosition);
-
-	public int getWidth();
-	
-	public int getHeight();
+	public void setImage(String resourceName);
 
 }

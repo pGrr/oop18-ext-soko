@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import model.LevelSequence;
-import model.Element.Type;
 import model.LevelSchema;
 import model.LevelSchemaImpl.LevelNotValidException;
 
@@ -39,8 +38,8 @@ public interface SokobanController {
 			throws LevelNotValidException, FileNotFoundException, IOException;
 
 	LevelSchema loadLevel(String path) 
-			throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException;
-		
+			throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException;		
+	
 	void moveUp();
 	
 	void moveDown();
@@ -48,5 +47,6 @@ public interface SokobanController {
 	void moveLeft();
 	
 	void moveRight();
-
+	
+	void updateElements();
 }

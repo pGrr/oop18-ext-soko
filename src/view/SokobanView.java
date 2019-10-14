@@ -15,6 +15,10 @@ public interface SokobanView {
 	
 	int getPlayableAreaHeight();
 	
+	void initializePlayView(List<Element> elements);
+		
 	void showElements(List<Element> elements);
+	
+	void showBoxesOnTargets(List<Element> boxesCoveringTargets);
 	
 }

@@ -81,4 +81,22 @@ public class SokobanViewImpl implements SokobanView {
 		}
 	}
 
+	@Override
+	public void showBoxesOnTargets(List<Element> boxesCoveringTargets) {
+		if (this.playView.isPresent()) {			
+			this.playView.get().showBoxesCoveringTargets(boxesCoveringTargets);
+		} else {
+			throw new IllegalStateException("Play view has not been initialized");
+		}
+	}
+
+	@Override
+	public void initializePlayView(List<Element> elements) {
+		if (this.playView.isPresent()) {			
+			this.playView.get().initialize(elements);;
+		} else {
+			throw new IllegalStateException("Play view has not been initialized");
+		}
+	}
+
 }

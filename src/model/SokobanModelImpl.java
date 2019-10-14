@@ -36,4 +36,14 @@ public class SokobanModelImpl implements SokobanModel {
 		return this.currentLevel.get().moveUserRight();		
 	}
 
+	@Override
+	public List<Element> getBoxesOnTargets() {
+		return this.currentLevel.get().getBoxesOnTarget();
+	}
+
+	@Override
+	public List<Element> getAllElements() {
+		return this.currentLevel.get().getElements();
+	}
+
 }

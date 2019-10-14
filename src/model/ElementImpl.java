@@ -53,5 +53,39 @@ public class ElementImpl implements Element {
 	public void setYPosition(int yPosition) {
 		this.yPosition = yPosition;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + height;
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + width;
+		result = prime * result + xPosition;
+		result = prime * result + yPosition;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ElementImpl other = (ElementImpl) obj;
+		if (height != other.height)
+			return false;
+		if (type != other.type)
+			return false;
+		if (width != other.width)
+			return false;
+		if (xPosition != other.xPosition)
+			return false;
+		if (yPosition != other.yPosition)
+			return false;
+		return true;
+	}
 	
 }

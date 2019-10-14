@@ -12,12 +12,12 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 	private static final double WIDTH_TO_HEIGHT_RATIO = 1;
 	
 	private final SokobanController controller;
-	private final LevelPanel levelPanel;
+	private final PlayViewLevelPanel levelPanel;
 	
 	public PlayViewImpl(SokobanController controller, String name) {
 		super(name, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
-		this.levelPanel = new LevelPanel(this.getFrame(), this.controller);
+		this.levelPanel = new PlayViewLevelPanel(this.getFrame(), this.controller);
 		this.getFrame().add(createMainPanel());
 		this.getFrame().pack();
 	}
@@ -39,6 +39,16 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 
 	@Override
 	public void showElements(List<Element> elements) {
+		this.levelPanel.showElements(elements);
+	}
+	
+	@Override
+	public void showBoxesCoveringTargets(List<Element> boxesCoveringTargets) {
+		this.levelPanel.showBoxesOnTargets(boxesCoveringTargets);
+	}
+
+	@Override
+	public void initialize(List<Element> elements) {
 		this.levelPanel.setElements(elements);
 	}
 

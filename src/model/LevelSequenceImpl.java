@@ -1,13 +1,9 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import model.Element.Type;
-import model.LevelSchemaImpl.LevelNotValidException;
 
 public class LevelSequenceImpl implements LevelSequence, Serializable, Iterable<LevelSchema> {
 	
