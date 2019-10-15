@@ -49,4 +49,10 @@ public interface SokobanController {
 	void moveRight();
 	
 	void updateElements();
+
+	void playLevel(LevelSchema levelSchema);
+
+	void levelFinishedAccepted();
+
+	void gameFinishedAccepted();
 }

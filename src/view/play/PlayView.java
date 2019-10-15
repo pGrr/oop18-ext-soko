@@ -15,5 +15,9 @@ public interface PlayView extends View {
 	void showElements(List<Element> elements);
 
 	void showBoxesCoveringTargets(List<Element> boxesCoveringTargets);
+
+	void showLevelFinishedDialog();
+
+	void showGameFinishedDialog();
 	
 }

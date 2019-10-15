@@ -3,8 +3,14 @@ package model;
 import java.util.List;
 
 public interface SokobanModel {
+	
+	void startLevelSequence(LevelSequence levelSequence);
+	
+	boolean hasNextSchema();
+	
+	LevelSchema getNextSchema();
 						
-	void startLevel(LevelInstance levelInstance);
+	LevelInstance startLevel(LevelSchema levelSchema, int width, int height);
 	
 	List<Element> moveUserUp();
 	
@@ -17,4 +23,8 @@ public interface SokobanModel {
 	List<Element> getAllElements();
 	
 	List<Element> getBoxesOnTargets();
+	
+	boolean isLevelFinished();
+	
+	boolean isGameFinished();
 }

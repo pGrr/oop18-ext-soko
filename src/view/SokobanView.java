@@ -21,4 +21,8 @@ public interface SokobanView {
 	
 	void showBoxesOnTargets(List<Element> boxesCoveringTargets);
 	
+	void showLevelFinishedDialog();
+	
+	void showGameFinishedDialog();
+	
 }

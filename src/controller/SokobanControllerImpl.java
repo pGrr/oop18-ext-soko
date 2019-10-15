@@ -10,11 +10,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import model.Element;
 import model.LevelInstance;
-import model.LevelInstanceImpl;
 import model.LevelSchema;
 import model.LevelSchemaImpl.LevelNotValidException;
 import model.LevelSequence;
@@ -108,13 +106,20 @@ public class SokobanControllerImpl implements SokobanController {
 
 	@Override
 	public void playLevelSequence(LevelSequence levelSequence) {
-		Iterator<LevelSchema> levels = levelSequence.iterator();
-		LevelSchema levelSchema = levels.next();
+		this.model.startLevelSequence(levelSequence);
+		if (this.model.hasNextSchema()) {
+			LevelSchema levelSchema = this.model.getNextSchema();
+			this.playLevel(levelSchema);
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	@Override
+	public void playLevel(LevelSchema levelSchema) {
 		this.view.showPlayLevelView(levelSchema.getName());
-		LevelInstance levelInstance = new LevelInstanceImpl(levelSchema, 
-				this.view.getPlayableAreaWidth(), this.view.getPlayableAreaHeight());
-		this.model.startLevel(levelInstance);
-		this.view.initializePlayView(levelInstance.getElements());
+		LevelInstance level = this.model.startLevel(levelSchema, this.view.getPlayableAreaWidth(), this.view.getPlayableAreaHeight());
+		this.view.initializePlayView(level.getElements());
 	}
 
 	@Override
@@ -142,6 +147,7 @@ public class SokobanControllerImpl implements SokobanController {
 		List<Element> updatedElements = this.model.moveUserUp();
 		this.view.showElements(updatedElements);
 		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
+		checkLevelFinished();
 	}
 	
 	@Override
@@ -149,6 +155,7 @@ public class SokobanControllerImpl implements SokobanController {
 		List<Element> updatedElements = this.model.moveUserDown();
 		this.view.showElements(updatedElements);
 		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
+		checkLevelFinished();
 	}
 	
 	@Override
@@ -156,6 +163,7 @@ public class SokobanControllerImpl implements SokobanController {
 		List<Element> updatedElements = this.model.moveUserLeft();
 		this.view.showElements(updatedElements);
 		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
+		checkLevelFinished();
 	}
 	
 	@Override
@@ -163,11 +171,32 @@ public class SokobanControllerImpl implements SokobanController {
 		List<Element> updatedElements = this.model.moveUserRight();
 		this.view.showElements(updatedElements);
 		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
+		checkLevelFinished();
 	}
 
 	@Override
 	public void updateElements() {
 		this.view.initializePlayView(this.model.getAllElements());
+	}
+
+	@Override
+	public void levelFinishedAccepted() {
+		this.playLevel(this.model.getNextSchema());
+	}
+	
+	@Override
+	public void gameFinishedAccepted() {
+		this.backToInitialView();
+	}
+		
+	private void checkLevelFinished() {
+		if (this.model.isLevelFinished()) {
+			if (this.model.isGameFinished()) {
+				this.view.showGameFinishedDialog();
+			} else {
+				this.view.showLevelFinishedDialog();
+			}
+		}
 	}
 
 }

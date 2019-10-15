@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.SokobanController;
@@ -21,7 +23,6 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	private static final double WIDTH_TO_HEIGHT_RATIO = 1;
 	private static final int DEFAULT_PADDING = 20;
 	private static final String ICON_CRAFT = "craft.png";
-	private static final String ICON_OK = "ok.png";
 	private static final String TITLE = "SOKOBAN - InitialView";
 	private static final String LABEL_WELCOME_TEXT = "Welcome to Sokoban! What would you like to do?";
 	private static final String BUTTON_CRAFT_TEXT = "CRAFT A LEVEL";
@@ -32,6 +33,7 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
 	private static final String DIALOG_CLASS_NOT_FOUND_TITLE = "CLASS NOT FOUND";
 	private static final String DIALOG_CLASS_NOT_FOUND_TEXT = "Loaded file is corrupted.";
+	private static final ImageIcon ICON_PLAY = createImageIcon("ok.png");
 
 	private final SokobanController controller;
 	private final List<String> levels;
@@ -80,7 +82,7 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 		p.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		JButton craftButton = createButton(BUTTON_CRAFT_TEXT, ICON_CRAFT, craftButtonActionListener());
 		p.add(craftButton, BorderLayout.PAGE_START);
-		JButton playButton = createButton(BUTTON_PLAY_TEXT, ICON_OK, playButtonActionListener());
+		JButton playButton = createButton(BUTTON_PLAY_TEXT, ICON_PLAY, playButtonActionListener());
 		p.add(playButton, BorderLayout.PAGE_END);
 		return p;
 	}
@@ -106,4 +108,11 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 			}
 		});
 	}
+
+	@Override
+	protected ActionListener errorButtonActionListener(JDialog dialog) {
+		return e -> {
+			dialog.dispose();
+			this.controller.backToInitialView();
+		};	}
 }

@@ -188,5 +188,10 @@ public class LevelInstanceImpl implements LevelInstance {
 		 });
 		return l;
 	}
+
+	@Override
+	public boolean isFinished() {
+		return this.boxes.equals(getBoxesOnTarget());
+	}
 		
 }

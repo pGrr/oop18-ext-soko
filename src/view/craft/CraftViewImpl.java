@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,22 +36,22 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private static final String PANEL_GRID_TITLE = "Level grid";
 	private static final String PANEL_OPTIONS_TITLE = "Edit level options";
 	private static final String LABEL_WELCOME_TEXT = "Welcome! Click on a element to select it and then the cell's grid to mark them.";
-	private static final String BUTTON_SAVE_TEXT = "SAVE";
-	private static final String BUTTON_LOAD_TEXT = "LOAD";
-	private static final String BUTTON_RESET_TEXT = "RESET";
-	private static final String BUTTON_BACK_TEXT = "BACK TO INITIAL VIEW";
-	private static final String ICON_WALL_PATH = "wall-30px.png";
-	private static final String ICON_BOX_PATH = "box-30px.png";
-	private static final String ICON_TARGET_PATH = "target-30px.png";
-	private static final String ICON_USER_PATH = "user-30px.png";
-	private static final String ICON_SAVE_PATH = "download.png";
-	private static final String ICON_LOAD_PATH = "upload.png";
-	private static final String ICON_CANCEL_PATH = "cross.png";
-	private static final String ICON_BACK_PATH = "back.png";
 	private static final String DIALOG_ERROR_TITLE = "ERROR";
 	private static final String DIALOG_LEVEL_NOT_CORRECT_TITLE = "LEVEL NOT SAVED";
 	private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
 	private static final String DIALOG_IOERROR_TEXT = "An error occurred during input / output operation";
+	private static final String BUTTON_SAVE_TEXT = "SAVE";
+	private static final String BUTTON_LOAD_TEXT = "LOAD";
+	private static final String BUTTON_RESET_TEXT = "RESET";
+	private static final String BUTTON_BACK_TEXT = "BACK TO INITIAL VIEW";
+	private static final ImageIcon ICON_WALL = createImageIcon("wall-30px.png");
+	private static final ImageIcon ICON_BOX = createImageIcon("box-30px.png");
+	private static final ImageIcon ICON_TARGET = createImageIcon("target-30px.png");
+	private static final ImageIcon ICON_USER = createImageIcon("user-30px.png");
+	private static final ImageIcon ICON_SAVE = createImageIcon("download.png");
+	private static final ImageIcon ICON_LOAD = createImageIcon("upload.png");
+	private static final ImageIcon ICON_CANCEL = createImageIcon("cross.png");
+	private static final ImageIcon ICON_BACK = createImageIcon("back.png");
 	
 	private final SokobanController controller;
 	private final List<Pair<Type,JToggleButton>> toggleButtons;
@@ -68,9 +69,8 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	
 	@Override
 	public void showLevelNotValidDialog() {
-		showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT);
+		showErrorDialog(DIALOG_LEVEL_NOT_CORRECT_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT);
 	}
-
 	
 	@Override
 	protected JPanel createMainPanel() {
@@ -87,22 +87,30 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 		this.getFrame().setVisible(true);
 	}
 	
+	@Override
+	protected ActionListener errorButtonActionListener(JDialog dialog) {
+		return e -> {
+			dialog.dispose();
+			this.controller.backToInitialView();
+		};
+	}
+
 	private List<Pair<Type, ImageIcon>> createIcons() {
 		List<Pair<Type, ImageIcon>> l = new ArrayList<>();
 		l.add(new PairImpl<>(Type.EMPTY, createImageIcon("")));
-		l.add(new PairImpl<>(Type.MOVABLE, createImageIcon(ICON_BOX_PATH)));
-		l.add(new PairImpl<>(Type.UNMOVABLE, createImageIcon(ICON_WALL_PATH)));
-		l.add(new PairImpl<>(Type.TARGET, createImageIcon(ICON_TARGET_PATH)));
-		l.add(new PairImpl<>(Type.USER, createImageIcon(ICON_USER_PATH)));
+		l.add(new PairImpl<>(Type.MOVABLE, ICON_BOX));
+		l.add(new PairImpl<>(Type.UNMOVABLE, ICON_WALL));
+		l.add(new PairImpl<>(Type.TARGET, ICON_TARGET));
+		l.add(new PairImpl<>(Type.USER, ICON_USER));
 		return l;
 	}
 
 	private List<Pair<Type,JToggleButton>> createToggleButtonSelectionList() {
 		List<Pair<Type,JToggleButton>> l = new ArrayList<>();
-		l.add(new PairImpl<>(Type.MOVABLE, createToggleButton("", createImageIcon(ICON_BOX_PATH), toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.UNMOVABLE, createToggleButton("", createImageIcon(ICON_WALL_PATH), toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.TARGET, createToggleButton("", createImageIcon(ICON_TARGET_PATH), toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.USER, createToggleButton("", createImageIcon(ICON_USER_PATH), toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.MOVABLE, createToggleButton("", ICON_BOX, toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.UNMOVABLE, createToggleButton("", ICON_WALL, toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.TARGET, createToggleButton("", ICON_TARGET, toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.USER, createToggleButton("", ICON_USER, toggleButtonActionListener())));
 		return l; 
 	}
 	
@@ -146,10 +154,10 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private JPanel choicesPanel() {
 		JPanel choicesPanel = new JPanel(new GridLayout(1,4, DEFAULT_PADDING, DEFAULT_PADDING));
 		choicesPanel.setBorder(createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
-		choicesPanel.add(createButton(BUTTON_SAVE_TEXT, ICON_SAVE_PATH, saveButtonActionListener()));
-		choicesPanel.add(createButton(BUTTON_LOAD_TEXT, ICON_LOAD_PATH, loadButtonActionListener()));
-		choicesPanel.add(createButton(BUTTON_RESET_TEXT, ICON_CANCEL_PATH, resetButtonActionListener()));
-		choicesPanel.add(createButton(BUTTON_BACK_TEXT, ICON_BACK_PATH, backButtonActionListener()));
+		choicesPanel.add(createButton(BUTTON_SAVE_TEXT, ICON_SAVE, saveButtonActionListener()));
+		choicesPanel.add(createButton(BUTTON_LOAD_TEXT, ICON_LOAD, loadButtonActionListener()));
+		choicesPanel.add(createButton(BUTTON_RESET_TEXT, ICON_CANCEL, resetButtonActionListener()));
+		choicesPanel.add(createButton(BUTTON_BACK_TEXT, ICON_BACK, backButtonActionListener()));
 		return choicesPanel;
 	}
 
@@ -274,4 +282,5 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 				   .findFirst()
 				   .orElse(new ImageIcon());
 	}
+
 }

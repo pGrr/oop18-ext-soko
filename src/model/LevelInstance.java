@@ -19,5 +19,7 @@ public interface LevelInstance {
 	List<Element> getElements();
 
 	List<Element> getBoxesOnTarget();
+	
+	boolean isFinished();
 
 }

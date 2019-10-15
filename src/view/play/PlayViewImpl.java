@@ -1,6 +1,8 @@
 package view.play;
 
+import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import controller.SokobanController;
 import model.Element;
@@ -10,6 +12,9 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 	
 	private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
 	private static final double WIDTH_TO_HEIGHT_RATIO = 1;
+	private static final String LEVEL_FINISHED_TITLE = "LEVEL COMPLETE";
+	private static final String LEVEL_FINISHED_MESSAGE = "You made it!! Congratulations!";
+	private static final String GAME_FINISHED_MESSAGE = "...and that was the last one!! You won!! Congratulations!";
 	
 	private final SokobanController controller;
 	private final PlayViewLevelPanel levelPanel;
@@ -50,6 +55,37 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 	@Override
 	public void initialize(List<Element> elements) {
 		this.levelPanel.setElements(elements);
+	}
+
+	@Override
+	protected ActionListener errorButtonActionListener(JDialog dialog) {
+		return e -> {
+			dialog.dispose();
+			this.controller.backToInitialView();
+		};
+	}
+	
+	protected ActionListener levelFinishedActionListener() {
+		return e -> {
+			this.controller.levelFinishedAccepted();
+		};
+	}
+	
+	protected ActionListener gameFinishedActionListener() {
+		return e -> {
+			this.controller.gameFinishedAccepted();
+		};
+	}
+	
+	@Override
+	public void showLevelFinishedDialog() {
+		showNotifyDialog(LEVEL_FINISHED_TITLE, LEVEL_FINISHED_MESSAGE, levelFinishedActionListener());
+	}
+	
+	
+	@Override
+	public void showGameFinishedDialog() {
+		showNotifyDialog(LEVEL_FINISHED_TITLE, GAME_FINISHED_MESSAGE, gameFinishedActionListener());
 	}
 
 }

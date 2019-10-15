@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -24,7 +26,7 @@ public class Views {
 
 	public static final int DEFAULT_PADDING = 20;
 
-	private Views() {} // not instantiable
+	private Views() {} // static class
 
 	public static final Dimension computeAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
 		double screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight();
@@ -33,11 +35,14 @@ public class Views {
 		return new Dimension(width, height);
 	}
 
-	public static final JDialog createDialog(JFrame owner, String title, String message) {
+	public static final JDialog createDialog(JFrame owner, String title, String message, JButton button) {
 		JDialog dialog = new JDialog(owner, title);
+		JPanel panel = new JPanel(new GridLayout(2,1));
 		JLabel label = new JLabel(message);
 		label.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING * 2));
-		dialog.add(label);
+		panel.add(label);
+		panel.add(button);
+		dialog.add(panel);
 		dialog.setLocationByPlatform(true);
 		dialog.setSize(dialog.getPreferredSize());
 		return dialog;

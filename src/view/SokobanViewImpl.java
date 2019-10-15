@@ -99,4 +99,21 @@ public class SokobanViewImpl implements SokobanView {
 		}
 	}
 
+	@Override
+	public void showLevelFinishedDialog() {
+		if (this.playView.isPresent()) {			
+			this.playView.get().showLevelFinishedDialog();
+		} else {
+			throw new IllegalStateException("Play view has not been initialized");
+		}
+	}
+
+	@Override
+	public void showGameFinishedDialog() {
+		if (this.playView.isPresent()) {			
+			this.playView.get().showGameFinishedDialog();
+		} else {
+			throw new IllegalStateException("Play view has not been initialized");
+		}	}
+
 }
