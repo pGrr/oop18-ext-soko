@@ -36,14 +36,19 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	private static final ImageIcon ICON_PLAY = createImageIcon("ok.png");
 
 	private final SokobanController controller;
-	private final List<String> levels;
-	private final LevelList levelList;
+	private final LevelListEditor levelListEditor;
 	
 	public InitialViewImpl(SokobanController controller) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
-		this.levels = new ArrayList<>();
-		this.levelList = new LevelList(this, this.controller, this.levels);
+		this.levelListEditor = new LevelListEditor(this, this.controller, new ArrayList<>());
+		this.getFrame().add(createMainPanel());
+	}
+	
+	public InitialViewImpl(SokobanController controller, List<String> levels) {
+		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
+		this.controller = controller;
+		this.levelListEditor = new LevelListEditor(this, this.controller, levels);
 		this.getFrame().add(createMainPanel());
 	}
 	
@@ -72,7 +77,7 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 		JPanel p = new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
 		p.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
-		p.add(this.levelList.getPanel());
+		p.add(this.levelListEditor.getPanel());
 		return p;
 	}
 	
@@ -96,7 +101,7 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	private ActionListener playButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
 			try {
-				this.controller.playLevelSequence(this.controller.createLevelSequence("", this.levels));
+				this.controller.playLevelSequence(this.levelListEditor.getLevelSequence());
 			} catch (LevelNotValidException levelNotValidException) {
 				showLevelNotValidDialog();
 			} catch (IOException ioException) {
