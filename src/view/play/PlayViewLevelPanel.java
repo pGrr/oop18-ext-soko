@@ -29,14 +29,14 @@ class PlayViewLevelPanel extends JPanel {
 	private final JFrame ownerFrame;
 	private Optional<Graphics> graphics;
 	private final Timer timer;
-	private final Set<Integer> keyPressedCode;
+	private Optional<Integer> keyPressedCode;
 	private final List<ViewElement> elements;
 	private final Set<ViewElementBox> boxesOnTarget;
 	
 	public PlayViewLevelPanel(JFrame ownerFrame, SokobanController controller) {
 		this.controller = controller;
 		this.ownerFrame = ownerFrame;
-		this.keyPressedCode = new HashSet<>(8);
+		this.keyPressedCode = Optional.empty();
 		this.timer = new Timer(TIMER_DELAY_MS, this.timerAction());
 		this.timer.start();
 		this.elements = new ArrayList<>();
@@ -136,19 +136,18 @@ class PlayViewLevelPanel extends JPanel {
 	
 	private ActionListener timerAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			if (!this.keyPressedCode.isEmpty()) {
-				PlayViewLevelPanel.this.keyPressedCode.stream().forEach(key -> {
-					if (key.equals(KeyEvent.VK_DOWN) || key.equals(KeyEvent.VK_KP_DOWN)) {
-						PlayViewLevelPanel.this.controller.moveDown();
-					} else if (key.equals(KeyEvent.VK_UP) || key.equals(KeyEvent.VK_KP_UP)) {
-						PlayViewLevelPanel.this.controller.moveUp();
-					} else if (key.equals(KeyEvent.VK_LEFT) || key.equals(KeyEvent.VK_KP_LEFT)) {
-						PlayViewLevelPanel.this.controller.moveLeft();
-					} else if (key.equals(KeyEvent.VK_RIGHT) || key.equals(KeyEvent.VK_KP_RIGHT)) {
-						PlayViewLevelPanel.this.controller.moveRight();
-					}					
-				});
-				PlayViewLevelPanel.this.keyPressedCode.clear();
+			if (this.keyPressedCode.isPresent()) {
+				Integer key = keyPressedCode.get();
+				if (key.equals(KeyEvent.VK_DOWN) || key.equals(KeyEvent.VK_KP_DOWN)) {
+					PlayViewLevelPanel.this.controller.moveDown();
+				} else if (key.equals(KeyEvent.VK_UP) || key.equals(KeyEvent.VK_KP_UP)) {
+					PlayViewLevelPanel.this.controller.moveUp();
+				} else if (key.equals(KeyEvent.VK_LEFT) || key.equals(KeyEvent.VK_KP_LEFT)) {
+					PlayViewLevelPanel.this.controller.moveLeft();
+				} else if (key.equals(KeyEvent.VK_RIGHT) || key.equals(KeyEvent.VK_KP_RIGHT)) {
+					PlayViewLevelPanel.this.controller.moveRight();
+				}					
+				this.keyPressedCode = Optional.empty();
 			}
 		});
 	}
@@ -157,12 +156,7 @@ class PlayViewLevelPanel extends JPanel {
 		return new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				SwingUtilities.invokeLater(() -> PlayViewLevelPanel.this.keyPressedCode.add(e.getKeyCode()));
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				SwingUtilities.invokeLater(() -> PlayViewLevelPanel.this.keyPressedCode.clear());
+				SwingUtilities.invokeLater(() -> PlayViewLevelPanel.this.keyPressedCode = Optional.of(e.getKeyCode()));
 			}
 		};
 	}	
