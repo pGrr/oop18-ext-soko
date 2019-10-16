@@ -1,6 +1,6 @@
-package view.play;
+package view.play.elements;
 
-import static view.Views.createImageIcon;
+import static view.Components.createImageIcon;
 import java.awt.Image;
 import java.util.Objects;
 

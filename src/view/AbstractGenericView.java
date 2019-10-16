@@ -6,22 +6,22 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import static view.Views.*;
+import static view.Components.*;
 
 import java.awt.event.ActionListener;
 
-public abstract  class AbstractView implements View {
+public abstract  class AbstractGenericView implements GenericView {
 	
 	private static final String BUTTON_OK_TEXT = "Ok";
 	private static final ImageIcon ICON_OK = createImageIcon("icons/ok.png");
 		
 	private final JFrame frame;
 	
-	public AbstractView(String title) {
+	public AbstractGenericView(String title) {
 		this.frame = this.createFrame(title);
 	}
 
-	public AbstractView(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
+	public AbstractGenericView(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
 		this.frame = this.createFrame(title);
 		this.setFrameAbsoluteDimension(heightToScreenSizeRatio, widthToHeightRatio);
 	}
@@ -54,7 +54,7 @@ public abstract  class AbstractView implements View {
 	private JDialog createErrorDialog(String title, String message) {
 		JButton button = createButton(BUTTON_OK_TEXT, ICON_OK, null);
 		JDialog dialog = createDialog(this.getFrame(), title, message, button);
-		button.addActionListener(errorButtonActionListener(dialog));
+		button.addActionListener(errorAction(dialog));
 		return dialog;
 	}
 	
@@ -65,7 +65,7 @@ public abstract  class AbstractView implements View {
 		return dialog;
 	}
 	
-	abstract protected ActionListener errorButtonActionListener(JDialog dialog);
+	abstract protected ActionListener errorAction(JDialog dialog);
 	
 	public JFrame getFrame() {
 		return this.frame;

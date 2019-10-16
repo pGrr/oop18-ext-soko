@@ -3,6 +3,7 @@ package view;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
@@ -22,11 +23,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
-public class Views {
+public class Components {
 
 	public static final int DEFAULT_PADDING = 20;
 
-	private Views() {} // static class
+	private Components() {} // static class
 
 	public static final Dimension computeAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
 		double screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight();
@@ -104,6 +105,11 @@ public class Views {
 
 	public static final ImageIcon createImageIcon(String path) {
 		return path.isEmpty() ? new ImageIcon() : new ImageIcon(ClassLoader.getSystemResource(path));
+	}
+	
+	public static final ImageIcon createResizedIcon(ImageIcon i, int w, int h) {
+		Image img = i.getImage();
+		return img == null ? new ImageIcon() : new ImageIcon(i.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));	
 	}
 
 	public static final Border createEmptyPaddingBorder(int defaultPadding) {

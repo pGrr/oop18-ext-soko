@@ -7,11 +7,11 @@ import controller.SokobanController;
 import model.Element;
 import model.LevelSequence;
 import view.craft.CraftView;
-import view.craft.CraftViewImpl;
+import view.craft.CraftViewContainer;
 import view.initial.InitialView;
-import view.initial.InitialViewImpl;
+import view.initial.InitialViewContainer;
 import view.play.PlayView;
-import view.play.PlayViewImpl;
+import view.play.PlayViewContainer;
 
 public class SokobanViewImpl implements SokobanView {
 	
@@ -34,8 +34,8 @@ public class SokobanViewImpl implements SokobanView {
 			System.err.println(e);
 		}
 		this.initialView = this.defaultLevelSequence.isPresent() ? 
-				new InitialViewImpl(controller, this.defaultLevelSequence.get()) : new InitialViewImpl(controller);			
-		this.craftView = new CraftViewImpl(controller);
+				new InitialViewContainer(controller, this.defaultLevelSequence.get()) : new InitialViewContainer(controller);			
+		this.craftView = new CraftViewContainer(controller);
 		this.playView = Optional.empty();
 	}
 
@@ -54,14 +54,14 @@ public class SokobanViewImpl implements SokobanView {
 	@Override
 	public void showPlayLevelView(String name) {
 		this.hideAll();
-		this.playView = Optional.of(new PlayViewImpl(this.controller, name));
+		this.playView = Optional.of(new PlayViewContainer(this.controller, name));
 		this.playView.get().show();
 	}
 
 	@Override
 	public int getPlayableAreaWidth() {
 		if (this.playView.isPresent()) {
-			return this.playView.get().getPlayAreaWidth();			
+			return this.playView.get().getGameAreaWidth();			
 		} else {
 			throw new RuntimeException(LEVEL_NOT_INITIALIZED_ERROR_TEXT);
 		}
@@ -70,7 +70,7 @@ public class SokobanViewImpl implements SokobanView {
 	@Override
 	public int getPlayableAreaHeight() {
 		if (this.playView.isPresent()) {
-			return this.playView.get().getPlayAreaHeight();
+			return this.playView.get().getGameAreaHeight();
 		} else {
 			throw new RuntimeException(LEVEL_NOT_INITIALIZED_ERROR_TEXT);
 		}
@@ -79,7 +79,7 @@ public class SokobanViewImpl implements SokobanView {
 	@Override
 	public void showElements(List<Element> elements) {
 		if (this.playView.isPresent()) {
-			this.playView.get().showElements(elements);			
+			this.playView.get().drawElements(elements);			
 		} else {
 			throw new RuntimeException(LEVEL_NOT_INITIALIZED_ERROR_TEXT);
 		}
@@ -96,7 +96,7 @@ public class SokobanViewImpl implements SokobanView {
 	@Override
 	public void showBoxesOnTargets(List<Element> boxesCoveringTargets) {
 		if (this.playView.isPresent()) {			
-			this.playView.get().showBoxesCoveringTargets(boxesCoveringTargets);
+			this.playView.get().drawBoxesCoveringTargets(boxesCoveringTargets);
 		} else {
 			throw new IllegalStateException("Play view has not been initialized");
 		}

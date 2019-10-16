@@ -9,9 +9,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import controller.SokobanController;
 import model.Element;
-import view.AbstractView;
+import view.AbstractGenericView;
 
-public class PlayViewImpl extends AbstractView implements PlayView {
+public class PlayViewContainer extends AbstractGenericView implements PlayView {
 	
 	private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
 	private static final double WIDTH_TO_HEIGHT_RATIO = 1;
@@ -22,12 +22,12 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 	private static final String GAME_FINISHED_MESSAGE = "...and that was the last one!! You won!! Congratulations!";
 	
 	private final SokobanController controller;
-	private final PlayViewLevelPanel levelPanel;
+	private final PlayViewGameArea levelPanel;
 	
-	public PlayViewImpl(SokobanController controller, String name) {
+	public PlayViewContainer(SokobanController controller, String name) {
 		super(name, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
-		this.levelPanel = new PlayViewLevelPanel(this.getFrame(), this.controller);
+		this.levelPanel = new PlayViewGameArea(this.getFrame(), this.controller);
 		this.getFrame().setJMenuBar(createMenuBar());
 		this.getFrame().add(createMainPanel());
 		this.getFrame().pack();
@@ -39,23 +39,23 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 	}
 
 	@Override
-	public int getPlayAreaWidth() {
+	public int getGameAreaWidth() {
 		return this.levelPanel.getWidth();
 	}
 
 	@Override
-	public int getPlayAreaHeight() {
+	public int getGameAreaHeight() {
 		return this.levelPanel.getHeight();
 	}
 
 	@Override
-	public void showElements(List<Element> elements) {
-		this.levelPanel.showElements(elements);
+	public void drawElements(List<Element> elements) {
+		this.levelPanel.drawElements(elements);
 	}
 	
 	@Override
-	public void showBoxesCoveringTargets(List<Element> boxesCoveringTargets) {
-		this.levelPanel.showBoxesOnTargets(boxesCoveringTargets);
+	public void drawBoxesCoveringTargets(List<Element> boxesCoveringTargets) {
+		this.levelPanel.drawDarkerBoxes(boxesCoveringTargets);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 	}
 
 	@Override
-	protected ActionListener errorButtonActionListener(JDialog dialog) {
+	protected ActionListener errorAction(JDialog dialog) {
 		return e -> {
 			dialog.dispose();
 			this.controller.backToInitialView();

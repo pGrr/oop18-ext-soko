@@ -1,8 +1,8 @@
 package view.initial;
 
-import view.View;
+import view.GenericView;
 
-public interface InitialView extends View {
+public interface InitialView extends GenericView {
 
 	public void showLevelNotValidDialog();
 	

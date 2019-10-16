@@ -1,4 +1,4 @@
-package view.play;
+package view.play.elements;
 
 import model.Element;
 import model.Element.Type;

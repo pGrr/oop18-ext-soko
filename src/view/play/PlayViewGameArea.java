@@ -19,8 +19,13 @@ import javax.swing.Timer;
 import controller.SokobanController;
 import model.Element;
 import model.Element.Type;
+import view.play.elements.ViewElement;
+import view.play.elements.ViewElementBox;
+import view.play.elements.ViewElementTarget;
+import view.play.elements.ViewElementUser;
+import view.play.elements.ViewElementWall;
 
-class PlayViewLevelPanel extends JPanel {
+class PlayViewGameArea extends JPanel {
 
 	private static final long serialVersionUID = 1009850031284813715L;	
 	private static final int TIMER_DELAY_MS = 10;
@@ -33,7 +38,7 @@ class PlayViewLevelPanel extends JPanel {
 	private final List<ViewElement> elements;
 	private final Set<ViewElementBox> boxesOnTarget;
 	
-	public PlayViewLevelPanel(JFrame ownerFrame, SokobanController controller) {
+	public PlayViewGameArea(JFrame ownerFrame, SokobanController controller) {
 		this.controller = controller;
 		this.ownerFrame = ownerFrame;
 		this.keyPressedCode = Optional.empty();
@@ -73,13 +78,13 @@ class PlayViewLevelPanel extends JPanel {
 		this.elements.addAll(elements.stream().map(this::translateElement).collect(Collectors.toList()));
 	}
 	
-	public void showElements(List<Element> elements) {
+	public void drawElements(List<Element> elements) {
 		List<ViewElement> drawElementList = elements.stream()
-				.map(PlayViewLevelPanel.this::translateElement).collect(Collectors.toList());
+				.map(PlayViewGameArea.this::translateElement).collect(Collectors.toList());
 		draw(drawElementList);
 	}
 	
-	public void showBoxesOnTargets(List<Element> boxesOnTargets) {
+	public void drawDarkerBoxes(List<Element> boxesOnTargets) {
 		if (boxesOnTargets == null) {
 			throw new IllegalArgumentException();
 		}
@@ -139,13 +144,13 @@ class PlayViewLevelPanel extends JPanel {
 			if (this.keyPressedCode.isPresent()) {
 				Integer key = keyPressedCode.get();
 				if (key.equals(KeyEvent.VK_DOWN) || key.equals(KeyEvent.VK_KP_DOWN)) {
-					PlayViewLevelPanel.this.controller.moveDown();
+					PlayViewGameArea.this.controller.moveDown();
 				} else if (key.equals(KeyEvent.VK_UP) || key.equals(KeyEvent.VK_KP_UP)) {
-					PlayViewLevelPanel.this.controller.moveUp();
+					PlayViewGameArea.this.controller.moveUp();
 				} else if (key.equals(KeyEvent.VK_LEFT) || key.equals(KeyEvent.VK_KP_LEFT)) {
-					PlayViewLevelPanel.this.controller.moveLeft();
+					PlayViewGameArea.this.controller.moveLeft();
 				} else if (key.equals(KeyEvent.VK_RIGHT) || key.equals(KeyEvent.VK_KP_RIGHT)) {
-					PlayViewLevelPanel.this.controller.moveRight();
+					PlayViewGameArea.this.controller.moveRight();
 				}					
 				this.keyPressedCode = Optional.empty();
 			}
@@ -156,7 +161,7 @@ class PlayViewLevelPanel extends JPanel {
 		return new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				SwingUtilities.invokeLater(() -> PlayViewLevelPanel.this.keyPressedCode = Optional.of(e.getKeyCode()));
+				SwingUtilities.invokeLater(() -> PlayViewGameArea.this.keyPressedCode = Optional.of(e.getKeyCode()));
 			}
 		};
 	}	

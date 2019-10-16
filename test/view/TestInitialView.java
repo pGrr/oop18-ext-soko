@@ -2,14 +2,14 @@ package view;
 
 import controller.SokobanControllerImpl;
 import view.initial.InitialView;
-import view.initial.InitialViewImpl;
+import view.initial.InitialViewContainer;
 
 public class TestInitialView {
 
 	private TestInitialView() {}
 
 	public static void main(String ...args) {
-		InitialView initialView = new InitialViewImpl(new SokobanControllerImpl());
+		InitialView initialView = new InitialViewContainer(new SokobanControllerImpl());
 		initialView.show();
 	}
 }

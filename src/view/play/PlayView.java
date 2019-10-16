@@ -1,20 +1,20 @@
 package view.play;
 
-import view.View;
+import view.GenericView;
 import java.util.List;
 import model.Element;
 
-public interface PlayView extends View {
+public interface PlayView extends GenericView {
 	
-	int getPlayAreaWidth();
+	int getGameAreaWidth();
 	
-	int getPlayAreaHeight();
+	int getGameAreaHeight();
 	
 	void initialize(List<Element> elements);
 	
-	void showElements(List<Element> elements);
+	void drawElements(List<Element> elements);
 
-	void showBoxesCoveringTargets(List<Element> boxesCoveringTargets);
+	void drawBoxesCoveringTargets(List<Element> boxesCoveringTargets);
 
 	void showLevelFinishedDialog();
 

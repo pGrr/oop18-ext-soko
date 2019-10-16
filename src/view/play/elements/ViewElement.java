@@ -1,4 +1,4 @@
-package view.play;
+package view.play.elements;
 
 import java.awt.Image;
 
