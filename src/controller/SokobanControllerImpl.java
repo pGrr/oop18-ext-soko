@@ -83,12 +83,12 @@ public class SokobanControllerImpl implements SokobanController {
 	}
 
 	@Override
-	public void saveLevelSequence(String name, List<String> levels) 
+	public void saveLevelSequence(String path, String name, List<String> levels) 
 			throws LevelNotValidException, ClassNotFoundException, IOException {
 		try (ObjectOutputStream o = new ObjectOutputStream(
 				new BufferedOutputStream(
 						new FileOutputStream(
-								new File(name))))) {
+								new File(path))))) {
 			o.writeObject(createLevelSequence(name, levels));
 		}
 	}

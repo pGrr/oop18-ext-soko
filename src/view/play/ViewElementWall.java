@@ -6,7 +6,7 @@ import model.Element.Type;
 public class ViewElementWall extends ViewElementBasic implements ViewElement {
 	
 	private static final Type TYPE = Type.UNMOVABLE;
-	private static final String ICON = "wall-original.png";
+	private static final String ICON = "icons/wall-original.png";
 
 	public ViewElementWall(Element element) {
 		super(element, ICON);

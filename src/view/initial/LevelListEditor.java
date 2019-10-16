@@ -4,6 +4,7 @@ import static view.Views.*;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +45,13 @@ public class LevelListEditor {
 	private final DefaultListModel<String> listModel;
 	private Optional<LevelSequence> levelSequence;
 	
-	public LevelListEditor(InitialViewImpl owner, SokobanController controller, List<String> levels) {
+	public LevelListEditor(InitialViewImpl owner, SokobanController controller, Optional<LevelSequence> levelSequence) {
 		this.owner = owner;
 		this.controller = controller;
 		this.listModel = new DefaultListModel<>();
 		this.levelList = new JList<>(this.listModel);
-		this.panel = createPanel(levels);
+		this.levelSequence = levelSequence;
+		this.panel = createPanel(levelSequence.isPresent() ? levelSequence.get().getNames() : new ArrayList<>());
 	}
 
 	public JPanel getPanel() {
@@ -158,8 +160,9 @@ public class LevelListEditor {
 			JFileChooser fc = createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
 			fc.showSaveDialog(this.owner.getFrame());
 			try {
-				String fileName = fc.getSelectedFile().getAbsolutePath() + this.controller.getLevelSequenceFileExtension();
-				this.controller.saveLevelSequence(fileName, getLevelsAsStringList());
+				String path = fc.getSelectedFile().getAbsolutePath() + this.controller.getLevelSequenceFileExtension();
+				String name = fc.getSelectedFile().getName();
+				this.controller.saveLevelSequence(path, name, getLevelsAsStringList());
 			} catch (LevelNotValidException levelNotValidException) {
 				this.owner.showLevelNotValidDialog();
 			} catch (IOException ioException) {
@@ -177,9 +180,14 @@ public class LevelListEditor {
 			JFileChooser fc = createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
 			fc.showOpenDialog(this.owner.getFrame());
 			try {
-				this.levelSequence = Optional.of(this.controller.loadLevelSequence(fc.getSelectedFile().getAbsolutePath()));
-				List<String> paths = this.levelSequence.get().getNames();
-				paths.stream().forEach(this.listModel::addElement);
+				File file = fc.getSelectedFile();
+				String path = new String();
+				if (file != null) {
+					path = file.getPath();
+				}
+				this.levelSequence = Optional.of(this.controller.loadLevelSequence(path));
+				List<String> names = this.levelSequence.get().getNames();
+				names.stream().forEach(this.listModel::addElement);
 			} catch (IOException ioException) {
 				this.owner.showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
 				System.err.println(ioException);

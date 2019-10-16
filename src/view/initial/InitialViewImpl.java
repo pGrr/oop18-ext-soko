@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.SokobanController;
 import model.LevelSchemaImpl.LevelNotValidException;
+import model.LevelSequence;
 import view.AbstractView;
 
 import static view.Views.*;
@@ -41,14 +44,14 @@ public class InitialViewImpl extends AbstractView implements InitialView {
 	public InitialViewImpl(SokobanController controller) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
-		this.levelListEditor = new LevelListEditor(this, this.controller, new ArrayList<>());
+		this.levelListEditor = new LevelListEditor(this, this.controller, Optional.empty());
 		this.getFrame().add(createMainPanel());
 	}
 	
-	public InitialViewImpl(SokobanController controller, List<String> levels) {
+	public InitialViewImpl(SokobanController controller, LevelSequence levelSequence) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
-		this.levelListEditor = new LevelListEditor(this, this.controller, levels);
+		this.levelListEditor = new LevelListEditor(this, this.controller, Optional.of(levelSequence));
 		this.getFrame().add(createMainPanel());
 	}
 	

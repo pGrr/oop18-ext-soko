@@ -6,8 +6,8 @@ import model.Element.Type;
 public class ViewElementBox extends ViewElementBasic implements ViewElement {
 	
 	private static final Type TYPE = Type.MOVABLE;
-	private static final String ICON = "box-original.png";
-	private static final String ICON_ON_TARGET = "box-on-target-original.png";
+	private static final String ICON = "icons/box-original.png";
+	private static final String ICON_ON_TARGET = "icons/box-on-target-original.png";
 	
 	private boolean onTarget;
 

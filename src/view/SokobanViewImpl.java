@@ -1,9 +1,14 @@
 package view;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Optional;
 import controller.SokobanController;
 import model.Element;
+import model.LevelSequence;
 import view.craft.CraftView;
 import view.craft.CraftViewImpl;
 import view.initial.InitialView;
@@ -14,15 +19,25 @@ import view.play.PlayViewImpl;
 public class SokobanViewImpl implements SokobanView {
 	
 	private static final String LEVEL_NOT_INITIALIZED_ERROR_TEXT = "Level has not been initialized.";
+	private static final String DEFAULT_LEVEL_SEQUENCE = "default.sokolevelsequence";
 
 	private final SokobanController controller;
 	private final InitialView initialView;
 	private final CraftView craftView;
+	private Optional<LevelSequence> defaultLevelSequence;
 	private Optional<PlayView> playView;
 	
 	public SokobanViewImpl(SokobanController controller) {
 		this.controller = controller;
-		this.initialView = new InitialViewImpl(controller);
+		this.defaultLevelSequence = Optional.empty();
+		try {
+			String path = URLDecoder.decode(ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE).getPath(), "UTF-8");
+			this.defaultLevelSequence = Optional.of(this.controller.loadLevelSequence(path));
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+		this.initialView = this.defaultLevelSequence.isPresent() ? 
+				new InitialViewImpl(controller, this.defaultLevelSequence.get()) : new InitialViewImpl(controller);			
 		this.craftView = new CraftViewImpl(controller);
 		this.playView = Optional.empty();
 	}

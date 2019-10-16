@@ -6,7 +6,7 @@ import model.Element.Type;
 public class ViewElementUser extends ViewElementBasic implements ViewElement {
 	
 	private static final Type TYPE = Type.USER;
-	private static final String ICON = "user-original.png";
+	private static final String ICON = "icons/user-original.png";
 	
 	public ViewElementUser(Element element) {
 		super(element, ICON);

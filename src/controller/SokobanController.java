@@ -26,7 +26,7 @@ public interface SokobanController {
 	LevelSequence createLevelSequence(String name, List<String> paths) 
 			throws LevelNotValidException, IOException, ClassNotFoundException;
 	
-	void saveLevelSequence(String name, List<String> levels) 
+	void saveLevelSequence(String path, String name, List<String> levels) 
 			throws LevelNotValidException, ClassNotFoundException, IOException;
 	
 	LevelSequence loadLevelSequence(String path) 

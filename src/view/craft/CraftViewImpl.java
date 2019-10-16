@@ -55,6 +55,8 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private static final ImageIcon ICON_LOAD = createImageIcon("icons/upload.png");
 	private static final ImageIcon ICON_CANCEL = createImageIcon("icons/cross.png");
 	private static final ImageIcon ICON_BACK = createImageIcon("icons/back.png");
+	private static final double GRIDBUTTON_RELATIVE_ICON_WIDTH = 0.5;
+	private static final double GRIDBUTTON_RELATIVE_ICON_HEIGHT = 0.7;
 	
 	private final SokobanController controller;
 	private final List<Pair<Type,JToggleButton>> toggleButtons;
@@ -120,7 +122,8 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	}
 	
 	private ImageIcon resizedIcon(ImageIcon i, int w, int h) {
-		return new ImageIcon(i.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+		Image img = i.getImage();
+		return img == null ? new ImageIcon() : new ImageIcon(i.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));	
 	}
 	
 	private List<List<Pair<JButton,Type>>> createButtonGrid(int nRows) {
@@ -189,8 +192,8 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 				clickedPair.getX().setIcon(new ImageIcon());
 				clickedPair.setY(Type.EMPTY);
 			} else {
-				int w = (int) Math.round(clickedButton.getWidth() * 0.5);
-				int h = (int) Math.round(clickedButton.getHeight() * 0.7);
+				int w = (int) Math.round(clickedButton.getWidth() * GRIDBUTTON_RELATIVE_ICON_WIDTH);
+				int h = (int) Math.round(clickedButton.getHeight() * GRIDBUTTON_RELATIVE_ICON_HEIGHT);
 				Icon i = getSelectedToggleButton().getIcon();
 				if (i.getClass() != ImageIcon.class) {
 					throw new IllegalStateException();
@@ -206,8 +209,9 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 			JFileChooser fc = createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
 			fc.showSaveDialog(getFrame());
 			try {
-				String fileName = fc.getSelectedFile().getAbsolutePath() + controller.getLevelFileExtension();
-				controller.saveLevel(fileName, new LevelSchemaImpl(fileName, getCurrentTypeGrid()));
+				String path = fc.getSelectedFile().getAbsolutePath() + controller.getLevelFileExtension();
+				String fileName = fc.getSelectedFile().getName();
+				controller.saveLevel(path, new LevelSchemaImpl(fileName, getCurrentTypeGrid()));
 			} catch (IOException ioException) {
 				showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
 				ioException.printStackTrace();
@@ -250,7 +254,10 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private void acceptTypeGrid(List<List<Type>> typeGrid) {
 		for(int i=0; i<LevelSchema.N_ROWS; i++) {
 			for(int j=0; j<LevelSchema.N_ROWS; j++) {
-				this.buttonGrid.get(i).get(j).getX().setIcon(findTypeIcon(typeGrid.get(i).get(j)));
+				int w = (int) Math.round(this.buttonGrid.get(i).get(j).getX().getWidth() * GRIDBUTTON_RELATIVE_ICON_WIDTH);
+				int h = (int) Math.round(this.buttonGrid.get(i).get(j).getX().getHeight() * GRIDBUTTON_RELATIVE_ICON_HEIGHT);
+				ImageIcon icon = findTypeIcon(typeGrid.get(i).get(j));
+				this.buttonGrid.get(i).get(j).getX().setIcon(resizedIcon(icon, w, h));
 				this.buttonGrid.get(i).get(j).setY(typeGrid.get(i).get(j));
 			}
 		}
