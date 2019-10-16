@@ -3,6 +3,9 @@ package view.play;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JDialog;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import controller.SokobanController;
 import model.Element;
@@ -12,6 +15,8 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 	
 	private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
 	private static final double WIDTH_TO_HEIGHT_RATIO = 1;
+	private static final String MENU_TITLE = "Menu";
+	private static final String MENU_BACK_ITEM_TEXT = "Go back to initial view";
 	private static final String LEVEL_FINISHED_TITLE = "LEVEL COMPLETE";
 	private static final String LEVEL_FINISHED_MESSAGE = "You made it!! Congratulations!";
 	private static final String GAME_FINISHED_MESSAGE = "...and that was the last one!! You won!! Congratulations!";
@@ -23,6 +28,7 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 		super(name, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.levelPanel = new PlayViewLevelPanel(this.getFrame(), this.controller);
+		this.getFrame().setJMenuBar(createMenuBar());
 		this.getFrame().add(createMainPanel());
 		this.getFrame().pack();
 	}
@@ -88,4 +94,13 @@ public class PlayViewImpl extends AbstractView implements PlayView {
 		showNotifyDialog(LEVEL_FINISHED_TITLE, GAME_FINISHED_MESSAGE, gameFinishedActionListener());
 	}
 
+	private JMenuBar createMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu(MENU_TITLE);
+		JMenuItem item = new JMenuItem(MENU_BACK_ITEM_TEXT);
+		item.addActionListener(e -> this.controller.backToInitialView());
+		menu.add(item);
+		menuBar.add(menu);
+		return menuBar;
+	}
 }

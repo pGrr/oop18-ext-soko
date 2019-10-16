@@ -1,8 +1,5 @@
 package view;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Optional;

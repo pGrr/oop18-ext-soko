@@ -113,4 +113,5 @@ public class Views {
 	public static final Border createTitledPaddingBorder(String title, int defaultPadding) {
 		return new CompoundBorder(new TitledBorder(title), createEmptyPaddingBorder(DEFAULT_PADDING));
 	}
+	
 }
