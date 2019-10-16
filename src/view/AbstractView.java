@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 public abstract  class AbstractView implements View {
 	
 	private static final String BUTTON_OK_TEXT = "Ok";
-	private static final ImageIcon ICON_OK = createImageIcon("ok.png");
+	private static final ImageIcon ICON_OK = createImageIcon("icons/ok.png");
 		
 	private final JFrame frame;
 	

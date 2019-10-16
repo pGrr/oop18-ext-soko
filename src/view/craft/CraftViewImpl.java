@@ -47,14 +47,14 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private static final String BUTTON_LOAD_TEXT = "LOAD";
 	private static final String BUTTON_RESET_TEXT = "RESET";
 	private static final String BUTTON_BACK_TEXT = "BACK";
-	private static final ImageIcon ICON_WALL = createImageIcon("wall-original.png");
-	private static final ImageIcon ICON_BOX = createImageIcon("box-original.png");
-	private static final ImageIcon ICON_TARGET = createImageIcon("target-original.png");
-	private static final ImageIcon ICON_USER = createImageIcon("user-original.png");
-	private static final ImageIcon ICON_SAVE = createImageIcon("download.png");
-	private static final ImageIcon ICON_LOAD = createImageIcon("upload.png");
-	private static final ImageIcon ICON_CANCEL = createImageIcon("cross.png");
-	private static final ImageIcon ICON_BACK = createImageIcon("back.png");
+	private static final ImageIcon ICON_WALL = createImageIcon("icons/wall-original.png");
+	private static final ImageIcon ICON_BOX = createImageIcon("icons/box-original.png");
+	private static final ImageIcon ICON_TARGET = createImageIcon("icons/target-original.png");
+	private static final ImageIcon ICON_USER = createImageIcon("icons/user-original.png");
+	private static final ImageIcon ICON_SAVE = createImageIcon("icons/download.png");
+	private static final ImageIcon ICON_LOAD = createImageIcon("icons/upload.png");
+	private static final ImageIcon ICON_CANCEL = createImageIcon("icons/cross.png");
+	private static final ImageIcon ICON_BACK = createImageIcon("icons/back.png");
 	
 	private final SokobanController controller;
 	private final List<Pair<Type,JToggleButton>> toggleButtons;
