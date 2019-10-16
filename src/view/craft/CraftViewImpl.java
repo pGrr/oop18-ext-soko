@@ -3,11 +3,14 @@ package view.craft;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -43,11 +46,11 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 	private static final String BUTTON_SAVE_TEXT = "SAVE";
 	private static final String BUTTON_LOAD_TEXT = "LOAD";
 	private static final String BUTTON_RESET_TEXT = "RESET";
-	private static final String BUTTON_BACK_TEXT = "BACK TO INITIAL VIEW";
-	private static final ImageIcon ICON_WALL = createImageIcon("wall-30px.png");
-	private static final ImageIcon ICON_BOX = createImageIcon("box-30px.png");
-	private static final ImageIcon ICON_TARGET = createImageIcon("target-30px.png");
-	private static final ImageIcon ICON_USER = createImageIcon("user-30px.png");
+	private static final String BUTTON_BACK_TEXT = "BACK";
+	private static final ImageIcon ICON_WALL = createImageIcon("wall-original.png");
+	private static final ImageIcon ICON_BOX = createImageIcon("box-original.png");
+	private static final ImageIcon ICON_TARGET = createImageIcon("target-original.png");
+	private static final ImageIcon ICON_USER = createImageIcon("user-original.png");
 	private static final ImageIcon ICON_SAVE = createImageIcon("download.png");
 	private static final ImageIcon ICON_LOAD = createImageIcon("upload.png");
 	private static final ImageIcon ICON_CANCEL = createImageIcon("cross.png");
@@ -107,11 +110,17 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 
 	private List<Pair<Type,JToggleButton>> createToggleButtonSelectionList() {
 		List<Pair<Type,JToggleButton>> l = new ArrayList<>();
-		l.add(new PairImpl<>(Type.MOVABLE, createToggleButton("", ICON_BOX, toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.UNMOVABLE, createToggleButton("", ICON_WALL, toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.TARGET, createToggleButton("", ICON_TARGET, toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.USER, createToggleButton("", ICON_USER, toggleButtonActionListener())));
+		int w = this.getFrame().getWidth() / LevelSchema.N_ROWS;	
+		int h = this.getFrame().getHeight() / LevelSchema.N_ROWS;
+		l.add(new PairImpl<>(Type.MOVABLE, createToggleButton("", resizedIcon(ICON_BOX, 30, 30), toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.UNMOVABLE, createToggleButton("", resizedIcon(ICON_WALL, 30, 30), toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.TARGET, createToggleButton("", resizedIcon(ICON_TARGET, 30, 30), toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.USER, createToggleButton("", resizedIcon(ICON_USER, 30, 30), toggleButtonActionListener())));
 		return l; 
+	}
+	
+	private ImageIcon resizedIcon(ImageIcon i, int w, int h) {
+		return new ImageIcon(i.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
 	}
 	
 	private List<List<Pair<JButton,Type>>> createButtonGrid(int nRows) {
@@ -180,7 +189,13 @@ public final class CraftViewImpl extends AbstractView implements CraftView {
 				clickedPair.getX().setIcon(new ImageIcon());
 				clickedPair.setY(Type.EMPTY);
 			} else {
-				clickedPair.getX().setIcon(getSelectedToggleButton().getIcon());
+				int w = (int) Math.round(clickedButton.getWidth() * 0.5);
+				int h = (int) Math.round(clickedButton.getHeight() * 0.7);
+				Icon i = getSelectedToggleButton().getIcon();
+				if (i.getClass() != ImageIcon.class) {
+					throw new IllegalStateException();
+				}
+				clickedPair.getX().setIcon(resizedIcon((ImageIcon)i, w, h));
 				clickedPair.setY(getSelectedType());
 			}
 		});
