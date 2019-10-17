@@ -20,7 +20,7 @@ import model.sequence.LevelSequenceImpl;
 
 public class InitialViewObserver {
 	
-	private static Optional<InitialViewObserver> SINGLETON;
+	private static Optional<InitialViewObserver> SINGLETON = Optional.empty();
 	
 	private final ControllerFacade owner;
 	private final ModelFacade model;

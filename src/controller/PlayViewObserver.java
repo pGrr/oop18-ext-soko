@@ -9,7 +9,7 @@ import view.ViewFacade;
 
 public class PlayViewObserver {
 	
-	private static Optional<PlayViewObserver> SINGLETON;
+	private static Optional<PlayViewObserver> SINGLETON = Optional.empty();
 	
 	private final ControllerFacade owner;
 	private final ViewFacade view;
