@@ -4,7 +4,7 @@ import model.PairImpl;
 
 public class MovementStrategyFactoryImpl implements MovementStrategyFactory {
 	
-	private final double DELTA_MOVEMENT_RELATIVE_TO_ELEMENT_EDGE_SIZE = 1;
+	private static final double DELTA_MOVEMENT_RELATIVE_TO_ELEMENT_EDGE_SIZE = 1;
 	
 	private final int deltaMovement;
 

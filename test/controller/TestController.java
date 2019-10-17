@@ -5,7 +5,7 @@ public class TestController {
 	private TestController() {}
 
 	public static void main(String ...args) {
-		ControllerFacade c = ControllerFacadeImpl.getInstance();
+		ControllerFacade c = ControllerFacadeSingleton.getInstance();
 		c.start();
 	}		
 }

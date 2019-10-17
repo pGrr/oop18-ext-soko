@@ -12,14 +12,14 @@ import model.level.LevelSchema;
 import model.level.LevelSchemaImpl.LevelNotValidException;
 import model.sequence.LevelSequence;
 import model.ModelFacade;
-import model.ModelFacadeImpl;
+import model.ModelFacadeSingleton;
 import view.ViewFacade;
-import view.ViewFacadeImpl;
+import view.ViewFacadeSingleton;
 import static controller.ControllerConstants.*;
 
-public class ControllerFacadeImpl implements ControllerFacade {
+public class ControllerFacadeSingleton implements ControllerFacade {
 	
-	private final static ControllerFacade SINGLETON = new ControllerFacadeImpl();
+	private final static ControllerFacade SINGLETON = new ControllerFacadeSingleton();
 		
 	private final ViewFacade view;
 	private final ModelFacade model;
@@ -27,10 +27,10 @@ public class ControllerFacadeImpl implements ControllerFacade {
 	private final InitialViewObserver initialViewObserver;
 	private final CraftViewObserver craftViewObserver;
 
-	private ControllerFacadeImpl() {
-		this.model = new ModelFacadeImpl();
+	private ControllerFacadeSingleton() {
+		this.model = ModelFacadeSingleton.getInstance();
 		this.initialViewObserver = InitialViewObserver.getInstance(this, this.model);
-		this.view = new ViewFacadeImpl(this);
+		this.view = ViewFacadeSingleton.getInstance(this);
 		this.craftViewObserver = new CraftViewObserver();		
 		this.playViewObserver = new PlayViewObserver(this, this.view, this.model);
 	}

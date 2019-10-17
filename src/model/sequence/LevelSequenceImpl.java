@@ -20,18 +20,18 @@ public class LevelSequenceImpl implements LevelSequence, Serializable, Iterable<
 	}
 	
 	@Override
-	public String getName() {
+	public String getSequenceName() {
 		return name;
 	}
 
 	@Override
-	public List<String> getNames() {
+	public List<String> getLevelNames() {
 		return this.schemaList.stream().map(l -> l.getName() ).collect(Collectors.toList());
 	}
 	
 	@Override
 	public String toString() {
-		return this.getName() + ": " + this.getNames();
+		return this.getSequenceName() + ": " + this.getLevelNames();
 	}
 
 	@Override

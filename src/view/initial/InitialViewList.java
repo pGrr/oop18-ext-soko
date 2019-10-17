@@ -38,7 +38,7 @@ public class InitialViewList {
 		this.listModel = new DefaultListModel<>();
 		this.levelList = new JList<>(this.listModel);
 		this.levelSequence = levelSequence;
-		this.panel = createPanel(levelSequence.isPresent() ? levelSequence.get().getNames() : new ArrayList<>());
+		this.panel = createPanel(levelSequence.isPresent() ? levelSequence.get().getLevelNames() : new ArrayList<>());
 	}
 
 	public JPanel getPanel() {

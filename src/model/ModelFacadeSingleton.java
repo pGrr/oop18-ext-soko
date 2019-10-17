@@ -11,13 +11,19 @@ import model.level.LevelInstanceImpl;
 import model.level.LevelSchema;
 import model.sequence.LevelSequence;
 
-public class ModelFacadeImpl implements ModelFacade {
+public class ModelFacadeSingleton implements ModelFacade {
+	
+	private final static ModelFacade SINGLETON = new ModelFacadeSingleton();
 	
 	private Optional<Iterator<LevelSchema>> iterator;
 	private Optional<LevelInstance> currentLevel;
 	
-	public ModelFacadeImpl() {
+	private ModelFacadeSingleton() {
 		this.currentLevel = Optional.empty();
+	}
+	
+	public static final ModelFacade getInstance() {
+		return SINGLETON;
 	}
 	
 	@Override

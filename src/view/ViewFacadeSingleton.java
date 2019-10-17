@@ -13,10 +13,11 @@ import view.initial.InitialViewContainer;
 import view.play.PlayView;
 import view.play.PlayViewContainer;
 
-public class ViewFacadeImpl implements ViewFacade {
+public class ViewFacadeSingleton implements ViewFacade {
 	
 	private static final String LEVEL_NOT_INITIALIZED_ERROR_TEXT = "Level has not been initialized.";
 	private static final String DEFAULT_LEVEL_SEQUENCE = "default.sokolevelsequence";
+	private static Optional<ViewFacade> SINGLETON = Optional.empty();
 
 	private final ControllerFacade controller;
 	private final InitialView initialView;
@@ -24,7 +25,7 @@ public class ViewFacadeImpl implements ViewFacade {
 	private Optional<LevelSequence> defaultLevelSequence;
 	private Optional<PlayView> playView;
 	
-	public ViewFacadeImpl(ControllerFacade controller) {
+	private ViewFacadeSingleton(ControllerFacade controller) {
 		this.controller = controller;
 		this.defaultLevelSequence = Optional.empty();
 		try {
@@ -37,6 +38,13 @@ public class ViewFacadeImpl implements ViewFacade {
 				new InitialViewContainer(controller, this.defaultLevelSequence.get()) : new InitialViewContainer(controller);			
 		this.craftView = new CraftViewContainer(controller);
 		this.playView = Optional.empty();
+	}
+	
+	public static final ViewFacade getInstance(ControllerFacade controller) {
+		if (!SINGLETON.isPresent()) {
+			SINGLETON = Optional.of(new ViewFacadeSingleton(controller));
+		}
+		return SINGLETON.get();
 	}
 
 	@Override

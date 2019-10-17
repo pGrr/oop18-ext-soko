@@ -68,7 +68,7 @@ public class InitialViewSaveOrLoad {
 					path = file.getPath();
 				}
 				LevelSequence levelSequence = this.controller.loadLevelSequence(path);
-				List<String> names = levelSequence.getNames();
+				List<String> names = levelSequence.getLevelNames();
 				names.stream().forEach(this.list.getListModel()::addElement);
 			} catch (IOException ioException) {
 				this.owner.showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);

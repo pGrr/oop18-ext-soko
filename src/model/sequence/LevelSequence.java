@@ -7,8 +7,8 @@ import model.level.LevelSchema;
 
 public interface LevelSequence extends Iterable<LevelSchema>, Serializable {
 
-	String getName();
+	String getSequenceName();
 	
-	List<String> getNames();
+	List<String> getLevelNames();
 	
 }
