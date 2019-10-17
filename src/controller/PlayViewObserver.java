@@ -1,14 +1,15 @@
 package controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import model.ModelFacade;
 import model.element.Element;
-import model.level.LevelInstance;
-import model.level.LevelSchema;
 import view.ViewFacade;
 
 public class PlayViewObserver {
+	
+	private static Optional<PlayViewObserver> SINGLETON;
 	
 	private final ControllerFacade owner;
 	private final ViewFacade view;
@@ -19,13 +20,14 @@ public class PlayViewObserver {
 		this.view = view;
 		this.model = model;
 	}
-
-	public void playLevel(LevelSchema levelSchema) {
-		this.view.showPlayLevelView(levelSchema.getName());
-		LevelInstance level = this.model.startLevel(levelSchema, this.view.getPlayableAreaWidth(), this.view.getPlayableAreaHeight());
-		this.view.initializePlayView(level.getElements());
-	}
 	
+	public static final PlayViewObserver getInstance(ControllerFacade owner, ViewFacade view, ModelFacade model) {
+		if (!SINGLETON.isPresent()) {
+			SINGLETON = Optional.of(new PlayViewObserver(owner, view, model));
+		}
+		return SINGLETON.get();
+	}
+
 	public void moveUp() {
 		List<Element> updatedElements = this.model.moveUserUp();
 		this.view.showElements(updatedElements);
@@ -55,7 +57,7 @@ public class PlayViewObserver {
 	}
 	
 	public void levelFinishedAccepted() {
-		this.playLevel(this.model.getNextSchema());
+		this.owner.playLevel(this.model.getNextSchema());
 	}
 	
 	public void gameFinishedAccepted() {

@@ -10,6 +10,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import model.ModelFacade;
 import model.level.LevelSchema;
 import model.level.LevelSchemaImpl.LevelNotValidException;
@@ -18,12 +20,21 @@ import model.sequence.LevelSequenceImpl;
 
 public class InitialViewObserver {
 	
+	private static Optional<InitialViewObserver> SINGLETON;
+	
 	private final ControllerFacade owner;
 	private final ModelFacade model;
 
-	public InitialViewObserver(ControllerFacade owner, ModelFacade model) {
+	private InitialViewObserver(ControllerFacade owner, ModelFacade model) {
 		this.owner = owner;
 		this.model = model;
+	}
+	
+	public static final InitialViewObserver getInstance(ControllerFacade owner, ModelFacade model) {
+		if (!SINGLETON.isPresent()) {
+			SINGLETON = Optional.of(new InitialViewObserver(owner, model));
+		}
+		return SINGLETON.get();
 	}
 
 	public LevelSequence createLevelSequence(String name, List<String> paths) 

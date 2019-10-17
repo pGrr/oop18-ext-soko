@@ -1,8 +1,13 @@
 package controller;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
+
+import model.level.LevelInstance;
 import model.level.LevelSchema;
 import model.level.LevelSchemaImpl.LevelNotValidException;
 import model.sequence.LevelSequence;
@@ -10,26 +15,28 @@ import model.ModelFacade;
 import model.ModelFacadeImpl;
 import view.ViewFacade;
 import view.ViewFacadeImpl;
+import static controller.ControllerConstants.*;
 
 public class ControllerFacadeImpl implements ControllerFacade {
 	
-	private static final String LEVEL_SEQUENCE_FILE_DESCRIPTION = "Sokoban level-sequence files (*.sokolevelsequence)";
-	private static final String LEVEL_SEQUENCE_FILE_EXTENSION = ".sokolevelsequence";
-	private static final String LEVEL_FILE_DESCRIPTION = "Sokoban level files (*.sokolevel)";
-	private static final String LEVEL_FILE_EXTENSION = ".sokolevel";
-	
+	private final static ControllerFacade SINGLETON = new ControllerFacadeImpl();
+		
 	private final ViewFacade view;
 	private final ModelFacade model;
 	private final PlayViewObserver playViewObserver;
 	private final InitialViewObserver initialViewObserver;
 	private final CraftViewObserver craftViewObserver;
 
-	public ControllerFacadeImpl() {
+	private ControllerFacadeImpl() {
 		this.model = new ModelFacadeImpl();
-		this.initialViewObserver = new InitialViewObserver(this, this.model);
+		this.initialViewObserver = InitialViewObserver.getInstance(this, this.model);
 		this.view = new ViewFacadeImpl(this);
-		this.craftViewObserver = new CraftViewObserver(this.view, this.model);		
+		this.craftViewObserver = new CraftViewObserver();		
 		this.playViewObserver = new PlayViewObserver(this, this.view, this.model);
+	}
+	
+	public static final ControllerFacade getInstance() {
+		return SINGLETON;
 	}
 
 	@Override
@@ -66,6 +73,24 @@ public class ControllerFacadeImpl implements ControllerFacade {
 	public String getLevelFileDescription() {
 		return LEVEL_FILE_DESCRIPTION;
 	}
+	
+	@Override
+	public LevelSchema loadLevel(String path) 
+			throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException {
+		try (ObjectInputStream inputStream = new ObjectInputStream(
+				new BufferedInputStream(
+						new FileInputStream(path)))) {
+			return (LevelSchema) inputStream.readObject();
+		}
+	}
+
+	@Override
+	public void playLevel(LevelSchema levelSchema) {
+		this.view.showPlayLevelView(levelSchema.getName());
+		LevelInstance level = this.model.startLevel(levelSchema, this.view.getPlayableAreaWidth(), this.view.getPlayableAreaHeight());
+		this.view.initializePlayView(level.getElements());
+	}
+	
 
 	@Override
 	public LevelSequence createLevelSequence(String name, List<String> paths) throws LevelNotValidException, IOException, ClassNotFoundException {		
@@ -86,20 +111,10 @@ public class ControllerFacadeImpl implements ControllerFacade {
 	public void playLevelSequence(LevelSequence levelSequence) {
 		initialViewObserver.playLevelSequence(levelSequence);
 	}
-	
-	@Override
-	public void playLevel(LevelSchema levelSchema) {
-		playViewObserver.playLevel(levelSchema);
-	}
 
 	@Override
 	public void saveLevel(String path, LevelSchema schema) throws LevelNotValidException, FileNotFoundException, IOException {
 		craftViewObserver.saveLevel(path, schema);
-	}
-
-	@Override
-	public LevelSchema loadLevel(String path) throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException {
-		return craftViewObserver.loadLevel(path);
 	}
 	
 	@Override
