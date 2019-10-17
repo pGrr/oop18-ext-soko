@@ -1,23 +1,11 @@
 package controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
-
-import model.element.Element;
-import model.level.LevelInstance;
 import model.level.LevelSchema;
 import model.level.LevelSchemaImpl.LevelNotValidException;
 import model.sequence.LevelSequence;
-import model.sequence.LevelSequenceImpl;
 import model.ModelFacade;
 import model.ModelFacadeImpl;
 import view.ViewFacade;
@@ -32,10 +20,16 @@ public class ControllerFacadeImpl implements ControllerFacade {
 	
 	private final ViewFacade view;
 	private final ModelFacade model;
+	private final PlayViewObserver playViewObserver;
+	private final InitialViewObserver initialViewObserver;
+	private final CraftViewObserver craftViewObserver;
 
 	public ControllerFacadeImpl() {
 		this.model = new ModelFacadeImpl();
+		this.initialViewObserver = new InitialViewObserver(this, this.model);
 		this.view = new ViewFacadeImpl(this);
+		this.craftViewObserver = new CraftViewObserver(this.view, this.model);		
+		this.playViewObserver = new PlayViewObserver(this, this.view, this.model);
 	}
 
 	@Override
@@ -74,130 +68,67 @@ public class ControllerFacadeImpl implements ControllerFacade {
 	}
 
 	@Override
-	public LevelSequence createLevelSequence(String name, List<String> paths) 
-			throws LevelNotValidException, IOException, ClassNotFoundException {		
-		List<LevelSchema> levelSchemaList = new ArrayList<>();
-		for (String path : paths) {
-			levelSchemaList.add(loadLevel(path));
-		}
-		return new LevelSequenceImpl(name, levelSchemaList);
+	public LevelSequence createLevelSequence(String name, List<String> paths) throws LevelNotValidException, IOException, ClassNotFoundException {		
+		return initialViewObserver.createLevelSequence(name, paths);
 	}
 
 	@Override
-	public void saveLevelSequence(String path, String name, List<String> levels) 
-			throws LevelNotValidException, ClassNotFoundException, IOException {
-		try (ObjectOutputStream o = new ObjectOutputStream(
-				new BufferedOutputStream(
-						new FileOutputStream(
-								new File(path))))) {
-			o.writeObject(createLevelSequence(name, levels));
-		}
+	public void saveLevelSequence(String path, String name, List<String> levels) throws LevelNotValidException, ClassNotFoundException, IOException {
+		initialViewObserver.saveLevelSequence(path, name, levels);
 	}
 
 	@Override
-	public LevelSequence loadLevelSequence(String path) 
-			throws IOException, ClassNotFoundException {
-		try (ObjectInputStream o = new ObjectInputStream(
-				new BufferedInputStream(
-						new FileInputStream(
-								new File(path))))) {
-			return (LevelSequence) o.readObject();
-		}
+	public LevelSequence loadLevelSequence(String path) throws IOException, ClassNotFoundException {
+		return initialViewObserver.loadLevelSequence(path);
 	}
 
 	@Override
 	public void playLevelSequence(LevelSequence levelSequence) {
-		this.model.startLevelSequence(levelSequence);
-		if (this.model.hasNextSchema()) {
-			LevelSchema levelSchema = this.model.getNextSchema();
-			this.playLevel(levelSchema);
-		} else {
-			throw new IllegalArgumentException();
-		}
+		initialViewObserver.playLevelSequence(levelSequence);
 	}
 	
 	@Override
 	public void playLevel(LevelSchema levelSchema) {
-		this.view.showPlayLevelView(levelSchema.getName());
-		LevelInstance level = this.model.startLevel(levelSchema, this.view.getPlayableAreaWidth(), this.view.getPlayableAreaHeight());
-		this.view.initializePlayView(level.getElements());
+		playViewObserver.playLevel(levelSchema);
 	}
 
 	@Override
-	public void saveLevel(String path, LevelSchema schema) 
-			throws LevelNotValidException, FileNotFoundException, IOException {
-		try(ObjectOutputStream o = new ObjectOutputStream(
-				new BufferedOutputStream(
-						new FileOutputStream(path)))) {
-			o.writeObject(schema);
-		}
+	public void saveLevel(String path, LevelSchema schema) throws LevelNotValidException, FileNotFoundException, IOException {
+		craftViewObserver.saveLevel(path, schema);
 	}
 
 	@Override
-	public LevelSchema loadLevel(String path) 
-			throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException {
-		try (ObjectInputStream inputStream = new ObjectInputStream(
-				new BufferedInputStream(
-						new FileInputStream(path)))) {
-			return (LevelSchema) inputStream.readObject();
-		}
+	public LevelSchema loadLevel(String path) throws LevelNotValidException, ClassNotFoundException, FileNotFoundException, IOException {
+		return craftViewObserver.loadLevel(path);
 	}
 	
 	@Override
 	public void moveUp() {
-		List<Element> updatedElements = this.model.moveUserUp();
-		this.view.showElements(updatedElements);
-		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
-		checkLevelFinished();
+		playViewObserver.moveUp();
 	}
 	
 	@Override
 	public void moveDown() {
-		List<Element> updatedElements = this.model.moveUserDown();
-		this.view.showElements(updatedElements);
-		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
-		checkLevelFinished();
+		playViewObserver.moveDown();
 	}
 	
 	@Override
 	public void moveLeft() {
-		List<Element> updatedElements = this.model.moveUserLeft();
-		this.view.showElements(updatedElements);
-		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
-		checkLevelFinished();
+		playViewObserver.moveLeft();
 	}
 	
 	@Override
 	public void moveRight() {
-		List<Element> updatedElements = this.model.moveUserRight();
-		this.view.showElements(updatedElements);
-		this.view.showBoxesOnTargets(this.model.getBoxesOnTargets());
-		checkLevelFinished();
-	}
-
-	@Override
-	public void updateElements() {
-		this.view.initializePlayView(this.model.getAllElements());
+		playViewObserver.moveRight();
 	}
 
 	@Override
 	public void levelFinishedAccepted() {
-		this.playLevel(this.model.getNextSchema());
+		playViewObserver.levelFinishedAccepted();
 	}
 	
 	@Override
 	public void gameFinishedAccepted() {
-		this.backToInitialView();
+		playViewObserver.gameFinishedAccepted();
 	}
-		
-	private void checkLevelFinished() {
-		if (this.model.isLevelFinished()) {
-			if (this.model.isGameFinished()) {
-				this.view.showGameFinishedDialog();
-			} else {
-				this.view.showLevelFinishedDialog();
-			}
-		}
-	}
-
 }

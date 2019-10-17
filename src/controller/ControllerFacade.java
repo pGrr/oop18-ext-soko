@@ -49,8 +49,6 @@ public interface ControllerFacade {
 	
 	void moveRight();
 	
-	void updateElements();
-
 	void playLevel(LevelSchema levelSchema);
 
 	void levelFinishedAccepted();
