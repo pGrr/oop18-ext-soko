@@ -4,10 +4,12 @@ import model.PairImpl;
 
 public class MovementStrategyFactoryImpl implements MovementStrategyFactory {
 	
+	private final double DELTA_MOVEMENT_RELATIVE_TO_ELEMENT_EDGE_SIZE = 1;
+	
 	private final int deltaMovement;
 
-	public MovementStrategyFactoryImpl(int deltaMovement) {
-		this.deltaMovement = deltaMovement;
+	public MovementStrategyFactoryImpl(int elementEdgeSize) {
+		this.deltaMovement = (int) Math.round(Math.floor(elementEdgeSize * DELTA_MOVEMENT_RELATIVE_TO_ELEMENT_EDGE_SIZE));
 	}
 	
 	@Override

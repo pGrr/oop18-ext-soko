@@ -22,4 +22,5 @@ public interface LevelInstance {
 	List<Element> getBoxesOnTarget();
 	
 	boolean isFinished();
+
 }
