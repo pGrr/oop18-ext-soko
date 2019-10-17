@@ -1,6 +1,6 @@
 package view;
 
-import controller.SokobanControllerImpl;
+import controller.ControllerFacadeImpl;
 import view.play.PlayViewContainer;
 
 public class TestPlayView {
@@ -8,7 +8,7 @@ public class TestPlayView {
 	private TestPlayView() {}
 	
 	public static void main(String ...args) {
-		new PlayViewContainer(new SokobanControllerImpl(), "").show();
+		new PlayViewContainer(new ControllerFacadeImpl(), "").show();
 	}
 
 }

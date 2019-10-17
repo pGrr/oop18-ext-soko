@@ -1,4 +1,4 @@
-package model;
+package model.element;
 
 public class ElementImpl implements Element {
 
@@ -17,6 +17,14 @@ public class ElementImpl implements Element {
 		this.height = height;
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
+	}
+	
+	public ElementImpl(Element element) {
+		this.type = element.getType();
+		this.width = element.getWidth();
+		this.height = element.getHeight();
+		this.xPosition = element.getX();
+		this.yPosition = element.getY();	
 	}
 	
 	@Override

@@ -2,7 +2,12 @@ package model;
 
 import java.util.List;
 
-public interface SokobanModel {
+import model.element.Element;
+import model.level.LevelInstance;
+import model.level.LevelSchema;
+import model.sequence.LevelSequence;
+
+public interface ModelFacade {
 	
 	void startLevelSequence(LevelSequence levelSequence);
 	

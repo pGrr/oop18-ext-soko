@@ -16,9 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import controller.SokobanController;
-import model.Element;
-import model.Element.Type;
+import controller.ControllerFacade;
+import model.element.Element;
+import model.element.Element.Type;
 import view.play.elements.ViewElement;
 import view.play.elements.ViewElementBox;
 import view.play.elements.ViewElementTarget;
@@ -30,7 +30,7 @@ class PlayViewGameArea extends JPanel {
 	private static final long serialVersionUID = 1009850031284813715L;	
 	private static final int TIMER_DELAY_MS = 10;
 	
-	private final SokobanController controller;
+	private final ControllerFacade controller;
 	private final JFrame ownerFrame;
 	private Optional<Graphics> graphics;
 	private final Timer timer;
@@ -38,7 +38,7 @@ class PlayViewGameArea extends JPanel {
 	private final List<ViewElement> elements;
 	private final Set<ViewElementBox> boxesOnTarget;
 	
-	public PlayViewGameArea(JFrame ownerFrame, SokobanController controller) {
+	public PlayViewGameArea(JFrame ownerFrame, ControllerFacade controller) {
 		this.controller = controller;
 		this.ownerFrame = ownerFrame;
 		this.keyPressedCode = Optional.empty();
@@ -131,9 +131,9 @@ class PlayViewGameArea extends JPanel {
 			return new ViewElementUser(element);
 		} else if (element.getType().equals(Type.TARGET)) {
 			return new ViewElementTarget(element);
-		} else if (element.getType().equals(Type.MOVABLE)) {
+		} else if (element.getType().equals(Type.BOX)) {
 			return new ViewElementBox(element);
-		} else if (element.getType().equals(Type.UNMOVABLE)) {
+		} else if (element.getType().equals(Type.WALL)) {
 			return new ViewElementWall(element);
 		}
 		throw new IllegalArgumentException();

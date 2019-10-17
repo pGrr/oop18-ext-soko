@@ -9,18 +9,18 @@ import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import controller.SokobanController;
-import model.LevelSchemaImpl;
-import model.Element.Type;
-import model.LevelSchemaImpl.LevelNotValidException;
+import controller.ControllerFacade;
+import model.element.Element.Type;
+import model.level.LevelSchemaImpl;
+import model.level.LevelSchemaImpl.LevelNotValidException;
 
 public class CraftViewOptions {
 	
-	private final SokobanController controller;
+	private final ControllerFacade controller;
 	private final CraftViewContainer owner;
 	private final CraftViewGrid grid;
 	
-	public CraftViewOptions(SokobanController controller, CraftViewContainer owner, CraftViewGrid grid) {
+	public CraftViewOptions(ControllerFacade controller, CraftViewContainer owner, CraftViewGrid grid) {
 		this.controller = controller;
 		this.owner = owner;
 		this.grid = grid;

@@ -5,12 +5,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class SokobanModelImpl implements SokobanModel {
+import model.element.Element;
+import model.level.LevelInstance;
+import model.level.LevelInstanceImpl;
+import model.level.LevelSchema;
+import model.sequence.LevelSequence;
+
+public class ModelFacadeImpl implements ModelFacade {
 	
 	private Optional<Iterator<LevelSchema>> iterator;
 	private Optional<LevelInstance> currentLevel;
 	
-	public SokobanModelImpl() {
+	public ModelFacadeImpl() {
 		this.currentLevel = Optional.empty();
 	}
 	

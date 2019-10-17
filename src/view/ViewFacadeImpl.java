@@ -3,9 +3,9 @@ package view;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Optional;
-import controller.SokobanController;
-import model.Element;
-import model.LevelSequence;
+import controller.ControllerFacade;
+import model.element.Element;
+import model.sequence.LevelSequence;
 import view.craft.CraftView;
 import view.craft.CraftViewContainer;
 import view.initial.InitialView;
@@ -13,25 +13,25 @@ import view.initial.InitialViewContainer;
 import view.play.PlayView;
 import view.play.PlayViewContainer;
 
-public class SokobanViewImpl implements SokobanView {
+public class ViewFacadeImpl implements ViewFacade {
 	
 	private static final String LEVEL_NOT_INITIALIZED_ERROR_TEXT = "Level has not been initialized.";
 	private static final String DEFAULT_LEVEL_SEQUENCE = "default.sokolevelsequence";
 
-	private final SokobanController controller;
+	private final ControllerFacade controller;
 	private final InitialView initialView;
 	private final CraftView craftView;
 	private Optional<LevelSequence> defaultLevelSequence;
 	private Optional<PlayView> playView;
 	
-	public SokobanViewImpl(SokobanController controller) {
+	public ViewFacadeImpl(ControllerFacade controller) {
 		this.controller = controller;
 		this.defaultLevelSequence = Optional.empty();
 		try {
 			String path = URLDecoder.decode(ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE).getPath(), "UTF-8");
 			this.defaultLevelSequence = Optional.of(this.controller.loadLevelSequence(path));
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
 		}
 		this.initialView = this.defaultLevelSequence.isPresent() ? 
 				new InitialViewContainer(controller, this.defaultLevelSequence.get()) : new InitialViewContainer(controller);			

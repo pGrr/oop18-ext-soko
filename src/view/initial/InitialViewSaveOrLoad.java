@@ -10,17 +10,17 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import controller.SokobanController;
-import model.LevelSequence;
-import model.LevelSchemaImpl.LevelNotValidException;
+import controller.ControllerFacade;
+import model.level.LevelSchemaImpl.LevelNotValidException;
+import model.sequence.LevelSequence;
 
 public class InitialViewSaveOrLoad {
 	
-	private final SokobanController controller;
+	private final ControllerFacade controller;
 	private final InitialViewContainer owner;
 	private final InitialViewList list;
 
-	public InitialViewSaveOrLoad(SokobanController controller, InitialViewContainer owner, InitialViewList levelList) {
+	public InitialViewSaveOrLoad(ControllerFacade controller, InitialViewContainer owner, InitialViewList levelList) {
 		this.controller = controller;
 		this.owner = owner;
 		this.list = levelList;

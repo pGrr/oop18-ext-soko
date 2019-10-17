@@ -1,11 +1,11 @@
 package view.play.elements;
 
-import model.Element;
-import model.Element.Type;
+import model.element.Element;
+import model.element.Element.Type;
 
 public class ViewElementBox extends ViewElementBasic implements ViewElement {
 	
-	private static final Type TYPE = Type.MOVABLE;
+	private static final Type TYPE = Type.BOX;
 	private static final String ICON = "icons/box-original.png";
 	private static final String ICON_ON_TARGET = "icons/box-on-target-original.png";
 	

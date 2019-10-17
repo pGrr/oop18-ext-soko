@@ -1,8 +1,9 @@
-package model;
+package model.level;
 
 import java.io.Serializable;
 import java.util.List;
-import model.Element.Type;
+
+import model.element.Element.Type;
 
 public class LevelSchemaImpl implements LevelSchema, Serializable {
 	
@@ -31,7 +32,7 @@ public class LevelSchemaImpl implements LevelSchema, Serializable {
 			throw new UncorrectGridSizeException();
 		} else {
 			long nUsers = countElements(schema, Type.USER);
-			long nBoxes = countElements(schema, Type.MOVABLE);
+			long nBoxes = countElements(schema, Type.BOX);
 			long nTargets = countElements(schema, Type.TARGET);
 			if (nUsers <= 0) {
 				throw new NoInitialPointException();

@@ -13,7 +13,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import model.Pair;
 import model.PairImpl;
-import model.Element.Type;
+import model.element.Element.Type;
 
 public class CraftViewSelection {
 	
@@ -61,11 +61,11 @@ public class CraftViewSelection {
 	
 	private List<Pair<Type,JToggleButton>> createToggleButtonSelectionList() {
 		List<Pair<Type,JToggleButton>> l = new ArrayList<>();
-		l.add(new PairImpl<>(Type.MOVABLE, 
+		l.add(new PairImpl<>(Type.BOX, 
 				createToggleButton("", 
 						createResizedIcon(ICON_BOX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX), 
 						toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.UNMOVABLE, 
+		l.add(new PairImpl<>(Type.WALL, 
 				createToggleButton("", 
 						createResizedIcon(ICON_WALL, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX),
 						toggleButtonActionListener())));

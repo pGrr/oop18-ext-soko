@@ -1,8 +1,9 @@
-package model;
+package model.level;
 
 import java.io.Serializable;
 import java.util.List;
-import model.Element.Type;
+
+import model.element.Element.Type;
 
 public interface LevelSchema extends Serializable {
 	

@@ -8,16 +8,16 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import controller.SokobanController;
-import model.LevelSchemaImpl.LevelNotValidException;
+import controller.ControllerFacade;
+import model.level.LevelSchemaImpl.LevelNotValidException;
 
 public class InitialViewOptions {
 
 	private final InitialViewContainer view;
 	private final InitialViewList levels;
-	private final SokobanController controller;
+	private final ControllerFacade controller;
 	
-	public InitialViewOptions(SokobanController controller, InitialViewContainer view, InitialViewList levels) {
+	public InitialViewOptions(ControllerFacade controller, InitialViewContainer view, InitialViewList levels) {
 		this.controller = controller;
 		this.view = view;
 		this.levels = levels;

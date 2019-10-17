@@ -1,11 +1,11 @@
 package view.play.elements;
 
-import model.Element;
-import model.Element.Type;
+import model.element.Element;
+import model.element.Element.Type;
 
 public class ViewElementWall extends ViewElementBasic implements ViewElement {
 	
-	private static final Type TYPE = Type.UNMOVABLE;
+	private static final Type TYPE = Type.WALL;
 	private static final String ICON = "icons/wall-original.png";
 
 	public ViewElementWall(Element element) {

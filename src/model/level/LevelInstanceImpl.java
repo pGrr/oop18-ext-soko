@@ -1,13 +1,18 @@
-package model;
+package model.level;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import model.Element.Type;
+import model.Pair;
+import model.element.Element;
+import model.element.ElementImpl;
+import model.movement.MovementStrategy;
+import model.movement.MovementStrategyFactory;
+import model.movement.MovementStrategyFactoryImpl;
+import model.element.Element.Type;
 
 public class LevelInstanceImpl implements LevelInstance {
 	
@@ -15,6 +20,7 @@ public class LevelInstanceImpl implements LevelInstance {
 	private final double COLLISION_TOLERANCE_PX = 5;
 	
 	private final LevelSchema schema;
+	private final MovementStrategyFactory movements;
 	private final int width;
 	private final int height;
 	private final int elementEdgeSize;
@@ -29,12 +35,13 @@ public class LevelInstanceImpl implements LevelInstance {
 		this.schema = schema;
 		this.width = width;
 		this.height = height;
-		this.elementEdgeSize = computeElementEdgeSize();
+		this.elementEdgeSize = this.computeElementEdgeSize();
 		this.deltaMovement = (int) Math.round(Math.floor(elementEdgeSize * DELTA_MOVEMENT_RELATIVE_TO_ELEMENT_EDGE_SIZE));
+		this.movements = new MovementStrategyFactoryImpl(this.deltaMovement);
 		this.user = createUser();
 		this.targets = createElementList(Type.TARGET);
-		this.boxes = createElementList(Type.MOVABLE);
-		this.walls = createElementList(Type.UNMOVABLE);
+		this.boxes = createElementList(Type.BOX);
+		this.walls = createElementList(Type.WALL);
 		this.lastModified = new ArrayList<>();
 	}
 	
@@ -50,26 +57,31 @@ public class LevelInstanceImpl implements LevelInstance {
 
 	@Override
 	public List<Element> moveUserUp() {
-		move(this.user, up());
+		move(this.user, this.movements.up());
 		return this.lastModified;
 	}
 
 	@Override
 	public List<Element> moveUserDown() {
-		move(this.user, down());
+		move(this.user, this.movements.down());
 		return this.lastModified;
 	}
 
 	@Override
 	public List<Element> moveUserLeft() {
-		move(this.user, left());
+		move(this.user, this.movements.left());
 		return this.lastModified;
 	}
 
 	@Override
 	public List<Element> moveUserRight() {
-		move(this.user, right());
+		move(this.user, this.movements.right());
 		return this.lastModified;
+	}
+	
+	@Override
+	public boolean isFinished() {
+		return this.boxes.stream().count() == getBoxesOnTarget().stream().count();
 	}
 	
 	@Override
@@ -88,34 +100,33 @@ public class LevelInstanceImpl implements LevelInstance {
 						   .collect(Collectors.toList());
 	}
 	
-	private void move(Element element, BiFunction<Integer,Integer,Pair<Integer,Integer>> computeTargetPoint) {
+	private void move(Element element, MovementStrategy movement) {
 		this.lastModified.clear();
-		Pair<Integer, Integer> newPoint = computeTargetPoint.apply(element.getX(), element.getY());
+		Pair<Integer, Integer> newPoint = movement.computeTargetPoint(element);
 		if (element.getType().equals(Type.USER)) {
 			if (isNewPositionAcceptable(newPoint.getX(), newPoint.getY())) {
 				List<Element> wallsAndBoxes = Stream.concat(this.walls.stream(), this.boxes.stream()).collect(Collectors.toList());
-				Optional<Element> obstacle = collision(element, wallsAndBoxes, computeTargetPoint);
+				Optional<Element> obstacle = collision(element, wallsAndBoxes, movement);
 				if (!obstacle.isPresent()) {
-					updateElementPosition(element, computeTargetPoint);
-				} else if (obstacle.get().getType().equals(Type.MOVABLE)) {
+					updateElementPosition(element, movement);
+				} else if (obstacle.get().getType().equals(Type.BOX)) {
 					Element box = obstacle.get();
-					Optional<Element> boxObstacle = collision(box, wallsAndBoxes, computeTargetPoint);
+					Optional<Element> boxObstacle = collision(box, wallsAndBoxes, movement);
 					if (!boxObstacle.isPresent()) {
-						updateElementPosition(box, computeTargetPoint);
-						updateElementPosition(element, computeTargetPoint);
+						updateElementPosition(box, movement);
+						updateElementPosition(element, movement);
 					}
 				}
 			}
 		}
 	}
 	
-	
-	private void updateElementPosition(Element element, BiFunction<Integer,Integer,Pair<Integer,Integer>> computeTargetPoint) {
-		Pair<Integer, Integer> newPoint = computeTargetPoint.apply(element.getX(), element.getY());
+	private void updateElementPosition(Element element, MovementStrategy movement) {
+		Pair<Integer, Integer> newPoint = movement.computeTargetPoint(element);
 		if (element.getType().equals(Type.USER)) {			
 			this.user.setXPosition(newPoint.getX());
 			this.user.setYPosition(newPoint.getY());
-		} else if (element.getType().equals(Type.MOVABLE)) {
+		} else if (element.getType().equals(Type.BOX)) {
 			int index = this.boxes.indexOf(element);
 			this.boxes.get(index).setXPosition(newPoint.getX());
 			this.boxes.get(index).setYPosition(newPoint.getY());			
@@ -127,8 +138,8 @@ public class LevelInstanceImpl implements LevelInstance {
 	}
 	
 	private Optional<Element> collision(Element element, List<Element> others, 
-			BiFunction<Integer,Integer,Pair<Integer,Integer>> computeTargetPoint) {
-		Pair<Integer, Integer> newPoint = computeTargetPoint.apply(element.getX(), element.getY());
+			MovementStrategy movement) {
+		Pair<Integer, Integer> newPoint = movement.computeTargetPoint(element);
 		Optional<Element> collisionELement = others.stream()
 												   .filter(el ->
 			newPoint.getY() > el.getY() - elementEdgeSize + COLLISION_TOLERANCE_PX
@@ -146,26 +157,6 @@ public class LevelInstanceImpl implements LevelInstance {
 			&& element.getX() > other.getX() - elementEdgeSize + COLLISION_TOLERANCE_PX
 			&& element.getX() < other.getX() + elementEdgeSize - COLLISION_TOLERANCE_PX).findAny();
 		return collisionELement;
-	}
-	
-	private BiFunction<Integer,Integer,Pair<Integer,Integer>> up() {
-		return (x, y) -> new PairImpl<>(x, y - deltaMovement);
-	}
-	
-	private BiFunction<Integer,Integer,Pair<Integer,Integer>> down() {
-		return (x, y) -> new PairImpl<>(x, y + deltaMovement);
-	}
-	
-	private BiFunction<Integer,Integer,Pair<Integer,Integer>> left() {
-		return (x, y) -> new PairImpl<>(x - deltaMovement, y);
-	}
-	
-	private BiFunction<Integer,Integer,Pair<Integer,Integer>> right() {
-		return (x, y) -> new PairImpl<>(x + deltaMovement, y);
-	}
-
-	private int computeElementEdgeSize() {
-		return (int) Math.round(Math.ceil(this.width / LevelSchema.N_ROWS));
 	}
 
 	private Element createUser() {
@@ -195,10 +186,9 @@ public class LevelInstanceImpl implements LevelInstance {
 		 });
 		return l;
 	}
-
-	@Override
-	public boolean isFinished() {
-		return this.boxes.stream().count() == getBoxesOnTarget().stream().count();
+	
+	private int computeElementEdgeSize() {
+		return Math.round(this.height / LevelSchema.N_ROWS);
 	}
 		
 }

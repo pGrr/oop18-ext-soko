@@ -1,7 +1,7 @@
 package view.play.elements;
 
-import model.Element;
-import model.Element.Type;
+import model.element.Element;
+import model.element.Element.Type;
 
 public class ViewElementUser extends ViewElementBasic implements ViewElement {
 	

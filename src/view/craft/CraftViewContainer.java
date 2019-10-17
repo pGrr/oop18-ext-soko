@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import controller.SokobanController;
+import controller.ControllerFacade;
 import view.AbstractGenericView;
 
 import static view.Components.*;
@@ -12,12 +12,12 @@ import static view.craft.CraftViewConstants.*;
 
 public final class CraftViewContainer extends AbstractGenericView implements CraftView {
 	
-	private final SokobanController controller;
+	private final ControllerFacade controller;
 	private final CraftViewSelection selection;
 	private final CraftViewGrid grid;
 	private final CraftViewOptions options;
 	
-	public CraftViewContainer(SokobanController controller) {
+	public CraftViewContainer(ControllerFacade controller) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.selection = new CraftViewSelection();

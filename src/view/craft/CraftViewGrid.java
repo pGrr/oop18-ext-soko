@@ -24,10 +24,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import model.LevelSchema;
 import model.Pair;
 import model.PairImpl;
-import model.Element.Type;
+import model.element.Element.Type;
+import model.level.LevelSchema;
 
 public class CraftViewGrid {
 
@@ -95,8 +95,8 @@ public class CraftViewGrid {
 	private List<Pair<Type, ImageIcon>> createIcons() {
 		List<Pair<Type, ImageIcon>> l = new ArrayList<>();
 		l.add(new PairImpl<>(Type.EMPTY, createImageIcon("")));
-		l.add(new PairImpl<>(Type.MOVABLE, ICON_BOX));
-		l.add(new PairImpl<>(Type.UNMOVABLE, ICON_WALL));
+		l.add(new PairImpl<>(Type.BOX, ICON_BOX));
+		l.add(new PairImpl<>(Type.WALL, ICON_WALL));
 		l.add(new PairImpl<>(Type.TARGET, ICON_TARGET));
 		l.add(new PairImpl<>(Type.USER, ICON_USER));
 		return l;

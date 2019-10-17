@@ -2,7 +2,7 @@ package view.play.elements;
 
 import java.awt.Image;
 
-import model.Element;
+import model.element.Element;
 
 public interface ViewElement {
 	

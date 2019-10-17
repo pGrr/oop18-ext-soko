@@ -17,21 +17,21 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import controller.SokobanController;
-import model.LevelSchemaImpl.LevelNotValidException;
-import model.LevelSequence;
+import controller.ControllerFacade;
+import model.level.LevelSchemaImpl.LevelNotValidException;
+import model.sequence.LevelSequence;
 
 public class InitialViewList {
 	
 	private final InitialViewContainer owner;
-	private final SokobanController controller;
+	private final ControllerFacade controller;
 	private final InitialViewSaveOrLoad saveOrLoad;
 	private final JPanel panel;
 	private final JList<String> levelList;
 	private final DefaultListModel<String> listModel;
 	private Optional<LevelSequence> levelSequence;
 	
-	public InitialViewList(InitialViewContainer owner, SokobanController controller, Optional<LevelSequence> levelSequence) {
+	public InitialViewList(InitialViewContainer owner, ControllerFacade controller, Optional<LevelSequence> levelSequence) {
 		this.owner = owner;
 		this.controller = controller;
 		this.saveOrLoad = new InitialViewSaveOrLoad(this.controller, this.owner, this);

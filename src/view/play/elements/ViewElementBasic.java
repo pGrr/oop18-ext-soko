@@ -4,8 +4,8 @@ import static view.Components.createImageIcon;
 import java.awt.Image;
 import java.util.Objects;
 
-import model.Element;
-import model.Element.Type;
+import model.element.Element;
+import model.element.Element.Type;
 
 public class ViewElementBasic implements ViewElement {
 	

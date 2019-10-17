@@ -6,19 +6,19 @@ import java.util.Optional;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import controller.SokobanController;
-import model.LevelSequence;
+import controller.ControllerFacade;
+import model.sequence.LevelSequence;
 import view.AbstractGenericView;
 import static view.Components.*;
 import static view.initial.InitialViewConstants.*;
 
 public class InitialViewContainer extends AbstractGenericView implements InitialView {
 
-	private final SokobanController controller;
+	private final ControllerFacade controller;
 	private final InitialViewList levels;
 	private final InitialViewOptions options;
 	
-	public InitialViewContainer(SokobanController controller) {
+	public InitialViewContainer(ControllerFacade controller) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.levels = new InitialViewList(this, this.controller, Optional.empty());
@@ -26,7 +26,7 @@ public class InitialViewContainer extends AbstractGenericView implements Initial
 		this.getFrame().add(createMainPanel());
 	}
 	
-	public InitialViewContainer(SokobanController controller, LevelSequence levelSequence) {
+	public InitialViewContainer(ControllerFacade controller, LevelSequence levelSequence) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.levels = new InitialViewList(this, this.controller, Optional.of(levelSequence));

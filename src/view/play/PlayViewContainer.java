@@ -7,8 +7,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import controller.SokobanController;
-import model.Element;
+import controller.ControllerFacade;
+import model.element.Element;
 import view.AbstractGenericView;
 
 public class PlayViewContainer extends AbstractGenericView implements PlayView {
@@ -21,10 +21,10 @@ public class PlayViewContainer extends AbstractGenericView implements PlayView {
 	private static final String LEVEL_FINISHED_MESSAGE = "You made it!! Congratulations!";
 	private static final String GAME_FINISHED_MESSAGE = "...and that was the last one!! You won!! Congratulations!";
 	
-	private final SokobanController controller;
+	private final ControllerFacade controller;
 	private final PlayViewGameArea levelPanel;
 	
-	public PlayViewContainer(SokobanController controller, String name) {
+	public PlayViewContainer(ControllerFacade controller, String name) {
 		super(name, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.levelPanel = new PlayViewGameArea(this.getFrame(), this.controller);

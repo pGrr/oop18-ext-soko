@@ -1,9 +1,11 @@
-package model;
+package model.sequence;
 
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import model.level.LevelSchema;
 
 public class LevelSequenceImpl implements LevelSequence, Serializable, Iterable<LevelSchema> {
 	

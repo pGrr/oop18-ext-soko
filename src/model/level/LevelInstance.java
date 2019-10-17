@@ -1,6 +1,7 @@
-package model;
+package model.level;
 
 import java.util.List;
+import model.element.Element;
 
 public interface LevelInstance {
 
@@ -21,5 +22,4 @@ public interface LevelInstance {
 	List<Element> getBoxesOnTarget();
 	
 	boolean isFinished();
-
 }

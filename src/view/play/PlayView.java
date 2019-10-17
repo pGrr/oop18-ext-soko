@@ -2,7 +2,8 @@ package view.play;
 
 import view.GenericView;
 import java.util.List;
-import model.Element;
+
+import model.element.Element;
 
 public interface PlayView extends GenericView {
 	

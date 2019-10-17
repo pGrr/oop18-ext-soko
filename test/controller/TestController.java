@@ -5,7 +5,7 @@ public class TestController {
 	private TestController() {}
 
 	public static void main(String ...args) {
-		SokobanController c = new SokobanControllerImpl();
+		ControllerFacade c = new ControllerFacadeImpl();
 		c.start();
 	}		
 }

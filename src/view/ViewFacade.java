@@ -1,9 +1,10 @@
 package view;
 
 import java.util.List;
-import model.Element;
 
-public interface SokobanView {
+import model.element.Element;
+
+public interface ViewFacade {
 	
 	public void showInitialView();
 	

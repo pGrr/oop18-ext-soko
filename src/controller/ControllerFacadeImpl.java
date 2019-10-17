@@ -11,30 +11,31 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import model.Element;
-import model.LevelInstance;
-import model.LevelSchema;
-import model.LevelSchemaImpl.LevelNotValidException;
-import model.LevelSequence;
-import model.LevelSequenceImpl;
-import model.SokobanModel;
-import model.SokobanModelImpl;
-import view.SokobanView;
-import view.SokobanViewImpl;
 
-public class SokobanControllerImpl implements SokobanController {
+import model.element.Element;
+import model.level.LevelInstance;
+import model.level.LevelSchema;
+import model.level.LevelSchemaImpl.LevelNotValidException;
+import model.sequence.LevelSequence;
+import model.sequence.LevelSequenceImpl;
+import model.ModelFacade;
+import model.ModelFacadeImpl;
+import view.ViewFacade;
+import view.ViewFacadeImpl;
+
+public class ControllerFacadeImpl implements ControllerFacade {
 	
 	private static final String LEVEL_SEQUENCE_FILE_DESCRIPTION = "Sokoban level-sequence files (*.sokolevelsequence)";
 	private static final String LEVEL_SEQUENCE_FILE_EXTENSION = ".sokolevelsequence";
 	private static final String LEVEL_FILE_DESCRIPTION = "Sokoban level files (*.sokolevel)";
 	private static final String LEVEL_FILE_EXTENSION = ".sokolevel";
 	
-	private final SokobanView view;
-	private final SokobanModel model;
+	private final ViewFacade view;
+	private final ModelFacade model;
 
-	public SokobanControllerImpl() {
-		this.model = new SokobanModelImpl();
-		this.view = new SokobanViewImpl(this);
+	public ControllerFacadeImpl() {
+		this.model = new ModelFacadeImpl();
+		this.view = new ViewFacadeImpl(this);
 	}
 
 	@Override

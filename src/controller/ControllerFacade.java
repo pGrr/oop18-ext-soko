@@ -3,11 +3,12 @@ package controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
-import model.LevelSequence;
-import model.LevelSchema;
-import model.LevelSchemaImpl.LevelNotValidException;
 
-public interface SokobanController {
+import model.level.LevelSchema;
+import model.level.LevelSchemaImpl.LevelNotValidException;
+import model.sequence.LevelSequence;
+
+public interface ControllerFacade {
 	
 	void start();
 		

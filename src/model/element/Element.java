@@ -1,4 +1,4 @@
-package model;
+package model.element;
 
 import java.io.Serializable;
 
@@ -6,8 +6,8 @@ public interface Element extends Serializable {
 	
 	enum Type {
 		USER, 
-		MOVABLE, 
-		UNMOVABLE,
+		BOX, 
+		WALL,
 		TARGET,
 		EMPTY;
 	}
