@@ -1,9 +1,5 @@
 package view.initial;
 
-import static view.Components.createImageIcon;
-
-import javax.swing.ImageIcon;
-
 public class InitialViewConstants {
 
 	public static final double HEIGHT_TO_SCREENSIZE_RATIO = 0.9;
@@ -29,7 +25,7 @@ public class InitialViewConstants {
 	public static final String ICON_RESET = "icons/cross.png";
 	public static final String ICON_DOWNLOAD = "icons/download.png";
 	public static final String ICON_UPLOAD = "icons/upload.png";
-	public static final ImageIcon ICON_PLAY = createImageIcon("icons/ok.png");
+	public static final String ICON_PLAY = "icons/ok.png";
 
 	private InitialViewConstants() {} // static class
 

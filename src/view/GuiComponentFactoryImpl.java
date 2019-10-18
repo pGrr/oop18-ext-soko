@@ -1,5 +1,6 @@
 package view;
 
+import static view.craft.CraftViewConstants.ICON_BOX;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -23,11 +24,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
-public class Components {
+public class GuiComponentFactoryImpl implements GuiComponentFactory {
 
 	public static final int DEFAULT_PADDING = 20;
+	private static final GuiComponentFactory SINGLETON = new GuiComponentFactoryImpl();
 
-	private Components() {} // static class
+	private GuiComponentFactoryImpl() {}
+	
+	public static GuiComponentFactory getInstance() {
+		return SINGLETON;
+	}
 
 	public static final Dimension computeAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
 		double screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight();
@@ -36,7 +42,8 @@ public class Components {
 		return new Dimension(width, height);
 	}
 
-	public static final JDialog createDialog(JFrame owner, String title, String message, JButton button) {
+	@Override
+	public final JDialog createDialog(JFrame owner, String title, String message, JButton button) {
 		JDialog dialog = new JDialog(owner, title);
 		JPanel panel = new JPanel(new GridLayout(2,1));
 		JLabel label = new JLabel(message);
@@ -49,7 +56,8 @@ public class Components {
 		return dialog;
 	}
 
-	public static final JFileChooser createFileChooser(String description, String fileExtension) {
+	@Override
+	public final JFileChooser createFileChooser(String description, String fileExtension) {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(new FileFilter() {
 
@@ -71,31 +79,50 @@ public class Components {
 		return fileChooser;
 	}
 
-	public static final JButton createButton(String text, ImageIcon icon, ActionListener actionListener) {
+	@Override
+	public JButton createButton(String text) {
+		JButton b = new JButton(text);
+		b.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
+		return b;
+	}
+
+	@Override
+	public JButton createButton(String text, ImageIcon icon) {
+		JButton b = new JButton(text, icon);
+		b.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
+		return b;
+	}
+
+	@Override
+	public final JButton createButton(String text, ImageIcon icon, ActionListener actionListener) {
 		JButton b = new JButton(text, icon);
 		b.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		b.addActionListener(actionListener);
 		return b;
 	}
 
-	public static final JButton createButton(String text, String iconPath, ActionListener actionListener) {
+	@Override
+	public final JButton createButton(String text, String iconPath, ActionListener actionListener) {
 		return createButton(text, new ImageIcon(ClassLoader.getSystemResource(iconPath)), actionListener);
 	}
 
-	public static final JToggleButton createToggleButton(String text, ImageIcon icon, ActionListener actionListener) {
+	@Override
+	public final JToggleButton createToggleButton(String text, ImageIcon icon, ActionListener actionListener) {
 		JToggleButton b = new JToggleButton(text, icon);
 		b.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		b.addActionListener(actionListener);
 		return b;
 	}
 
-	public static final JLabel createLabel(String text) {
+	@Override
+	public final JLabel createLabel(String text) {
 		JLabel l = new JLabel(text);
 		l.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
 		return l;
 	}
 
-	public static final JList<String> createStringList(List<String> list, int padding) {
+	@Override
+	public final JList<String> createStringList(List<String> list, int padding) {
 		DefaultListModel<String> listModel = new DefaultListModel<>();
 		list.forEach(listModel::addElement);
 		JList<String> l = new JList<String>(listModel);
@@ -103,21 +130,44 @@ public class Components {
 		return l;
 	}
 
-	public static final ImageIcon createImageIcon(String path) {
+	@Override
+	public final ImageIcon createImageIcon(String path) {
 		return path.isEmpty() ? new ImageIcon() : new ImageIcon(ClassLoader.getSystemResource(path));
 	}
+
+	@Override
+	public ImageIcon createResizedIcon(String path, int w, int h) {
+		return createResizedIcon(createImageIcon(ICON_BOX), w, h);
+	}
 	
-	public static final ImageIcon createResizedIcon(ImageIcon i, int w, int h) {
+	@Override
+	public final ImageIcon createResizedIcon(ImageIcon i, int w, int h) {
 		Image img = i.getImage();
 		return img == null ? new ImageIcon() : new ImageIcon(i.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));	
 	}
-
-	public static final Border createEmptyPaddingBorder(int defaultPadding) {
+	
+	@Override
+	public final Border createEmptyPaddingBorder(int defaultPadding) {
 		return new EmptyBorder(defaultPadding, defaultPadding, defaultPadding, defaultPadding);
 	}
 
-	public static final Border createTitledPaddingBorder(String title, int defaultPadding) {
+	@Override
+	public final Border createTitledPaddingBorder(String title, int defaultPadding) {
 		return new CompoundBorder(new TitledBorder(title), createEmptyPaddingBorder(DEFAULT_PADDING));
 	}
-	
+
+	@Override
+	public JFrame createFrame(double heightToScreenSizeRatio, double widthToHeightRatio) {
+		return createFrame("", heightToScreenSizeRatio, widthToHeightRatio);
+	}
+
+	@Override
+	public JFrame createFrame(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
+		JFrame f = new JFrame(title);
+		f.setSize(computeAbsoluteDimension(heightToScreenSizeRatio, widthToHeightRatio));
+		f.setLocationByPlatform(true);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		return f;	
+	}
+
 }

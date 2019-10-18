@@ -1,6 +1,6 @@
 package view.initial;
 
-import static view.Components.*;
+import static view.GuiComponentFactoryImpl.*;
 import static view.initial.InitialViewConstants.*;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -30,7 +30,7 @@ public class InitialViewList {
 	private final JList<String> levelList;
 	private final DefaultListModel<String> listModel;
 	private Optional<LevelSequence> levelSequence;
-	
+
 	public InitialViewList(InitialViewContainer owner, ControllerFacade controller, Optional<LevelSequence> levelSequence) {
 		this.owner = owner;
 		this.controller = controller;
@@ -38,7 +38,7 @@ public class InitialViewList {
 		this.listModel = new DefaultListModel<>();
 		this.levelList = new JList<>(this.listModel);
 		this.levelSequence = levelSequence;
-		this.panel = createPanel(levelSequence.isPresent() ? levelSequence.get().getLevelNames() : new ArrayList<>());
+		this.panel = createPanel(levelSequence.isPresent() ? levelSequence.get().getLevelNames() : new ArrayList<>());	
 	}
 
 	public JPanel getPanel() {
@@ -68,7 +68,7 @@ public class InitialViewList {
 		JPanel p = new JPanel(new BorderLayout());
 		// level list panel
 		JPanel levelListPanel = new JPanel(new BorderLayout());
-		levelListPanel.setBorder(createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
+		levelListPanel.setBorder(owner.getComponentFactory().createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
 		levels.forEach(this.listModel::addElement);
 		JScrollPane scrollPane = new JScrollPane(this.levelList); 
 		levelListPanel.add(scrollPane);
@@ -76,16 +76,16 @@ public class InitialViewList {
 		// edit list panel
 		JPanel p2 = new JPanel(new GridLayout(2,1));
 		JPanel editListPanel = new JPanel();
-		JButton addLevelButton = createButton("", ICON_PLUS, addLevelAction());
+		JButton addLevelButton = owner.getComponentFactory().createButton("", ICON_PLUS, addLevelAction());
 		editListPanel.add(addLevelButton);
-		JButton removeLevelButton = createButton("", ICON_MINUS, removeSelectedAction());
+		JButton removeLevelButton = owner.getComponentFactory().createButton("", ICON_MINUS, removeSelectedAction());
 		editListPanel.add(removeLevelButton);
-		editListPanel.setBorder(createTitledPaddingBorder(PANEL_EDIT_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
-		JButton upButton = createButton("", ICON_UP, moveUpAction());
+		editListPanel.setBorder(owner.getComponentFactory().createTitledPaddingBorder(PANEL_EDIT_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
+		JButton upButton = owner.getComponentFactory().createButton("", ICON_UP, moveUpAction());
 		editListPanel.add(upButton);
-		JButton downButton = createButton("", ICON_DOWN, moveDownAction());
+		JButton downButton = owner.getComponentFactory().createButton("", ICON_DOWN, moveDownAction());
 		editListPanel.add(downButton);
-		JButton cancelButton = createButton("", ICON_RESET, removeAllAction());
+		JButton cancelButton = owner.getComponentFactory().createButton("", ICON_RESET, removeAllAction());
 		editListPanel.add(cancelButton);
 		p2.add(editListPanel);
 		// save or load panel	
@@ -97,7 +97,7 @@ public class InitialViewList {
 
 	private ActionListener addLevelAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
 			fc.showOpenDialog(this.owner.getFrame());
 			String path = fc.getSelectedFile().getAbsolutePath();
 			this.listModel.addElement(path);

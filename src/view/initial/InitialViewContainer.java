@@ -8,11 +8,12 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import controller.ControllerFacade;
 import model.sequence.LevelSequence;
-import view.AbstractGenericView;
-import static view.Components.*;
+import view.AbstractView;
+
+import static view.GuiComponentFactoryImpl.*;
 import static view.initial.InitialViewConstants.*;
 
-public class InitialViewContainer extends AbstractGenericView implements InitialView {
+public class InitialViewContainer extends AbstractView implements InitialView {
 
 	private final ControllerFacade controller;
 	private final InitialViewList levels;
@@ -22,7 +23,7 @@ public class InitialViewContainer extends AbstractGenericView implements Initial
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.levels = new InitialViewList(this, this.controller, Optional.empty());
-		this.options = new InitialViewOptions(this.controller, this, this.levels);
+		this.options = new InitialViewOptions(this, this.controller, this.levels);
 		this.getFrame().add(createMainPanel());
 	}
 	
@@ -30,7 +31,7 @@ public class InitialViewContainer extends AbstractGenericView implements Initial
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.levels = new InitialViewList(this, this.controller, Optional.of(levelSequence));
-		this.options = new InitialViewOptions(this.controller, this, this.levels);
+		this.options = new InitialViewOptions(this, this.controller, this.levels);
 		this.getFrame().add(createMainPanel());
 	}
 	
@@ -42,7 +43,7 @@ public class InitialViewContainer extends AbstractGenericView implements Initial
 	@Override
 	protected JPanel createMainPanel() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		mainPanel.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
+		mainPanel.setBorder(getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
 		mainPanel.add(welcomePanel(), BorderLayout.PAGE_START);
 		mainPanel.add(levelSequencePanel(), BorderLayout.CENTER);
 		mainPanel.add(this.options.createPanel(), BorderLayout.PAGE_END);
@@ -59,14 +60,14 @@ public class InitialViewContainer extends AbstractGenericView implements Initial
 
 	private JPanel welcomePanel() {
 		JPanel p = new JPanel();
-		p.add(createLabel(LABEL_WELCOME_TEXT));
+		p.add(getComponentFactory().createLabel(LABEL_WELCOME_TEXT));
 		return p;
 	}
 
 	private JPanel levelSequencePanel() {
 		JPanel p = new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
-		p.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
+		p.setBorder(getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
 		p.add(this.levels.getPanel());
 		return p;
 	}

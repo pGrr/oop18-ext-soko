@@ -1,6 +1,6 @@
 package view.craft;
 
-import static view.Components.*;
+import static view.GuiComponentFactoryImpl.*;
 import static view.craft.CraftViewConstants.*;
 
 import java.awt.FlowLayout;
@@ -17,18 +17,18 @@ import model.element.Element.Type;
 
 public class CraftViewSelection {
 	
-	private static final int TOGGLE_BUTTON_ICON_EDGE_SIZE_PX = 30;
-	
+	private final CraftViewContainer owner;		
 	private final List<Pair<Type,JToggleButton>> toggleButtons;
 
-	public CraftViewSelection() {
+	public CraftViewSelection(CraftViewContainer owner) {
+		this.owner = owner;
 		this.toggleButtons = createToggleButtonSelectionList();
 	}
 	
 	public JPanel createPanel() {
 		JPanel upperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel welcomeLabel = new JLabel(LABEL_WELCOME_TEXT);
-		welcomeLabel.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
+		welcomeLabel.setBorder(owner.getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
 		upperPanel.add(welcomeLabel);
 		this.toggleButtons.stream()
 						  .map(Pair::getY)
@@ -61,22 +61,18 @@ public class CraftViewSelection {
 	
 	private List<Pair<Type,JToggleButton>> createToggleButtonSelectionList() {
 		List<Pair<Type,JToggleButton>> l = new ArrayList<>();
-		l.add(new PairImpl<>(Type.BOX, 
-				createToggleButton("", 
-						createResizedIcon(ICON_BOX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX), 
-						toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.WALL, 
-				createToggleButton("", 
-						createResizedIcon(ICON_WALL, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX),
-						toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.TARGET, 
-				createToggleButton("", 
-					createResizedIcon(ICON_TARGET, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX), 
-					toggleButtonActionListener())));
-		l.add(new PairImpl<>(Type.USER, 
-				createToggleButton("", 
-						createResizedIcon(ICON_USER, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX),
-						toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.BOX, owner.getComponentFactory().createToggleButton("", 
+			owner.getComponentFactory().createResizedIcon(ICON_BOX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX), 
+			toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.WALL, owner.getComponentFactory().createToggleButton("", 
+			owner.getComponentFactory().createResizedIcon(ICON_WALL, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX),
+			toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.TARGET, owner.getComponentFactory().createToggleButton("", 
+			owner.getComponentFactory().createResizedIcon(ICON_TARGET, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX), 
+			toggleButtonActionListener())));
+		l.add(new PairImpl<>(Type.USER, owner.getComponentFactory().createToggleButton("", 
+			owner.getComponentFactory().createResizedIcon(ICON_USER, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX),
+			toggleButtonActionListener())));
 		return l; 
 	}
 

@@ -1,6 +1,6 @@
 package view.initial;
 
-import static view.Components.*;
+import static view.GuiComponentFactoryImpl.*;
 import static view.initial.InitialViewConstants.*;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
@@ -13,23 +13,23 @@ import model.level.LevelSchemaImpl.LevelNotValidException;
 
 public class InitialViewOptions {
 
-	private final InitialViewContainer view;
+	private final InitialViewContainer owner;
 	private final InitialViewList levels;
 	private final ControllerFacade controller;
 	
-	public InitialViewOptions(ControllerFacade controller, InitialViewContainer view, InitialViewList levels) {
+	public InitialViewOptions(InitialViewContainer owner, ControllerFacade controller, InitialViewList levels) {
 		this.controller = controller;
-		this.view = view;
+		this.owner = owner;
 		this.levels = levels;
 	}
 	
 	public JPanel createPanel() {
 		int littlePadding = Math.round(DEFAULT_PADDING / 5);
 		JPanel p = new JPanel(new BorderLayout(littlePadding, littlePadding));
-		p.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
-		JButton craftButton = createButton(BUTTON_CRAFT_TEXT, ICON_CRAFT, crafAction());
+		p.setBorder(owner.getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
+		JButton craftButton = owner.getComponentFactory().createButton(BUTTON_CRAFT_TEXT, ICON_CRAFT, crafAction());
 		p.add(craftButton, BorderLayout.PAGE_START);
-		JButton playButton = createButton(BUTTON_PLAY_TEXT, ICON_PLAY, playAction());
+		JButton playButton = owner.getComponentFactory().createButton(BUTTON_PLAY_TEXT, ICON_PLAY, playAction());
 		p.add(playButton, BorderLayout.PAGE_END);
 		return p;
 	}
@@ -45,12 +45,12 @@ public class InitialViewOptions {
 			try {
 				this.controller.playLevelSequence(this.levels.getLevelSequence());
 			} catch (LevelNotValidException levelNotValidException) {
-				this.view.showLevelNotValidDialog();
+				this.owner.showLevelNotValidDialog();
 			} catch (IOException ioException) {
-				this.view.showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
+				this.owner.showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
 				System.err.println(ioException);
 			} catch (ClassNotFoundException classNotFoundException) {
-				this.view.showErrorDialog(DIALOG_CLASS_NOT_FOUND_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT);
+				this.owner.showErrorDialog(DIALOG_CLASS_NOT_FOUND_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT);
 				System.err.println(classNotFoundException);
 			}
 		});

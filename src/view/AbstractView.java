@@ -1,29 +1,22 @@
 package view;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import static view.Components.*;
-
 import java.awt.event.ActionListener;
 
-public abstract  class AbstractGenericView implements GenericView {
+public abstract  class AbstractView implements View {
 	
 	private static final String BUTTON_OK_TEXT = "Ok";
-	private static final ImageIcon ICON_OK = createImageIcon("icons/ok.png");
-		
-	private final JFrame frame;
+	private static final String ICON_OK = "icons/ok.png";
 	
-	public AbstractGenericView(String title) {
-		this.frame = this.createFrame(title);
-	}
+	private final GuiComponentFactory componentFactory;	
+	private final JFrame frame;
 
-	public AbstractGenericView(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
-		this.frame = this.createFrame(title);
-		this.setFrameAbsoluteDimension(heightToScreenSizeRatio, widthToHeightRatio);
+	public AbstractView(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
+		this.componentFactory = GuiComponentFactoryImpl.getInstance();
+		this.frame = this.componentFactory.createFrame(title, heightToScreenSizeRatio, widthToHeightRatio);
 	}
 
 	@Override
@@ -51,16 +44,20 @@ public abstract  class AbstractGenericView implements GenericView {
 		createNotifyDialog(title, message, actionListener).setVisible(true);
 	}
 	
+	public GuiComponentFactory getComponentFactory() {
+		return this.componentFactory;
+	}
+	
 	private JDialog createErrorDialog(String title, String message) {
-		JButton button = createButton(BUTTON_OK_TEXT, ICON_OK, null);
-		JDialog dialog = createDialog(this.getFrame(), title, message, button);
+		JButton button = componentFactory.createButton(BUTTON_OK_TEXT, ICON_OK, null);
+		JDialog dialog = componentFactory.createDialog(this.getFrame(), title, message, button);
 		button.addActionListener(errorAction(dialog));
 		return dialog;
 	}
 	
 	private JDialog createNotifyDialog(String title, String message, ActionListener actionListener) {
-		JButton button = createButton(BUTTON_OK_TEXT, ICON_OK, null);
-		JDialog dialog = createDialog(this.getFrame(), title, message, button);
+		JButton button = componentFactory.createButton(BUTTON_OK_TEXT, ICON_OK, null);
+		JDialog dialog = componentFactory.createDialog(this.getFrame(), title, message, button);
 		button.addActionListener(actionListener);
 		return dialog;
 	}
@@ -72,16 +69,5 @@ public abstract  class AbstractGenericView implements GenericView {
 	}
 	
 	protected abstract JPanel createMainPanel();
-	
-	protected final JFrame createFrame(String title) {
-		JFrame f = new JFrame(title);
-		f.setLocationByPlatform(true);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		return f;
-	}
-	
-	protected final void setFrameAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
-		this.frame.setSize(computeAbsoluteDimension(heightToScreenSizeRatio, widthToHeightRatio));
-	}
 	
 }

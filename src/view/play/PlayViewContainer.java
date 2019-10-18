@@ -9,25 +9,20 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import controller.ControllerFacade;
 import model.element.Element;
-import view.AbstractGenericView;
+import view.AbstractView;
+import static view.play.PlayViewConstants.*;
 
-public class PlayViewContainer extends AbstractGenericView implements PlayView {
-	
-	private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
-	private static final double WIDTH_TO_HEIGHT_RATIO = 1;
-	private static final String MENU_TITLE = "Menu";
-	private static final String MENU_BACK_ITEM_TEXT = "Go back to initial view";
-	private static final String LEVEL_FINISHED_TITLE = "LEVEL COMPLETE";
-	private static final String LEVEL_FINISHED_MESSAGE = "You made it!! Congratulations!";
-	private static final String GAME_FINISHED_MESSAGE = "...and that was the last one!! You won!! Congratulations!";
-	
+public class PlayViewContainer extends AbstractView implements PlayView {
+		
 	private final ControllerFacade controller;
 	private final PlayViewGameArea levelPanel;
+	private final PlayViewState state;
 	
 	public PlayViewContainer(ControllerFacade controller, String name) {
 		super(name, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
-		this.levelPanel = new PlayViewGameArea(this.getFrame(), this.controller);
+		this.state = new PlayViewState();
+		this.levelPanel = new PlayViewGameArea(this, this.state, this.controller);
 		this.getFrame().setJMenuBar(createMenuBar());
 		this.getFrame().add(createMainPanel());
 		this.getFrame().pack();
@@ -60,7 +55,7 @@ public class PlayViewContainer extends AbstractGenericView implements PlayView {
 
 	@Override
 	public void initialize(List<Element> elements) {
-		this.levelPanel.setElements(elements);
+		this.state.setElements(elements);
 	}
 
 	@Override

@@ -9,7 +9,7 @@ public class TestInitialView {
 	private TestInitialView() {}
 
 	public static void main(String ...args) {
-		InitialView initialView = new InitialViewContainer(new ControllerFacadeSingleton());
+		InitialView initialView = new InitialViewContainer(ControllerFacadeSingleton.getInstance());
 		initialView.show();
 	}
 }

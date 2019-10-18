@@ -1,29 +1,17 @@
 package view.craft;
 
-import static view.Components.DEFAULT_PADDING;
-import static view.Components.createImageIcon;
-import static view.Components.createResizedIcon;
-import static view.Components.createTitledPaddingBorder;
-import static view.craft.CraftViewConstants.GRIDBUTTON_RELATIVE_ICON_HEIGHT;
-import static view.craft.CraftViewConstants.GRIDBUTTON_RELATIVE_ICON_WIDTH;
-import static view.craft.CraftViewConstants.ICON_BOX;
-import static view.craft.CraftViewConstants.ICON_TARGET;
-import static view.craft.CraftViewConstants.ICON_USER;
-import static view.craft.CraftViewConstants.ICON_WALL;
-import static view.craft.CraftViewConstants.PANEL_GRID_TITLE;
-
+import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
+import static view.craft.CraftViewConstants.*;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 import model.Pair;
 import model.PairImpl;
 import model.element.Element.Type;
@@ -31,11 +19,13 @@ import model.level.LevelSchema;
 
 public class CraftViewGrid {
 
+	private final CraftViewContainer owner;
 	private final CraftViewSelection selection;
 	private final List<List<Pair<JButton, Type>>> buttonGrid;
 	private final List<Pair<Type,ImageIcon>> icons;
 	
-	public CraftViewGrid(CraftViewSelection selection) {
+	public CraftViewGrid(CraftViewContainer owner, CraftViewSelection selection) {
+		this.owner = owner;
 		this.selection = selection;
 		this.buttonGrid = createButtonGrid(LevelSchema.N_ROWS);
 		this.icons = createIcons();
@@ -43,7 +33,7 @@ public class CraftViewGrid {
 	
 	public final JPanel createPanel() {
 		JPanel panel = new JPanel(new GridLayout(LevelSchema.N_ROWS, LevelSchema.N_ROWS));
-		panel.setBorder(createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
+		panel.setBorder(owner.getComponentFactory().createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
 		this.buttonGrid.stream()
 					   .flatMap(List::stream)
 					   .map(Pair::getX)
@@ -73,7 +63,7 @@ public class CraftViewGrid {
 				int w = (int) Math.round(this.buttonGrid.get(i).get(j).getX().getWidth() * GRIDBUTTON_RELATIVE_ICON_WIDTH);
 				int h = (int) Math.round(this.buttonGrid.get(i).get(j).getX().getHeight() * GRIDBUTTON_RELATIVE_ICON_HEIGHT);
 				ImageIcon icon = findTypeIcon(typeGrid.get(i).get(j));
-				this.buttonGrid.get(i).get(j).getX().setIcon(createResizedIcon(icon, w, h));
+				this.buttonGrid.get(i).get(j).getX().setIcon(owner.getComponentFactory().createResizedIcon(icon, w, h));
 				this.buttonGrid.get(i).get(j).setY(typeGrid.get(i).get(j));
 			}
 		}
@@ -94,11 +84,11 @@ public class CraftViewGrid {
 
 	private List<Pair<Type, ImageIcon>> createIcons() {
 		List<Pair<Type, ImageIcon>> l = new ArrayList<>();
-		l.add(new PairImpl<>(Type.EMPTY, createImageIcon("")));
-		l.add(new PairImpl<>(Type.BOX, ICON_BOX));
-		l.add(new PairImpl<>(Type.WALL, ICON_WALL));
-		l.add(new PairImpl<>(Type.TARGET, ICON_TARGET));
-		l.add(new PairImpl<>(Type.USER, ICON_USER));
+		l.add(new PairImpl<>(Type.EMPTY, owner.getComponentFactory().createImageIcon("")));
+		l.add(new PairImpl<>(Type.BOX, owner.getComponentFactory().createImageIcon(ICON_BOX)));
+		l.add(new PairImpl<>(Type.WALL, owner.getComponentFactory().createImageIcon(ICON_WALL)));
+		l.add(new PairImpl<>(Type.TARGET, owner.getComponentFactory().createImageIcon(ICON_TARGET)));
+		l.add(new PairImpl<>(Type.USER, owner.getComponentFactory().createImageIcon(ICON_USER)));
 		return l;
 	}
 	
@@ -120,7 +110,7 @@ public class CraftViewGrid {
 				if (i.getClass() != ImageIcon.class) {
 					throw new IllegalStateException();
 				}
-				clickedPair.getX().setIcon(createResizedIcon((ImageIcon)i, w, h));
+				clickedPair.getX().setIcon(owner.getComponentFactory().createResizedIcon((ImageIcon)i, w, h));
 				clickedPair.setY(this.selection.getSelectedType());
 			}
 		});
@@ -136,7 +126,6 @@ public class CraftViewGrid {
 				});
 		});
 	}
-	
 	
 	private ImageIcon findTypeIcon(Type type) {
 		return this.icons.stream()

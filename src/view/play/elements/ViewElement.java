@@ -10,6 +10,6 @@ public interface ViewElement {
 	
 	public Image getImage();
 	
-	public void setImage(String resourceName);
+	public void setImage(Image resourceName);
 
 }

@@ -5,12 +5,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import controller.ControllerFacade;
-import view.AbstractGenericView;
+import view.AbstractView;
 
-import static view.Components.*;
+import static view.GuiComponentFactoryImpl.*;
 import static view.craft.CraftViewConstants.*;
 
-public final class CraftViewContainer extends AbstractGenericView implements CraftView {
+public final class CraftViewContainer extends AbstractView implements CraftView {
 	
 	private final ControllerFacade controller;
 	private final CraftViewSelection selection;
@@ -20,8 +20,8 @@ public final class CraftViewContainer extends AbstractGenericView implements Cra
 	public CraftViewContainer(ControllerFacade controller) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
-		this.selection = new CraftViewSelection();
-		this.grid = new CraftViewGrid(this.selection);
+		this.selection = new CraftViewSelection(this);
+		this.grid = new CraftViewGrid(this, this.selection);
 		this.options = new CraftViewOptions(controller, this, this.grid);
 		this.getFrame().add(createMainPanel());
 	}
@@ -34,7 +34,7 @@ public final class CraftViewContainer extends AbstractGenericView implements Cra
 	@Override
 	protected JPanel createMainPanel() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		mainPanel.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
+		mainPanel.setBorder(getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
 		mainPanel.add(this.selection.createPanel(), BorderLayout.PAGE_START);
 		mainPanel.add(grid.createPanel(), BorderLayout.CENTER);
 		mainPanel.add(this.options.createPanel(), BorderLayout.PAGE_END);

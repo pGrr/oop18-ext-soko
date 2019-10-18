@@ -1,6 +1,6 @@
 package view.initial;
 
-import static view.Components.*;
+import static view.GuiComponentFactoryImpl.*;
 import static view.initial.InitialViewConstants.*;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -28,10 +28,10 @@ public class InitialViewSaveOrLoad {
 	
 	public JPanel createPanel() {
 		JPanel panel = new JPanel();
-		panel.setBorder(createTitledPaddingBorder(PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE, DEFAULT_PADDING));
-		JButton saveButton = createButton("", ICON_DOWNLOAD, saveSequenceAction());
+		panel.setBorder(owner.getComponentFactory().createTitledPaddingBorder(PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE, DEFAULT_PADDING));
+		JButton saveButton = owner.getComponentFactory().createButton("", ICON_DOWNLOAD, saveSequenceAction());
 		panel.add(saveButton);
-		JButton loadButton = createButton("", ICON_UPLOAD, loadSequenceAction());
+		JButton loadButton = owner.getComponentFactory().createButton("", ICON_UPLOAD, loadSequenceAction());
 		panel.add(loadButton);
 		return panel;
 	}
@@ -39,7 +39,7 @@ public class InitialViewSaveOrLoad {
 	
 	private ActionListener saveSequenceAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
 			fc.showSaveDialog(this.owner.getFrame());
 			try {
 				String path = fc.getSelectedFile().getAbsolutePath() + this.controller.getLevelSequenceFileExtension();
@@ -59,7 +59,7 @@ public class InitialViewSaveOrLoad {
 	
 	private ActionListener loadSequenceAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
 			fc.showOpenDialog(this.owner.getFrame());
 			try {
 				File file = fc.getSelectedFile();

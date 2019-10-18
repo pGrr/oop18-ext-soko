@@ -2,7 +2,7 @@ package view;
 
 import java.awt.event.ActionListener;
 
-public interface GenericView {
+public interface View {
 
 	public void show();
 	

@@ -9,7 +9,7 @@ public class TestCraftView {
 	private TestCraftView() {}
 	
 	public static void main(String... args) {
-		CraftView craftView = new CraftViewContainer(new ControllerFacadeSingleton());
+		CraftView craftView = new CraftViewContainer(ControllerFacadeSingleton.getInstance());
 		craftView.show();
 	}
 

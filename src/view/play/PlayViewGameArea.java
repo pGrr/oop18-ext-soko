@@ -6,46 +6,34 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import controller.ControllerFacade;
 import model.element.Element;
-import model.element.Element.Type;
-import view.play.elements.ViewElement;
-import view.play.elements.ViewElementBox;
-import view.play.elements.ViewElementTarget;
-import view.play.elements.ViewElementUser;
-import view.play.elements.ViewElementWall;
+
+import static view.play.PlayViewConstants.*;
 
 class PlayViewGameArea extends JPanel {
 
 	private static final long serialVersionUID = 1009850031284813715L;	
-	private static final int TIMER_DELAY_MS = 10;
 	
 	private final ControllerFacade controller;
-	private final JFrame ownerFrame;
-	private Optional<Graphics> graphics;
+	private final PlayViewContainer owner;
+	private final PlayViewState state;
 	private final Timer timer;
 	private Optional<Integer> keyPressedCode;
-	private final List<ViewElement> elements;
-	private final Set<ViewElementBox> boxesOnTarget;
+	private Optional<Graphics> graphics;
 	
-	public PlayViewGameArea(JFrame ownerFrame, ControllerFacade controller) {
+	public PlayViewGameArea(PlayViewContainer owner, PlayViewState state, ControllerFacade controller) {
 		this.controller = controller;
-		this.ownerFrame = ownerFrame;
+		this.owner = owner;
+		this.state = state;
 		this.keyPressedCode = Optional.empty();
 		this.timer = new Timer(TIMER_DELAY_MS, this.timerAction());
 		this.timer.start();
-		this.elements = new ArrayList<>();
-		this.boxesOnTarget = new HashSet<>();
 		this.graphics = Optional.empty();
 		this.setSize(this.getPreferredSize());
 		this.setFocusable(true);
@@ -56,89 +44,41 @@ class PlayViewGameArea extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.graphics = Optional.of(g);
-		this.elements.stream()
-		   .forEach(ve -> {
-			   Element e = ve.getElement();
-			   g.drawImage(ve.getImage(), e.getX(), e.getY(), this);
-		   });	
+		this.state.getAllElements().stream()
+		   .forEach(ve -> g.drawImage(ve.getImage(), ve.getElement().getX(), ve.getElement().getY(), this));	
 	}
 	
 	@Override
     public Dimension getPreferredSize() {
-		int frameHeight = (int) Math.round(this.ownerFrame.getSize().getHeight()) - this.ownerFrame.getInsets().top;
-		int frameWidth = (int) Math.round(this.ownerFrame.getSize().getWidth());
+		int frameHeight = (int) Math.round(owner.getFrame().getSize().getHeight()) - owner.getFrame().getInsets().top;
+		int frameWidth = (int) Math.round(owner.getFrame().getSize().getWidth());
 		return new Dimension(frameWidth, frameHeight);		
     }
-		
-	public void setElements(List<Element> elements) {
-		if (elements == null || elements.isEmpty()) {
-			throw new IllegalArgumentException();
-		}
-		this.elements.clear();
-		this.elements.addAll(elements.stream().map(this::translateElement).collect(Collectors.toList()));
-	}
 	
 	public void drawElements(List<Element> elements) {
-		List<ViewElement> drawElementList = elements.stream()
-				.map(PlayViewGameArea.this::translateElement).collect(Collectors.toList());
-		draw(drawElementList);
-	}
-	
-	public void drawDarkerBoxes(List<Element> boxesOnTargets) {
-		if (boxesOnTargets == null) {
-			throw new IllegalArgumentException();
-		}
-		if (boxesOnTargets.isEmpty()) {
-			this.boxesOnTarget.forEach(box -> {
-				int index = this.elements.indexOf(box);
-				((ViewElementBox)this.elements.get(index)).setOnTarget(false);
-				this.boxesOnTarget.remove(box);
-			});
-		} else {
-			List<ViewElementBox> newBoxes = boxesOnTargets.stream()
-					  .map(this::translateElement)
-					  .map(b -> (ViewElementBox)b)
-					  .collect(Collectors.toList());
-			newBoxes.forEach(box -> {
-				int index = this.elements.indexOf(box);
-				if (!this.boxesOnTarget.contains(box)) {
-					((ViewElementBox)this.elements.get(index)).setOnTarget(true);
-					this.boxesOnTarget.add(box);
-				} 				
-			});
-			this.boxesOnTarget.forEach(box -> {
-				int index = this.elements.indexOf(box);
-				if (!newBoxes.contains(box)) {
-					((ViewElementBox)this.elements.get(index)).setOnTarget(false);
-					this.boxesOnTarget.remove(box);					
-				}
-			});
-		}
+		elements.stream()
+				.map(state::translateElement)
+				.forEach(ve -> graphics.get().drawImage(ve.getImage(), ve.getElement().getX(), ve.getElement().getY(), this));
 		this.repaint(TIMER_DELAY_MS);
 	}
 	
-	private void draw(List<ViewElement> viewElementList) {
-		viewElementList.stream()
-		   .forEach(ve -> {
-			   Element e = ve.getElement();
-			   this.graphics.get().drawImage(ve.getImage(), e.getX(), e.getY(), this);
-			   this.repaint(TIMER_DELAY_MS);
-		   });	
-	}
-
-	private ViewElement translateElement(Element element) {
-		if (element.getType().equals(Type.USER)) {
-			return new ViewElementUser(element);
-		} else if (element.getType().equals(Type.TARGET)) {
-			return new ViewElementTarget(element);
-		} else if (element.getType().equals(Type.BOX)) {
-			return new ViewElementBox(element);
-		} else if (element.getType().equals(Type.WALL)) {
-			return new ViewElementWall(element);
+	public void drawDarkerBoxes(List<Element> newBoxesOnTarget) {
+		if (newBoxesOnTarget == null) {
+			throw new IllegalArgumentException();
 		}
-		throw new IllegalArgumentException();
+		state.updateBoxesOnTarget(newBoxesOnTarget);
+		this.repaint(TIMER_DELAY_MS);
 	}
 	
+	private KeyListener buttonPressed() {
+		return new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				SwingUtilities.invokeLater(() -> PlayViewGameArea.this.keyPressedCode = Optional.of(e.getKeyCode()));
+			}
+		};
+	}	
+
 	private ActionListener timerAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
 			if (this.keyPressedCode.isPresent()) {
@@ -156,14 +96,4 @@ class PlayViewGameArea extends JPanel {
 			}
 		});
 	}
-
-	private KeyListener buttonPressed() {
-		return new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				SwingUtilities.invokeLater(() -> PlayViewGameArea.this.keyPressedCode = Optional.of(e.getKeyCode()));
-			}
-		};
-	}	
-
 }

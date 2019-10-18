@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.List;
-
 import model.level.LevelInstance;
 import model.level.LevelSchema;
 import model.level.LevelSchemaImpl.LevelNotValidException;
@@ -29,9 +28,9 @@ public class ControllerFacadeSingleton implements ControllerFacade {
 
 	private ControllerFacadeSingleton() {
 		this.model = ModelFacadeSingleton.getInstance();
+		this.craftViewObserver = new CraftViewObserver();		
 		this.initialViewObserver = InitialViewObserver.getInstance(this, this.model);
 		this.view = ViewFacadeSingleton.getInstance(this);
-		this.craftViewObserver = new CraftViewObserver();		
 		this.playViewObserver = new PlayViewObserver(this, this.view, this.model);
 	}
 	

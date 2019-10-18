@@ -1,8 +1,8 @@
 package view.craft;
 
-import view.GenericView;
+import view.View;
 
-public interface CraftView extends GenericView {
+public interface CraftView extends View {
 
 	public void showLevelNotValidDialog();
 

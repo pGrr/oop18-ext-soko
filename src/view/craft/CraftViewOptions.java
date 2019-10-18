@@ -1,6 +1,6 @@
 package view.craft;
 
-import static view.Components.*;
+import static view.GuiComponentFactoryImpl.*;
 import static view.craft.CraftViewConstants.*;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -28,17 +28,17 @@ public class CraftViewOptions {
 	
 	public JPanel createPanel() {
 		JPanel choicesPanel = new JPanel(new GridLayout(1,4, DEFAULT_PADDING, DEFAULT_PADDING));
-		choicesPanel.setBorder(createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
-		choicesPanel.add(createButton(BUTTON_SAVE_TEXT, ICON_SAVE, saveButtonActionListener()));
-		choicesPanel.add(createButton(BUTTON_LOAD_TEXT, ICON_LOAD, loadButtonActionListener()));
-		choicesPanel.add(createButton(BUTTON_RESET_TEXT, ICON_CANCEL, this.grid.resetButtonActionListener()));
-		choicesPanel.add(createButton(BUTTON_BACK_TEXT, ICON_BACK, backButtonActionListener()));
+		choicesPanel.setBorder(owner.getComponentFactory().createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
+		choicesPanel.add(owner.getComponentFactory().createButton(BUTTON_SAVE_TEXT, ICON_SAVE, saveButtonActionListener()));
+		choicesPanel.add(owner.getComponentFactory().createButton(BUTTON_LOAD_TEXT, ICON_LOAD, loadButtonActionListener()));
+		choicesPanel.add(owner.getComponentFactory().createButton(BUTTON_RESET_TEXT, ICON_CANCEL, this.grid.resetButtonActionListener()));
+		choicesPanel.add(owner.getComponentFactory().createButton(BUTTON_BACK_TEXT, ICON_BACK, backButtonActionListener()));
 		return choicesPanel;
 	}
 
 	private ActionListener saveButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
 			fc.showSaveDialog(this.owner.getFrame());
 			try {
 				String path = fc.getSelectedFile().getAbsolutePath() + controller.getLevelFileExtension();
@@ -55,7 +55,7 @@ public class CraftViewOptions {
 	
 	private ActionListener loadButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
 			fc.showOpenDialog(this.owner.getFrame());
 			List<List<Type>> typeGrid;
 			try {

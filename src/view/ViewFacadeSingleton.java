@@ -134,6 +134,7 @@ public class ViewFacadeSingleton implements ViewFacade {
 			this.playView.get().showGameFinishedDialog();
 		} else {
 			throw new IllegalStateException("Play view has not been initialized");
-		}	}
+		}	
+	}
 
 }

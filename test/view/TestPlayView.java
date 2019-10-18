@@ -8,7 +8,7 @@ public class TestPlayView {
 	private TestPlayView() {}
 	
 	public static void main(String ...args) {
-		new PlayViewContainer(new ControllerFacadeSingleton(), "").show();
+		new PlayViewContainer(ControllerFacadeSingleton.getInstance(), "").show();
 	}
 
 }
