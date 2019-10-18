@@ -8,18 +8,18 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import controller.ControllerFacade;
 import model.sequence.LevelSequence;
-import view.AbstractView;
+import view.WindowAbstract;
 
 import static view.GuiComponentFactoryImpl.*;
 import static view.initial.InitialViewConstants.*;
 
-public class InitialViewContainer extends AbstractView implements InitialView {
+public class InitialViewWindowImpl extends WindowAbstract implements InitialViewWindow {
 
 	private final ControllerFacade controller;
 	private final InitialViewList levels;
 	private final InitialViewOptions options;
 	
-	public InitialViewContainer(ControllerFacade controller) {
+	public InitialViewWindowImpl(ControllerFacade controller) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.levels = new InitialViewList(this, this.controller, Optional.empty());
@@ -27,7 +27,7 @@ public class InitialViewContainer extends AbstractView implements InitialView {
 		this.getFrame().add(createMainPanel());
 	}
 	
-	public InitialViewContainer(ControllerFacade controller, LevelSequence levelSequence) {
+	public InitialViewWindowImpl(ControllerFacade controller, LevelSequence levelSequence) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.levels = new InitialViewList(this, this.controller, Optional.of(levelSequence));

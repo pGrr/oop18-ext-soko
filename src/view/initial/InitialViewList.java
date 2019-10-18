@@ -23,7 +23,7 @@ import model.sequence.LevelSequence;
 
 public class InitialViewList {
 	
-	private final InitialViewContainer owner;
+	private final InitialViewWindowImpl owner;
 	private final ControllerFacade controller;
 	private final InitialViewSaveOrLoad saveOrLoad;
 	private final JPanel panel;
@@ -31,7 +31,7 @@ public class InitialViewList {
 	private final DefaultListModel<String> listModel;
 	private Optional<LevelSequence> levelSequence;
 
-	public InitialViewList(InitialViewContainer owner, ControllerFacade controller, Optional<LevelSequence> levelSequence) {
+	public InitialViewList(InitialViewWindowImpl owner, ControllerFacade controller, Optional<LevelSequence> levelSequence) {
 		this.owner = owner;
 		this.controller = controller;
 		this.saveOrLoad = new InitialViewSaveOrLoad(this.controller, this.owner, this);

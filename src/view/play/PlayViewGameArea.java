@@ -21,13 +21,13 @@ class PlayViewGameArea extends JPanel {
 	private static final long serialVersionUID = 1009850031284813715L;	
 	
 	private final ControllerFacade controller;
-	private final PlayViewContainer owner;
+	private final PlayViewWindowImpl owner;
 	private final PlayViewState state;
 	private final Timer timer;
 	private Optional<Integer> keyPressedCode;
 	private Optional<Graphics> graphics;
 	
-	public PlayViewGameArea(PlayViewContainer owner, PlayViewState state, ControllerFacade controller) {
+	public PlayViewGameArea(PlayViewWindowImpl owner, PlayViewState state, ControllerFacade controller) {
 		this.controller = controller;
 		this.owner = owner;
 		this.state = state;

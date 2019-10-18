@@ -17,10 +17,10 @@ import model.sequence.LevelSequence;
 public class InitialViewSaveOrLoad {
 	
 	private final ControllerFacade controller;
-	private final InitialViewContainer owner;
+	private final InitialViewWindowImpl owner;
 	private final InitialViewList list;
 
-	public InitialViewSaveOrLoad(ControllerFacade controller, InitialViewContainer owner, InitialViewList levelList) {
+	public InitialViewSaveOrLoad(ControllerFacade controller, InitialViewWindowImpl owner, InitialViewList levelList) {
 		this.controller = controller;
 		this.owner = owner;
 		this.list = levelList;

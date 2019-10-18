@@ -1,8 +1,5 @@
 package model;
 
-/*
- * A standard generic Pair<X,Y>, with getters, setters, hashCode, equals, and toString. 
- */
 public class PairImpl<X, Y> implements Pair<X,Y>{
 
 	private X x;

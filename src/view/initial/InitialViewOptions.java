@@ -13,11 +13,11 @@ import model.level.LevelSchemaImpl.LevelNotValidException;
 
 public class InitialViewOptions {
 
-	private final InitialViewContainer owner;
+	private final InitialViewWindowImpl owner;
 	private final InitialViewList levels;
 	private final ControllerFacade controller;
 	
-	public InitialViewOptions(InitialViewContainer owner, ControllerFacade controller, InitialViewList levels) {
+	public InitialViewOptions(InitialViewWindowImpl owner, ControllerFacade controller, InitialViewList levels) {
 		this.controller = controller;
 		this.owner = owner;
 		this.levels = levels;

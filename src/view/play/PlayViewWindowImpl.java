@@ -9,16 +9,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import controller.ControllerFacade;
 import model.element.Element;
-import view.AbstractView;
+import view.WindowAbstract;
 import static view.play.PlayViewConstants.*;
 
-public class PlayViewContainer extends AbstractView implements PlayView {
+public class PlayViewWindowImpl extends WindowAbstract implements PlayViewWindow {
 		
 	private final ControllerFacade controller;
 	private final PlayViewGameArea levelPanel;
 	private final PlayViewState state;
 	
-	public PlayViewContainer(ControllerFacade controller, String name) {
+	public PlayViewWindowImpl(ControllerFacade controller, String name) {
 		super(name, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.state = new PlayViewState();

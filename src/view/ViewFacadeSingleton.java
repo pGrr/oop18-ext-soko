@@ -6,12 +6,12 @@ import java.util.Optional;
 import controller.ControllerFacade;
 import model.element.Element;
 import model.sequence.LevelSequence;
-import view.craft.CraftView;
-import view.craft.CraftViewContainer;
-import view.initial.InitialView;
-import view.initial.InitialViewContainer;
-import view.play.PlayView;
-import view.play.PlayViewContainer;
+import view.craft.CraftViewWindow;
+import view.craft.CraftViewWindowImpl;
+import view.initial.InitialViewWindow;
+import view.initial.InitialViewWindowImpl;
+import view.play.PlayViewWindow;
+import view.play.PlayViewWindowImpl;
 
 public class ViewFacadeSingleton implements ViewFacade {
 	
@@ -20,10 +20,10 @@ public class ViewFacadeSingleton implements ViewFacade {
 	private static Optional<ViewFacade> SINGLETON = Optional.empty();
 
 	private final ControllerFacade controller;
-	private final InitialView initialView;
-	private final CraftView craftView;
+	private final InitialViewWindow initialView;
+	private final CraftViewWindow craftView;
 	private Optional<LevelSequence> defaultLevelSequence;
-	private Optional<PlayView> playView;
+	private Optional<PlayViewWindow> playView;
 	
 	private ViewFacadeSingleton(ControllerFacade controller) {
 		this.controller = controller;
@@ -35,8 +35,8 @@ public class ViewFacadeSingleton implements ViewFacade {
 			e.printStackTrace();
 		}
 		this.initialView = this.defaultLevelSequence.isPresent() ? 
-				new InitialViewContainer(controller, this.defaultLevelSequence.get()) : new InitialViewContainer(controller);			
-		this.craftView = new CraftViewContainer(controller);
+				new InitialViewWindowImpl(controller, this.defaultLevelSequence.get()) : new InitialViewWindowImpl(controller);			
+		this.craftView = new CraftViewWindowImpl(controller);
 		this.playView = Optional.empty();
 	}
 	
@@ -62,7 +62,7 @@ public class ViewFacadeSingleton implements ViewFacade {
 	@Override
 	public void showPlayLevelView(String name) {
 		this.hideAll();
-		this.playView = Optional.of(new PlayViewContainer(this.controller, name));
+		this.playView = Optional.of(new PlayViewWindowImpl(this.controller, name));
 		this.playView.get().show();
 	}
 

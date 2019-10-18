@@ -17,10 +17,10 @@ import model.element.Element.Type;
 
 public class CraftViewSelection {
 	
-	private final CraftViewContainer owner;		
+	private final CraftViewWindowImpl owner;		
 	private final List<Pair<Type,JToggleButton>> toggleButtons;
 
-	public CraftViewSelection(CraftViewContainer owner) {
+	public CraftViewSelection(CraftViewWindowImpl owner) {
 		this.owner = owner;
 		this.toggleButtons = createToggleButtonSelectionList();
 	}

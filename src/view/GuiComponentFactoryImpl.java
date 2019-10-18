@@ -137,7 +137,7 @@ public class GuiComponentFactoryImpl implements GuiComponentFactory {
 
 	@Override
 	public ImageIcon createResizedIcon(String path, int w, int h) {
-		return createResizedIcon(createImageIcon(ICON_BOX), w, h);
+		return createResizedIcon(createImageIcon(path), w, h);
 	}
 	
 	@Override

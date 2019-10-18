@@ -1,11 +1,11 @@
 package view.play;
 
-import view.View;
+import view.Window;
 import java.util.List;
 
 import model.element.Element;
 
-public interface PlayView extends View {
+public interface PlayViewWindow extends Window {
 	
 	int getGameAreaWidth();
 	

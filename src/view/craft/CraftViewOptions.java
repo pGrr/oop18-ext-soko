@@ -17,10 +17,10 @@ import model.level.LevelSchemaImpl.LevelNotValidException;
 public class CraftViewOptions {
 	
 	private final ControllerFacade controller;
-	private final CraftViewContainer owner;
+	private final CraftViewWindowImpl owner;
 	private final CraftViewGrid grid;
 	
-	public CraftViewOptions(ControllerFacade controller, CraftViewContainer owner, CraftViewGrid grid) {
+	public CraftViewOptions(ControllerFacade controller, CraftViewWindowImpl owner, CraftViewGrid grid) {
 		this.controller = controller;
 		this.owner = owner;
 		this.grid = grid;

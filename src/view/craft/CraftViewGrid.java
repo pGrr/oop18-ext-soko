@@ -19,12 +19,12 @@ import model.level.LevelSchema;
 
 public class CraftViewGrid {
 
-	private final CraftViewContainer owner;
+	private final CraftViewWindowImpl owner;
 	private final CraftViewSelection selection;
 	private final List<List<Pair<JButton, Type>>> buttonGrid;
 	private final List<Pair<Type,ImageIcon>> icons;
 	
-	public CraftViewGrid(CraftViewContainer owner, CraftViewSelection selection) {
+	public CraftViewGrid(CraftViewWindowImpl owner, CraftViewSelection selection) {
 		this.owner = owner;
 		this.selection = selection;
 		this.buttonGrid = createButtonGrid(LevelSchema.N_ROWS);

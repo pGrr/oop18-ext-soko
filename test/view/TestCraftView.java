@@ -1,15 +1,15 @@
 package view;
 
 import controller.ControllerFacadeSingleton;
-import view.craft.CraftView;
-import view.craft.CraftViewContainer;
+import view.craft.CraftViewWindow;
+import view.craft.CraftViewWindowImpl;
 
 public class TestCraftView {
 
 	private TestCraftView() {}
 	
 	public static void main(String... args) {
-		CraftView craftView = new CraftViewContainer(ControllerFacadeSingleton.getInstance());
+		CraftViewWindow craftView = new CraftViewWindowImpl(ControllerFacadeSingleton.getInstance());
 		craftView.show();
 	}
 
