@@ -1,6 +1,5 @@
 package view;
 
-import static view.craft.CraftViewConstants.ICON_BOX;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -24,18 +23,26 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
+import controller.ControllerFacade;
+
 public class GuiComponentFactoryImpl implements GuiComponentFactory {
 
 	public static final int DEFAULT_PADDING = 20;
-	private static final GuiComponentFactory SINGLETON = new GuiComponentFactoryImpl();
+	private static final String BUTTON_OK_TEXT = "Ok";
+	private static final String ICON_OK = "icons/ok.png";
+	private static GuiComponentFactory SINGLETON;
 
 	private GuiComponentFactoryImpl() {}
 	
 	public static GuiComponentFactory getInstance() {
+		if (SINGLETON == null) {
+			SINGLETON = new GuiComponentFactoryImpl();
+		}
 		return SINGLETON;
 	}
 
-	public static final Dimension computeAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
+	@Override
+	public final Dimension computeAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio) {
 		double screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight();
 		int height = (int) Math.round(screenSize * heightToScreenSizeRatio);
 		int width = (int) Math.round(height * widthToHeightRatio);
@@ -53,6 +60,25 @@ public class GuiComponentFactoryImpl implements GuiComponentFactory {
 		dialog.add(panel);
 		dialog.setLocationByPlatform(true);
 		dialog.setSize(dialog.getPreferredSize());
+		return dialog;
+	}
+	
+	@Override
+	public JDialog createErrorDialog(String title, String message) {
+		JButton button = createButton(BUTTON_OK_TEXT, ICON_OK, null);
+		JDialog dialog = createDialog(null, title, message, button);
+		button.addActionListener(e -> {
+			dialog.setVisible(false);
+			ControllerFacade.getInstance().backToInitialView();
+		});
+		return dialog;
+	}
+	
+	@Override
+	public JDialog createNotifyDialog(String title, String message, ActionListener actionListener) {
+		JButton button = createButton(BUTTON_OK_TEXT, ICON_OK, null);
+		JDialog dialog = createDialog(null, title, message, button);
+		button.addActionListener(actionListener);
 		return dialog;
 	}
 

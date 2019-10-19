@@ -1,6 +1,5 @@
 package view;
 
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,14 +7,12 @@ import java.awt.event.ActionListener;
 
 public abstract  class WindowAbstract implements Window {
 	
-	private static final String BUTTON_OK_TEXT = "Ok";
-	private static final String ICON_OK = "icons/ok.png";
 	
 	private final GuiComponentFactory componentFactory;	
 	private final JFrame frame;
 
 	public WindowAbstract(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
-		this.componentFactory = GuiComponentFactoryImpl.getInstance();
+		this.componentFactory = GuiComponentFactory.getDefaultInstance();
 		this.frame = this.componentFactory.createFrame(title, heightToScreenSizeRatio, widthToHeightRatio);
 	}
 
@@ -36,38 +33,24 @@ public abstract  class WindowAbstract implements Window {
 	
 	@Override
 	public void showErrorDialog(String title, String message) {
-		createErrorDialog(title, message).setVisible(true);
+		componentFactory.createErrorDialog(title, message).setVisible(true);
 	}
 	
 	@Override
 	public void showNotifyDialog(String title, String message, ActionListener actionListener) {
-		createNotifyDialog(title, message, actionListener).setVisible(true);
+		componentFactory.createNotifyDialog(title, message, actionListener).setVisible(true);
 	}
 	
 	public GuiComponentFactory getComponentFactory() {
 		return this.componentFactory;
 	}
 	
-	abstract protected ActionListener errorAction(JDialog dialog);
-	
-	protected abstract JPanel createMainPanel();
-	
-	private JDialog createErrorDialog(String title, String message) {
-		JButton button = componentFactory.createButton(BUTTON_OK_TEXT, ICON_OK, null);
-		JDialog dialog = componentFactory.createDialog(this.getFrame(), title, message, button);
-		button.addActionListener(errorAction(dialog));
-		return dialog;
-	}
-	
-	private JDialog createNotifyDialog(String title, String message, ActionListener actionListener) {
-		JButton button = componentFactory.createButton(BUTTON_OK_TEXT, ICON_OK, null);
-		JDialog dialog = componentFactory.createDialog(this.getFrame(), title, message, button);
-		button.addActionListener(actionListener);
-		return dialog;
-	}
-	
 	public JFrame getFrame() {
 		return this.frame;
 	}
+		
+	abstract protected ActionListener errorAction(JDialog dialog);
 	
+	protected abstract JPanel createMainPanel();
+
 }

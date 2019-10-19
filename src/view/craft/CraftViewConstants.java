@@ -1,6 +1,8 @@
 package view.craft;
 
-public class CraftViewConstants {
+public final class CraftViewConstants {
+	
+	// package-private constants used by view.craft classes
 	
 	public static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
 	public static final double WIDTH_TO_HEIGHT_RATIO = 1;

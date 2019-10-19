@@ -4,21 +4,17 @@ import static view.GuiComponentFactoryImpl.*;
 import static view.initial.InitialViewConstants.*;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.ControllerFacade;
-import model.level.LevelSchemaImpl.LevelNotValidException;
 
 public class InitialViewOptions {
 
 	private final InitialViewWindowImpl owner;
 	private final InitialViewList levels;
-	private final ControllerFacade controller;
 	
-	public InitialViewOptions(InitialViewWindowImpl owner, ControllerFacade controller, InitialViewList levels) {
-		this.controller = controller;
+	public InitialViewOptions(InitialViewWindowImpl owner, InitialViewList levels) {
 		this.owner = owner;
 		this.levels = levels;
 	}
@@ -36,23 +32,13 @@ public class InitialViewOptions {
 	
 	public ActionListener crafAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			this.controller.craftLevel();
+			ControllerFacade.getInstance().craftLevel();
 		});
 	}
 	
 	public ActionListener playAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			try {
-				this.controller.playLevelSequence(this.levels.getLevelSequence());
-			} catch (LevelNotValidException levelNotValidException) {
-				this.owner.showLevelNotValidDialog();
-			} catch (IOException ioException) {
-				this.owner.showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
-				System.err.println(ioException);
-			} catch (ClassNotFoundException classNotFoundException) {
-				this.owner.showErrorDialog(DIALOG_CLASS_NOT_FOUND_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT);
-				System.err.println(classNotFoundException);
-			}
+			ControllerFacade.getInstance().playLevelSequence(this.levels.getLevelSequence());
 		});
 	}
 

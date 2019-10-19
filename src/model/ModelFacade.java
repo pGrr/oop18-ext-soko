@@ -32,4 +32,8 @@ public interface ModelFacade {
 	boolean isLevelFinished();
 	
 	boolean isGameFinished();
+	
+	static ModelFacade getInstance() {
+		return ModelFacadeSingleton.getInstance();
+	}
 }

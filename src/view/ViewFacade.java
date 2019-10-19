@@ -26,4 +26,7 @@ public interface ViewFacade {
 	
 	void showGameFinishedDialog();
 	
+	static ViewFacade getInstance() {
+		return ViewFacadeSingleton.getInstance();
+	}
 }

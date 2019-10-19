@@ -6,12 +6,12 @@ import java.util.Objects;
 import model.element.Element;
 import model.element.Element.Type;
 
-public abstract class AbstractViewElement implements ViewElement {
+public abstract class ViewElementAbstract implements ViewElement {
 	
 	private final Element element;
 	private Image image;
 	
-	public AbstractViewElement(Element element, Image image) {
+	public ViewElementAbstract(Element element, Image image) {
 		super();
 		if (element == null || image == null) {
 			throw new IllegalArgumentException();
@@ -49,7 +49,7 @@ public abstract class AbstractViewElement implements ViewElement {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractViewElement other = (AbstractViewElement) obj;
+		ViewElementAbstract other = (ViewElementAbstract) obj;
 		return element == other.element;
 	}
 	

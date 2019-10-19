@@ -18,7 +18,7 @@ import static controller.ControllerConstants.*;
 
 public class ControllerFacadeSingleton implements ControllerFacade {
 	
-	private final static ControllerFacade SINGLETON = new ControllerFacadeSingleton();
+	private static ControllerFacade SINGLETON;
 		
 	private final ViewFacade view;
 	private final ModelFacade model;
@@ -28,13 +28,16 @@ public class ControllerFacadeSingleton implements ControllerFacade {
 
 	private ControllerFacadeSingleton() {
 		this.model = ModelFacadeSingleton.getInstance();
-		this.craftViewObserver = new CraftViewObserver();		
-		this.initialViewObserver = InitialViewObserver.getInstance(this, this.model);
-		this.view = ViewFacadeSingleton.getInstance(this);
-		this.playViewObserver = new PlayViewObserver(this, this.view, this.model);
+		this.view = ViewFacadeSingleton.getInstance();
+		this.craftViewObserver = CraftViewObserver.getInstance();		
+		this.initialViewObserver = InitialViewObserver.getInstance();
+		this.playViewObserver = PlayViewObserver.getInstance();
 	}
 	
 	public static final ControllerFacade getInstance() {
+		if (SINGLETON == null) {
+			SINGLETON = new ControllerFacadeSingleton();
+		}
 		return SINGLETON;
 	}
 
@@ -145,4 +148,5 @@ public class ControllerFacadeSingleton implements ControllerFacade {
 	public void gameFinishedAccepted() {
 		playViewObserver.gameFinishedAccepted();
 	}
+	
 }

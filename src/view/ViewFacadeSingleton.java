@@ -1,11 +1,9 @@
 package view;
 
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Optional;
 import controller.ControllerFacade;
 import model.element.Element;
-import model.sequence.LevelSequence;
 import view.craft.CraftViewWindow;
 import view.craft.CraftViewWindowImpl;
 import view.initial.InitialViewWindow;
@@ -16,35 +14,23 @@ import view.play.PlayViewWindowImpl;
 public class ViewFacadeSingleton implements ViewFacade {
 	
 	private static final String LEVEL_NOT_INITIALIZED_ERROR_TEXT = "Level has not been initialized.";
-	private static final String DEFAULT_LEVEL_SEQUENCE = "default.sokolevelsequence";
-	private static Optional<ViewFacade> SINGLETON = Optional.empty();
+	private static ViewFacade SINGLETON;
 
-	private final ControllerFacade controller;
 	private final InitialViewWindow initialView;
 	private final CraftViewWindow craftView;
-	private Optional<LevelSequence> defaultLevelSequence;
 	private Optional<PlayViewWindow> playView;
 	
-	private ViewFacadeSingleton(ControllerFacade controller) {
-		this.controller = controller;
-		this.defaultLevelSequence = Optional.empty();
-		try {
-			String path = URLDecoder.decode(ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE).getPath(), "UTF-8");
-			this.defaultLevelSequence = Optional.of(this.controller.loadLevelSequence(path));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		this.initialView = this.defaultLevelSequence.isPresent() ? 
-				new InitialViewWindowImpl(controller, this.defaultLevelSequence.get()) : new InitialViewWindowImpl(controller);			
-		this.craftView = new CraftViewWindowImpl(controller);
+	private ViewFacadeSingleton() {
+		this.craftView = new CraftViewWindowImpl();
 		this.playView = Optional.empty();
+		this.initialView = new InitialViewWindowImpl();
 	}
-	
-	public static final ViewFacade getInstance(ControllerFacade controller) {
-		if (!SINGLETON.isPresent()) {
-			SINGLETON = Optional.of(new ViewFacadeSingleton(controller));
+
+	public static final ViewFacade getInstance() {
+		if (SINGLETON == null) {
+			SINGLETON = new ViewFacadeSingleton();
 		}
-		return SINGLETON.get();
+		return SINGLETON;
 	}
 
 	@Override
@@ -62,7 +48,7 @@ public class ViewFacadeSingleton implements ViewFacade {
 	@Override
 	public void showPlayLevelView(String name) {
 		this.hideAll();
-		this.playView = Optional.of(new PlayViewWindowImpl(this.controller, name));
+		this.playView = Optional.of(new PlayViewWindowImpl(ControllerFacade.getInstance(), name));
 		this.playView.get().show();
 	}
 
@@ -136,5 +122,4 @@ public class ViewFacadeSingleton implements ViewFacade {
 			throw new IllegalStateException("Play view has not been initialized");
 		}	
 	}
-
 }

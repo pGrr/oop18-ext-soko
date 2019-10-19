@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 
 public interface GuiComponentFactory {
+	
+	Dimension computeAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio);
 	
 	JFrame createFrame(double heightToScreenSizeRatio, double widthToHeightRatio);
 	
@@ -46,5 +49,12 @@ public interface GuiComponentFactory {
 	Border createEmptyPaddingBorder(int defaultPadding);
 	
 	Border createTitledPaddingBorder(String title, int defaultPadding);
+	
+	JDialog createErrorDialog(String title, String message);
+	
+	JDialog createNotifyDialog(String title, String message, ActionListener actionListener);
 
+	static GuiComponentFactory getDefaultInstance() {
+		return GuiComponentFactoryImpl.getInstance();
+	}
 }

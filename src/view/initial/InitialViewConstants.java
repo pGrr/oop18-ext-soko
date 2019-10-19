@@ -1,6 +1,8 @@
 package view.initial;
 
-public class InitialViewConstants {
+public final class InitialViewConstants {
+	
+	// package-private constants used by view.initial classes
 
 	public static final double HEIGHT_TO_SCREENSIZE_RATIO = 0.9;
 	public static final double WIDTH_TO_HEIGHT_RATIO = 1;
@@ -8,6 +10,10 @@ public class InitialViewConstants {
 	public static final String DIALOG_IOERROR_TEXT = "An error occurred during an input/output operation";
 	public static final String DIALOG_CLASS_NOT_FOUND_TITLE = "CLASS NOT FOUND";
 	public static final String DIALOG_CLASS_NOT_FOUND_TEXT = "Loaded file is corrupted.";
+	public static final String DIALOG_ERROR_LOAD_LEVEL_TEXT = "Sorry, an error occurred while attempting to load the level.";
+	public static final String DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT = "Level sequence is empty";
+	public static final String DIALOG_DEFAULT_LEVEL_SEQUENCE_ERROR_TEXT = "An error occurred while attempting to load the default level sequence.";
+	public static final String DEFAULT_LEVEL_SEQUENCE = "default.sokolevelsequence";
 	public static final String ICON_CRAFT = "icons/craft.png";
 	public static final String TITLE = "SOKOBAN - InitialView";
 	public static final String LABEL_WELCOME_TEXT = "Welcome to Sokoban! What would you like to do?";

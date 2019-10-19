@@ -11,7 +11,7 @@ import java.awt.Image;
 import model.element.Element;
 import model.element.Element.Type;
 
-public class ViewElementFactory {
+public final class ViewElementFactory {
 	
 	public static final ViewElementUser createUser(Element element) {
 		return new ViewElementUser(element);
@@ -29,7 +29,7 @@ public class ViewElementFactory {
 		return new ViewElementBox(element);
 	}
 	
-	public static class ViewElementUser extends AbstractViewElement implements ViewElement {
+	public final static class ViewElementUser extends ViewElementAbstract implements ViewElement {
 			
 		public ViewElementUser(Element element) {
 			super(element, ICON_USER);
@@ -42,9 +42,9 @@ public class ViewElementFactory {
 	
 	}
 	
-	public static class ViewElementTarget extends AbstractViewElement implements ViewElement {
+	public final static class ViewElementTarget extends ViewElementAbstract implements ViewElement {
 		
-		public ViewElementTarget(Element element) {
+		private ViewElementTarget(Element element) {
 			super(element, ICON_TARGET);
 		}
 		
@@ -55,9 +55,9 @@ public class ViewElementFactory {
 	
 	}
 	
-	public static class ViewElementWall extends AbstractViewElement implements ViewElement {
+	public final static class ViewElementWall extends ViewElementAbstract implements ViewElement {
 		
-		public ViewElementWall(Element element) {
+		private ViewElementWall(Element element) {
 			super(element, ICON_WALL);
 		}
 		
@@ -68,13 +68,13 @@ public class ViewElementFactory {
 		
 	}
 	
-	public static class ViewElementBox extends AbstractViewElement implements ViewElement {
+	public final static class ViewElementBox extends ViewElementAbstract implements ViewElement {
 		
 		private boolean onTarget;
 		private final Image defaultImage;
 		private final Image onTargetImage;
 
-		public ViewElementBox(Element element) {
+		private ViewElementBox(Element element) {
 			super(element, ICON_BOX);
 			this.defaultImage = ICON_BOX.getScaledInstance(element.getWidth(), element.getHeight(), Image.SCALE_DEFAULT);
 			this.onTargetImage = ICON_BOX_ON_TARGET.getScaledInstance(element.getWidth(), element.getHeight(), Image.SCALE_DEFAULT);

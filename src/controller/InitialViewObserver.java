@@ -10,38 +10,37 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import model.ModelFacade;
 import model.level.LevelSchema;
 import model.level.LevelSchemaImpl.LevelNotValidException;
 import model.sequence.LevelSequence;
 import model.sequence.LevelSequenceImpl;
+import view.GuiComponentFactory;
+
+import static view.initial.InitialViewConstants.*;
 
 public class InitialViewObserver {
 	
-	private static Optional<InitialViewObserver> SINGLETON = Optional.empty();
-	
-	private final ControllerFacade owner;
+	private static InitialViewObserver SINGLETON;
+
 	private final ModelFacade model;
 
-	private InitialViewObserver(ControllerFacade owner, ModelFacade model) {
-		this.owner = owner;
-		this.model = model;
+	private InitialViewObserver() {
+		this.model = ModelFacade.getInstance();
 	}
 	
-	public static final InitialViewObserver getInstance(ControllerFacade owner, ModelFacade model) {
-		if (!SINGLETON.isPresent()) {
-			SINGLETON = Optional.of(new InitialViewObserver(owner, model));
+	public static final InitialViewObserver getInstance() {
+		if (SINGLETON == null) {
+			SINGLETON = new InitialViewObserver();
 		}
-		return SINGLETON.get();
+		return SINGLETON;
 	}
 
 	public LevelSequence createLevelSequence(String name, List<String> paths) 
 			throws LevelNotValidException, IOException, ClassNotFoundException {		
 		List<LevelSchema> levelSchemaList = new ArrayList<>();
 		for (String path : paths) {
-			levelSchemaList.add(this.owner.loadLevel(path));
+			levelSchemaList.add(ControllerFacade.getInstance().loadLevel(path));
 		}
 		return new LevelSequenceImpl(name, levelSchemaList);
 	}
@@ -70,9 +69,10 @@ public class InitialViewObserver {
 		this.model.startLevelSequence(levelSequence);
 		if (this.model.hasNextSchema()) {
 			LevelSchema levelSchema = this.model.getNextSchema();
-			this.owner.playLevel(levelSchema);
+			ControllerFacade.getInstance().playLevel(levelSchema);
 		} else {
-			throw new IllegalArgumentException();
+			GuiComponentFactory.getDefaultInstance().createErrorDialog(DIALOG_ERROR_TITLE, DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT).setVisible(true);;
 		}
 	}
+	
 }

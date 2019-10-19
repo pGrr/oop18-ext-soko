@@ -10,9 +10,12 @@ import model.level.LevelSchemaImpl.LevelNotValidException;
 
 public class CraftViewObserver {
 	
-	private static final CraftViewObserver SINGLETON = new CraftViewObserver();
+	private static CraftViewObserver SINGLETON;
 	
 	public static final CraftViewObserver getInstance() {
+		if (SINGLETON == null) {
+			SINGLETON = new CraftViewObserver();
+		}
 		return SINGLETON;
 	}
 	

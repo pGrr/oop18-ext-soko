@@ -7,7 +7,6 @@ import model.element.Element;
 import model.element.ElementImpl;
 import model.element.Element.Type;
 import model.movement.MovementStrategyFactory;
-import model.movement.MovementStrategyFactoryImpl;
 
 public class LevelInstanceImpl implements LevelInstance {
 		
@@ -22,7 +21,7 @@ public class LevelInstanceImpl implements LevelInstance {
 		this.width = width;
 		this.height = height;
 		int elementEdgeSize = this.computeElementEdgeSize();
-		this.movements = new MovementStrategyFactoryImpl(elementEdgeSize);
+		this.movements = MovementStrategyFactory.createDefault(elementEdgeSize);
 		this.state = new LevelInstanceState(height, width, elementEdgeSize, 
 				createUser(elementEdgeSize), 
 				createElementList(elementEdgeSize, Type.TARGET), 

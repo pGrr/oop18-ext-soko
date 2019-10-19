@@ -16,12 +16,10 @@ import model.sequence.LevelSequence;
 
 public class InitialViewSaveOrLoad {
 	
-	private final ControllerFacade controller;
 	private final InitialViewWindowImpl owner;
 	private final InitialViewList list;
 
-	public InitialViewSaveOrLoad(ControllerFacade controller, InitialViewWindowImpl owner, InitialViewList levelList) {
-		this.controller = controller;
+	public InitialViewSaveOrLoad(InitialViewWindowImpl owner, InitialViewList levelList) {
 		this.owner = owner;
 		this.list = levelList;
 	}
@@ -39,12 +37,12 @@ public class InitialViewSaveOrLoad {
 	
 	private ActionListener saveSequenceAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = owner.getComponentFactory().createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(ControllerFacade.getInstance().getLevelSequenceFileDescription(), ControllerFacade.getInstance().getLevelSequenceFileExtension());
 			fc.showSaveDialog(this.owner.getFrame());
 			try {
-				String path = fc.getSelectedFile().getAbsolutePath() + this.controller.getLevelSequenceFileExtension();
+				String path = fc.getSelectedFile().getAbsolutePath() + ControllerFacade.getInstance().getLevelSequenceFileExtension();
 				String name = fc.getSelectedFile().getName();
-				this.controller.saveLevelSequence(path, name, list.getLevelsAsStringList());
+				ControllerFacade.getInstance().saveLevelSequence(path, name, list.getLevelNames());
 			} catch (LevelNotValidException levelNotValidException) {
 				this.owner.showLevelNotValidDialog();
 			} catch (IOException ioException) {
@@ -59,7 +57,7 @@ public class InitialViewSaveOrLoad {
 	
 	private ActionListener loadSequenceAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = owner.getComponentFactory().createFileChooser(controller.getLevelSequenceFileDescription(), controller.getLevelSequenceFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(ControllerFacade.getInstance().getLevelSequenceFileDescription(), ControllerFacade.getInstance().getLevelSequenceFileExtension());
 			fc.showOpenDialog(this.owner.getFrame());
 			try {
 				File file = fc.getSelectedFile();
@@ -67,7 +65,7 @@ public class InitialViewSaveOrLoad {
 				if (file != null) {
 					path = file.getPath();
 				}
-				LevelSequence levelSequence = this.controller.loadLevelSequence(path);
+				LevelSequence levelSequence = ControllerFacade.getInstance().loadLevelSequence(path);
 				List<String> names = levelSequence.getLevelNames();
 				names.stream().forEach(this.list.getListModel()::addElement);
 			} catch (IOException ioException) {

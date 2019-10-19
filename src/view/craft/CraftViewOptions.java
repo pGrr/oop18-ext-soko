@@ -16,12 +16,10 @@ import model.level.LevelSchemaImpl.LevelNotValidException;
 
 public class CraftViewOptions {
 	
-	private final ControllerFacade controller;
 	private final CraftViewWindowImpl owner;
 	private final CraftViewGrid grid;
 	
-	public CraftViewOptions(ControllerFacade controller, CraftViewWindowImpl owner, CraftViewGrid grid) {
-		this.controller = controller;
+	public CraftViewOptions(CraftViewWindowImpl owner, CraftViewGrid grid) {
 		this.owner = owner;
 		this.grid = grid;
 	}
@@ -38,12 +36,12 @@ public class CraftViewOptions {
 
 	private ActionListener saveButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = owner.getComponentFactory().createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(ControllerFacade.getInstance().getLevelFileDescription(), ControllerFacade.getInstance().getLevelFileExtension());
 			fc.showSaveDialog(this.owner.getFrame());
 			try {
-				String path = fc.getSelectedFile().getAbsolutePath() + controller.getLevelFileExtension();
+				String path = fc.getSelectedFile().getAbsolutePath() + ControllerFacade.getInstance().getLevelFileExtension();
 				String fileName = fc.getSelectedFile().getName();
-				controller.saveLevel(path, new LevelSchemaImpl(fileName, this.grid.getCurrentTypeGrid()));
+				ControllerFacade.getInstance().saveLevel(path, new LevelSchemaImpl(fileName, this.grid.getCurrentTypeGrid()));
 			} catch (IOException ioException) {
 				this.owner.showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
 				ioException.printStackTrace();
@@ -55,11 +53,11 @@ public class CraftViewOptions {
 	
 	private ActionListener loadButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = owner.getComponentFactory().createFileChooser(controller.getLevelFileDescription(), controller.getLevelFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(ControllerFacade.getInstance().getLevelFileDescription(), ControllerFacade.getInstance().getLevelFileExtension());
 			fc.showOpenDialog(this.owner.getFrame());
 			List<List<Type>> typeGrid;
 			try {
-				typeGrid = controller.loadLevel(fc.getSelectedFile().getAbsolutePath()).getSchema();
+				typeGrid = ControllerFacade.getInstance().loadLevel(fc.getSelectedFile().getAbsolutePath()).getSchema();
 				this.grid.acceptTypeGrid(typeGrid);
 			} catch (ClassNotFoundException | IOException  inputError) {
 				this.owner.showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
@@ -72,7 +70,7 @@ public class CraftViewOptions {
 	
 	private ActionListener backButtonActionListener() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			this.controller.backToInitialView();
+			ControllerFacade.getInstance().backToInitialView();
 		});
 	}
 

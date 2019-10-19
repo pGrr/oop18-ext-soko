@@ -20,15 +20,13 @@ class PlayViewGameArea extends JPanel {
 
 	private static final long serialVersionUID = 1009850031284813715L;	
 	
-	private final ControllerFacade controller;
 	private final PlayViewWindowImpl owner;
 	private final PlayViewState state;
 	private final Timer timer;
 	private Optional<Integer> keyPressedCode;
 	private Optional<Graphics> graphics;
 	
-	public PlayViewGameArea(PlayViewWindowImpl owner, PlayViewState state, ControllerFacade controller) {
-		this.controller = controller;
+	public PlayViewGameArea(PlayViewWindowImpl owner, PlayViewState state) {
 		this.owner = owner;
 		this.state = state;
 		this.keyPressedCode = Optional.empty();
@@ -84,13 +82,13 @@ class PlayViewGameArea extends JPanel {
 			if (this.keyPressedCode.isPresent()) {
 				Integer key = keyPressedCode.get();
 				if (key.equals(KeyEvent.VK_DOWN) || key.equals(KeyEvent.VK_KP_DOWN)) {
-					PlayViewGameArea.this.controller.moveDown();
+					ControllerFacade.getInstance().moveDown();
 				} else if (key.equals(KeyEvent.VK_UP) || key.equals(KeyEvent.VK_KP_UP)) {
-					PlayViewGameArea.this.controller.moveUp();
+					ControllerFacade.getInstance().moveUp();
 				} else if (key.equals(KeyEvent.VK_LEFT) || key.equals(KeyEvent.VK_KP_LEFT)) {
-					PlayViewGameArea.this.controller.moveLeft();
+					ControllerFacade.getInstance().moveLeft();
 				} else if (key.equals(KeyEvent.VK_RIGHT) || key.equals(KeyEvent.VK_KP_RIGHT)) {
-					PlayViewGameArea.this.controller.moveRight();
+					ControllerFacade.getInstance().moveRight();
 				}					
 				this.keyPressedCode = Optional.empty();
 			}

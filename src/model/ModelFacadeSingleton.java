@@ -13,7 +13,7 @@ import model.sequence.LevelSequence;
 
 public class ModelFacadeSingleton implements ModelFacade {
 	
-	private final static ModelFacade SINGLETON = new ModelFacadeSingleton();
+	private static ModelFacade SINGLETON;
 	
 	private Optional<Iterator<LevelSchema>> iterator;
 	private Optional<LevelInstance> currentLevel;
@@ -23,6 +23,9 @@ public class ModelFacadeSingleton implements ModelFacade {
 	}
 	
 	public static final ModelFacade getInstance() {
+		if (SINGLETON == null) {
+			SINGLETON = new ModelFacadeSingleton();
+		}
 		return SINGLETON;
 	}
 	

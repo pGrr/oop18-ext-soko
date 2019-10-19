@@ -1,6 +1,8 @@
 package view.play;
 
-public class PlayViewConstants {
+public final class PlayViewConstants {
+	
+	// package-private constants used by view.play classes
 	
 	public static final int TIMER_DELAY_MS = 10;
 	public static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
@@ -10,5 +12,7 @@ public class PlayViewConstants {
 	public static final String LEVEL_FINISHED_TITLE = "LEVEL COMPLETE";
 	public static final String LEVEL_FINISHED_MESSAGE = "You made it!! Congratulations!";
 	public static final String GAME_FINISHED_MESSAGE = "...and that was the last one!! You won!! Congratulations!";
+	
+	private PlayViewConstants() {} // static class
 
 }

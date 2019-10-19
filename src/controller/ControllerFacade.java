@@ -53,5 +53,9 @@ public interface ControllerFacade {
 	void levelFinishedAccepted();
 	
 	void gameFinishedAccepted();
+	
+	static ControllerFacade getInstance() {
+		return ControllerFacadeSingleton.getInstance();
+	}
 				
 }

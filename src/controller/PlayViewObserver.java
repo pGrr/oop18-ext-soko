@@ -1,31 +1,27 @@
 package controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import model.ModelFacade;
 import model.element.Element;
 import view.ViewFacade;
 
 public class PlayViewObserver {
 	
-	private static Optional<PlayViewObserver> SINGLETON = Optional.empty();
+	private static PlayViewObserver SINGLETON;
 	
-	private final ControllerFacade owner;
 	private final ViewFacade view;
 	private final ModelFacade model;
 
-	public PlayViewObserver(ControllerFacade owner, ViewFacade view, ModelFacade model) {
-		this.owner = owner;
-		this.view = view;
-		this.model = model;
+	public PlayViewObserver() {
+		this.view = ViewFacade.getInstance();
+		this.model = ModelFacade.getInstance();
 	}
 	
-	public static final PlayViewObserver getInstance(ControllerFacade owner, ViewFacade view, ModelFacade model) {
-		if (!SINGLETON.isPresent()) {
-			SINGLETON = Optional.of(new PlayViewObserver(owner, view, model));
+	public static final PlayViewObserver getInstance() {
+		if (SINGLETON == null) {
+			SINGLETON = new PlayViewObserver();
 		}
-		return SINGLETON.get();
+		return SINGLETON;
 	}
 
 	public void moveUp() {
@@ -57,11 +53,11 @@ public class PlayViewObserver {
 	}
 	
 	public void levelFinishedAccepted() {
-		this.owner.playLevel(this.model.getNextSchema());
+		ControllerFacade.getInstance().playLevel(this.model.getNextSchema());
 	}
 	
 	public void gameFinishedAccepted() {
-		this.owner.backToInitialView();
+		ControllerFacade.getInstance().backToInitialView();
 	}
 		
 	private void checkLevelFinished() {

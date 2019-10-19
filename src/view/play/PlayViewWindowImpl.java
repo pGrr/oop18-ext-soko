@@ -22,7 +22,7 @@ public class PlayViewWindowImpl extends WindowAbstract implements PlayViewWindow
 		super(name, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
 		this.controller = controller;
 		this.state = new PlayViewState();
-		this.levelPanel = new PlayViewGameArea(this, this.state, this.controller);
+		this.levelPanel = new PlayViewGameArea(this, this.state);
 		this.getFrame().setJMenuBar(createMenuBar());
 		this.getFrame().add(createMainPanel());
 		this.getFrame().pack();

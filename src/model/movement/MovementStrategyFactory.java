@@ -2,13 +2,16 @@ package model.movement;
 
 public interface MovementStrategyFactory {
 	
-	public MovementStrategy up();
+	MovementStrategy up();
 
-	public MovementStrategy down();
+	MovementStrategy down();
 
-	public MovementStrategy left();
+	MovementStrategy left();
 
-	public MovementStrategy right();
+	MovementStrategy right();
 
+	static MovementStrategyFactory createDefault(int elementEdgeSize) {
+		return new MovementStrategyFactoryImpl(elementEdgeSize);
+	}
 
 }

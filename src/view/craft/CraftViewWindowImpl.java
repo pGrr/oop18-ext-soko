@@ -12,17 +12,15 @@ import static view.craft.CraftViewConstants.*;
 
 public final class CraftViewWindowImpl extends WindowAbstract implements CraftViewWindow {
 	
-	private final ControllerFacade controller;
 	private final CraftViewSelection selection;
 	private final CraftViewGrid grid;
 	private final CraftViewOptions options;
 	
-	public CraftViewWindowImpl(ControllerFacade controller) {
+	public CraftViewWindowImpl() {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
-		this.controller = controller;
 		this.selection = new CraftViewSelection(this);
 		this.grid = new CraftViewGrid(this, this.selection);
-		this.options = new CraftViewOptions(controller, this, this.grid);
+		this.options = new CraftViewOptions(this, this.grid);
 		this.getFrame().add(createMainPanel());
 	}
 	
@@ -50,7 +48,7 @@ public final class CraftViewWindowImpl extends WindowAbstract implements CraftVi
 	protected ActionListener errorAction(JDialog dialog) {
 		return e -> {
 			dialog.dispose();
-			this.controller.backToInitialView();
+			ControllerFacade.getInstance().backToInitialView();
 		};
 	}
 

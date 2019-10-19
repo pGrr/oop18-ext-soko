@@ -2,7 +2,6 @@ package view.initial;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
-import java.util.Optional;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -15,24 +14,27 @@ import static view.initial.InitialViewConstants.*;
 
 public class InitialViewWindowImpl extends WindowAbstract implements InitialViewWindow {
 
-	private final ControllerFacade controller;
 	private final InitialViewList levels;
 	private final InitialViewOptions options;
 	
-	public InitialViewWindowImpl(ControllerFacade controller) {
+	public InitialViewWindowImpl() {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
-		this.controller = controller;
-		this.levels = new InitialViewList(this, this.controller, Optional.empty());
-		this.options = new InitialViewOptions(this, this.controller, this.levels);
+		this.levels = new InitialViewList(this);
+		this.options = new InitialViewOptions(this, this.levels);
 		this.getFrame().add(createMainPanel());
 	}
 	
-	public InitialViewWindowImpl(ControllerFacade controller, LevelSequence levelSequence) {
+	public InitialViewWindowImpl(LevelSequence levelSequence) {
 		super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
-		this.controller = controller;
-		this.levels = new InitialViewList(this, this.controller, Optional.of(levelSequence));
-		this.options = new InitialViewOptions(this, this.controller, this.levels);
+		this.levels = new InitialViewList(this);
+		this.options = new InitialViewOptions(this, this.levels);
 		this.getFrame().add(createMainPanel());
+	}
+	
+	@Override
+	public void show() {
+		this.levels.loadDefaultLevelSequence();
+		super.show();
 	}
 	
 	@Override
@@ -54,7 +56,7 @@ public class InitialViewWindowImpl extends WindowAbstract implements InitialView
 	protected ActionListener errorAction(JDialog dialog) {
 		return e -> {
 			dialog.dispose();
-			this.controller.backToInitialView();
+			ControllerFacade.getInstance().backToInitialView();
 		};	
 	}
 

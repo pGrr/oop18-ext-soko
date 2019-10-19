@@ -1,6 +1,8 @@
 package model.sequence;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,5 +40,33 @@ public class LevelSequenceImpl implements LevelSequence, Serializable, Iterable<
 	public Iterator<LevelSchema> iterator() {
 		return this.schemaList.iterator();
 	}
+	
+	@Override
+	public boolean isEmpty() {
+		return this.name.isEmpty() && schemaList.isEmpty();
+	}
 
+	public static LevelSequence createEmpty() {
+		return new LevelSequenceImpl("", new ArrayList<>());
+	}
+
+	@Override
+	public void add(LevelSchema level) {
+		this.schemaList.add(level);
+	}
+	
+	@Override
+	public void swap(int i, int j) {
+		Collections.swap(schemaList, i, j);
+	}
+	
+	@Override
+	public void remove(int i) {
+		this.schemaList.remove(i);
+	}
+	
+	@Override
+	public void clear() {
+		this.schemaList.clear();
+	}
 }
