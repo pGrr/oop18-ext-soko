@@ -57,5 +57,7 @@ public interface ControllerFacade {
 	static ControllerFacade getInstance() {
 		return ControllerFacadeSingleton.getInstance();
 	}
+
+	void restartCurrentLevel();
 				
 }

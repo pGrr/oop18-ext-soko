@@ -93,6 +93,11 @@ public class ControllerFacadeSingleton implements ControllerFacade {
 		this.view.initializePlayView(level.getElements());
 	}
 	
+	@Override
+	public void restartCurrentLevel() {
+		this.playLevel(this.model.getCurrentSchema());
+	}
+	
 
 	@Override
 	public LevelSequence createLevelSequence(String name, List<String> paths) throws LevelNotValidException, IOException, ClassNotFoundException {		

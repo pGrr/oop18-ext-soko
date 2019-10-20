@@ -80,16 +80,16 @@ public class InitialViewList {
 		// edit list panel
 		JPanel p2 = new JPanel(new GridLayout(2,1));
 		JPanel editListPanel = new JPanel();
-		JButton addLevelButton = componentFactory.createButton("", ICON_PLUS, addLevelAction());
+		JButton addLevelButton = componentFactory.createButton("", ICON_PLUS, addLevel());
 		editListPanel.add(addLevelButton);
-		JButton removeLevelButton = componentFactory.createButton("", ICON_MINUS, removeSelectedAction());
+		JButton removeLevelButton = componentFactory.createButton("", ICON_MINUS, removeSelected());
 		editListPanel.add(removeLevelButton);
 		editListPanel.setBorder(componentFactory.createTitledPaddingBorder(PANEL_EDIT_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
-		JButton upButton = componentFactory.createButton("", ICON_UP, moveUpAction());
+		JButton upButton = componentFactory.createButton("", ICON_UP, moveUp());
 		editListPanel.add(upButton);
-		JButton downButton = componentFactory.createButton("", ICON_DOWN, moveDownAction());
+		JButton downButton = componentFactory.createButton("", ICON_DOWN, moveDown());
 		editListPanel.add(downButton);
-		JButton cancelButton = componentFactory.createButton("", ICON_RESET, removeAllAction());
+		JButton cancelButton = componentFactory.createButton("", ICON_RESET, removeAll());
 		editListPanel.add(cancelButton);
 		p2.add(editListPanel);
 		// save or load panel	
@@ -104,7 +104,7 @@ public class InitialViewList {
 		this.levelSequence.getLevelNames().forEach(listModel::addElement);
 	}
 
-	private ActionListener addLevelAction() {
+	private ActionListener addLevel() {
 		return e -> SwingUtilities.invokeLater(() -> {
 			JFileChooser fc = componentFactory.createFileChooser(ControllerFacade.getInstance().getLevelFileDescription(), ControllerFacade.getInstance().getLevelFileExtension());
 			fc.showOpenDialog(this.owner.getFrame());
@@ -119,7 +119,7 @@ public class InitialViewList {
 		});
 	}
 	
-	private ActionListener moveUpAction() {
+	private ActionListener moveUp() {
 		return e -> SwingUtilities.invokeLater(() -> {
 			if (this.levelList.getSelectedIndex() > 0) {
 				int selectedIndex = this.levelList.getSelectedIndex();
@@ -130,7 +130,7 @@ public class InitialViewList {
 		});
 	}
 	
-	private ActionListener moveDownAction() {
+	private ActionListener moveDown() {
 		return e -> SwingUtilities.invokeLater(() -> {
 			if (this.levelList.getSelectedIndex() > 0) {
 				int selectedIndex = this.levelList.getSelectedIndex();
@@ -141,14 +141,14 @@ public class InitialViewList {
 		});
 	}
 	
-	private ActionListener removeSelectedAction() {
+	private ActionListener removeSelected() {
 		return e -> SwingUtilities.invokeLater(() -> {
 			this.levelSequence.remove(this.levelList.getSelectedIndex());
 			updateListModel();
 		});
 	}
 	
-	private ActionListener removeAllAction() {
+	private ActionListener removeAll() {
 		return e -> SwingUtilities.invokeLater(() -> {
 			this.levelSequence.clear();
 			updateListModel();

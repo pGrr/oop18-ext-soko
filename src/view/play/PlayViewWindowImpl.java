@@ -92,9 +92,12 @@ public class PlayViewWindowImpl extends WindowAbstract implements PlayViewWindow
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu(MENU_TITLE);
-		JMenuItem item = new JMenuItem(MENU_BACK_ITEM_TEXT);
-		item.addActionListener(e -> this.controller.backToInitialView());
-		menu.add(item);
+		JMenuItem menuBackItem = new JMenuItem(MENU_BACK_ITEM_TEXT);
+		menuBackItem.addActionListener(e -> this.controller.backToInitialView());
+		JMenuItem restartLevelItem = new JMenuItem(MENU_RESTART_LEVEL_TEXT);
+		restartLevelItem.addActionListener(e -> this.controller.restartCurrentLevel());
+		menu.add(menuBackItem);
+		menu.add(restartLevelItem);
 		menuBar.add(menu);
 		return menuBar;
 	}

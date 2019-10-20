@@ -13,6 +13,8 @@ public interface ModelFacade {
 	
 	boolean hasNextSchema();
 	
+	LevelSchema getCurrentSchema();
+	
 	LevelSchema getNextSchema();
 						
 	LevelInstance startLevel(LevelSchema levelSchema, int width, int height);

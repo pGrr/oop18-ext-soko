@@ -16,10 +16,11 @@ public class ModelFacadeSingleton implements ModelFacade {
 	private static ModelFacade SINGLETON;
 	
 	private Optional<Iterator<LevelSchema>> iterator;
-	private Optional<LevelInstance> currentLevel;
+	private Optional<LevelSchema> currentLevelSchema;
+	private Optional<LevelInstance> currentLevelInstance;
 	
 	private ModelFacadeSingleton() {
-		this.currentLevel = Optional.empty();
+		this.currentLevelInstance = Optional.empty();
 	}
 	
 	public static final ModelFacade getInstance() {
@@ -31,44 +32,45 @@ public class ModelFacadeSingleton implements ModelFacade {
 	
 	@Override
 	public LevelInstance startLevel(LevelSchema levelSchema, int width, int height) {
+		this.currentLevelSchema = Optional.of(levelSchema);
 		LevelInstance levelInstance = new LevelInstanceImpl(levelSchema, width, height);
-		this.currentLevel = Optional.of(levelInstance);
+		this.currentLevelInstance = Optional.of(levelInstance);
 		return levelInstance;
 	}
 
 	@Override
 	public List<Element> moveUserUp() {
-		return this.currentLevel.get().moveUserUp();
+		return this.currentLevelInstance.get().moveUserUp();
 	}
 
 	@Override
 	public List<Element> moveUserDown() {
-		return this.currentLevel.get().moveUserDown();
+		return this.currentLevelInstance.get().moveUserDown();
 	}
 
 	@Override
 	public List<Element> moveUserLeft() {
-		return this.currentLevel.get().moveUserLeft();		
+		return this.currentLevelInstance.get().moveUserLeft();		
 	}
 
 	@Override
 	public List<Element> moveUserRight() {
-		return this.currentLevel.get().moveUserRight();		
+		return this.currentLevelInstance.get().moveUserRight();		
 	}
 
 	@Override
 	public List<Element> getBoxesOnTargets() {
-		return this.currentLevel.get().getBoxesOnTarget();
+		return this.currentLevelInstance.get().getBoxesOnTarget();
 	}
 
 	@Override
 	public List<Element> getAllElements() {
-		return this.currentLevel.get().getElements();
+		return this.currentLevelInstance.get().getElements();
 	}
 
 	@Override
 	public boolean isLevelFinished() {
-		return this.currentLevel.get().isFinished();
+		return this.currentLevelInstance.get().isFinished();
 	}
 
 	@Override
@@ -83,6 +85,15 @@ public class ModelFacadeSingleton implements ModelFacade {
 			throw new IllegalStateException();
 		}
 		return iterator.get().hasNext();
+	}
+
+	@Override
+	public LevelSchema getCurrentSchema() {
+		if (this.currentLevelSchema.isPresent()) {
+			return this.currentLevelSchema.get();			
+		} else {
+			throw new IllegalStateException();
+		}
 	}
 
 	@Override
