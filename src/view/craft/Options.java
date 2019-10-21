@@ -13,7 +13,6 @@ import controller.ControllerFacade;
 import model.element.Element.Type;
 import model.level.LevelSchemaImpl;
 import model.level.LevelSchemaImpl.LevelNotValidException;
-import view.GuiComponentFactory;
 
 public class Options {
 	
@@ -44,10 +43,11 @@ public class Options {
 				String fileName = fc.getSelectedFile().getName();
 				ControllerFacade.getInstance().getLevelController().saveLevel(path, new LevelSchemaImpl(fileName, this.owner.getGrid().getCurrentTypeGrid()));
 			} catch (IOException ioException) {
-				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
+				this.owner.showIOErrorDialog();
 				ioException.printStackTrace();
 			} catch (LevelNotValidException levelNotValidException) {
-				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_LEVEL_NOT_CORRECT_TITLE, levelNotValidException.toString());
+				this.owner.showLevelInvalidDialog(levelNotValidException.toString());
+				levelNotValidException.printStackTrace();
 			}
 		});
 	}
@@ -62,11 +62,12 @@ public class Options {
 			try {
 				typeGrid = ControllerFacade.getInstance().getLevelController().loadLevel(fc.getSelectedFile().getAbsolutePath()).getSchema();
 				this.owner.getGrid().acceptTypeGrid(typeGrid);
-			} catch (ClassNotFoundException | IOException  inputError) {
-				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
-				System.err.println(inputError.toString());
+			} catch (IOException ioException) {
+				this.owner.showIOErrorDialog();
+			} catch (ClassNotFoundException  classNotFoundException) {
+				this.owner.showClassNotFoundErrorDialog();
 			} catch (LevelNotValidException levelNotValidException) {
-				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_LEVEL_NOT_CORRECT_TITLE, levelNotValidException.toString());
+				this.owner.showLevelInvalidDialog(levelNotValidException.toString());
 			}			
 		});
 	}

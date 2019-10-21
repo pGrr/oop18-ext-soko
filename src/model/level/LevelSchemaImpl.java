@@ -61,7 +61,7 @@ public class LevelSchemaImpl implements LevelSchema, Serializable {
 
 		@Override
 		public String toString() {
-			return LevelSchemaImpl.this.getName() + " has not been saved because an error occurred. ";
+			return LevelSchemaImpl.this.getName() + " is not valid. ";
 		}
 	}
 

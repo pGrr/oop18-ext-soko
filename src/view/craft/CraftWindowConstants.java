@@ -14,8 +14,9 @@ public final class CraftWindowConstants {
 	public static final String PANEL_OPTIONS_TITLE = "Edit level options";
 	public static final String LABEL_WELCOME_TEXT = "Welcome! Click on a element to select it and then the cell's grid to mark them.";
 	public static final String DIALOG_ERROR_TITLE = "ERROR";
-	public static final String DIALOG_LEVEL_NOT_CORRECT_TITLE = "LEVEL NOT SAVED";
-	public static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
+	public static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "An error occurred while trying to save the level.";
+	public static final String DIALOG_FILE_CORRUPTED_TEXT = "Loaded file is corrupted";
+	public static final String DIALOG_SEQUENCE_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
 	public static final String DIALOG_IOERROR_TEXT = "An error occurred during input / output operation";
 	public static final String BUTTON_SAVE_TEXT = "SAVE";
 	public static final String BUTTON_LOAD_TEXT = "LOAD";

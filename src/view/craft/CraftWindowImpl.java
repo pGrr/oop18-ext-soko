@@ -2,6 +2,8 @@ package view.craft;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
+
+import view.GuiComponentFactory;
 import view.WindowAbstract;
 
 import static view.GuiComponentFactoryImpl.*;
@@ -34,6 +36,21 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
 	@Override
 	public void show() {
 		this.getFrame().setVisible(true);
+	}
+	
+	@Override
+	public void showIOErrorDialog() {
+		GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);;		
+	}
+	
+	@Override
+	public void showClassNotFoundErrorDialog() {
+		GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_FILE_CORRUPTED_TEXT).setVisible(true);		
+	}
+	
+	@Override
+	public void showLevelInvalidDialog(String cause) {
+		GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + " " + cause).setVisible(true);
 	}
 	
 	protected Grid getGrid() {
