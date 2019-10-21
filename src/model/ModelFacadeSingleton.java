@@ -31,7 +31,7 @@ public class ModelFacadeSingleton implements ModelFacade {
 	}
 	
 	@Override
-	public LevelInstance startLevel(LevelSchema levelSchema, int width, int height) {
+	public LevelInstance initializeLevel(LevelSchema levelSchema, int width, int height) {
 		this.currentLevelSchema = Optional.of(levelSchema);
 		LevelInstance levelInstance = new LevelInstanceImpl(levelSchema, width, height);
 		this.currentLevelInstance = Optional.of(levelInstance);
@@ -74,7 +74,7 @@ public class ModelFacadeSingleton implements ModelFacade {
 	}
 
 	@Override
-	public void startLevelSequence(LevelSequence levelSequence) {
+	public void initializeLevelSequence(LevelSequence levelSequence) {
 		Objects.requireNonNull(levelSequence);
 		this.iterator = Optional.of(levelSequence.iterator());
 	}

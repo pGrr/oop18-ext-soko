@@ -1,7 +1,7 @@
 package view.craft;
 
 import static view.GuiComponentFactoryImpl.*;
-import static view.craft.CraftViewConstants.*;
+import static view.craft.CraftWindowConstants.*;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -15,12 +15,12 @@ import model.Pair;
 import model.PairImpl;
 import model.element.Element.Type;
 
-public class CraftViewSelection {
+public class Selection {
 	
-	private final CraftViewWindowImpl owner;		
+	private final CraftWindowImpl owner;		
 	private final List<Pair<Type,JToggleButton>> toggleButtons;
 
-	public CraftViewSelection(CraftViewWindowImpl owner) {
+	public Selection(CraftWindowImpl owner) {
 		this.owner = owner;
 		this.toggleButtons = createToggleButtonSelectionList();
 	}
@@ -77,4 +77,3 @@ public class CraftViewSelection {
 	}
 
 }
-

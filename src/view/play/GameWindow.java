@@ -5,20 +5,17 @@ import java.util.List;
 
 import model.element.Element;
 
-public interface PlayViewWindow extends Window {
+public interface GameWindow extends Window {
 	
 	int getGameAreaWidth();
 	
 	int getGameAreaHeight();
-	
-	void initialize(List<Element> elements);
-	
+			
 	void drawElements(List<Element> elements);
 
 	void drawBoxesCoveringTargets(List<Element> boxesCoveringTargets);
-
+		
 	void showLevelFinishedDialog();
-
-	void showGameFinishedDialog();
 	
+	void showGameFinishedDialog();
 }

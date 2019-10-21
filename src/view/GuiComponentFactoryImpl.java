@@ -1,5 +1,6 @@
 package view;
 
+import static view.play.GameConstants.*;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -23,13 +24,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
-import controller.ControllerFacade;
-
 public class GuiComponentFactoryImpl implements GuiComponentFactory {
 
 	public static final int DEFAULT_PADDING = 20;
-	private static final String BUTTON_OK_TEXT = "Ok";
-	private static final String ICON_OK = "icons/ok.png";
 	private static GuiComponentFactory SINGLETON;
 
 	private GuiComponentFactoryImpl() {}
@@ -50,36 +47,37 @@ public class GuiComponentFactoryImpl implements GuiComponentFactory {
 	}
 
 	@Override
-	public final JDialog createDialog(JFrame owner, String title, String message, JButton button) {
+	public final JDialog createDialog(JFrame owner, String title, String message) {
 		JDialog dialog = new JDialog(owner, title);
 		JPanel panel = new JPanel(new GridLayout(2,1));
 		JLabel label = new JLabel(message);
 		label.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING * 2));
 		panel.add(label);
-		panel.add(button);
 		dialog.add(panel);
 		dialog.setLocationByPlatform(true);
 		dialog.setSize(dialog.getPreferredSize());
 		return dialog;
 	}
-	
+
 	@Override
-	public JDialog createErrorDialog(String title, String message) {
-		JButton button = createButton(BUTTON_OK_TEXT, ICON_OK, null);
-		JDialog dialog = createDialog(null, title, message, button);
-		button.addActionListener(e -> {
-			dialog.setVisible(false);
-			ControllerFacade.getInstance().backToInitialView();
-		});
+	public JDialog createNotifyDialog(JFrame owner, String title, String message, ActionListener actionListener) {
+		JDialog dialog = new JDialog(owner, title);
+		JPanel panel = new JPanel(new GridLayout(2,1));
+		JLabel label = new JLabel(message);
+		label.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING * 2));
+		panel.add(label);
+		JButton b = createButton(ERROR_DIALOG_TITLE, "", actionListener);
+		panel.add(b);
+		b.addActionListener(e -> dialog.dispose());
+		dialog.add(panel);
+		dialog.setLocationByPlatform(true);
+		dialog.setSize(dialog.getPreferredSize());
 		return dialog;
 	}
-	
+
 	@Override
-	public JDialog createNotifyDialog(String title, String message, ActionListener actionListener) {
-		JButton button = createButton(BUTTON_OK_TEXT, ICON_OK, null);
-		JDialog dialog = createDialog(null, title, message, button);
-		button.addActionListener(actionListener);
-		return dialog;
+	public JDialog createNotifyDialog(JFrame owner, String title, String message) {
+		return createNotifyDialog(owner, title, message, e -> {});
 	}
 
 	@Override

@@ -1,9 +1,7 @@
 package view;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.event.ActionListener;
 
 public abstract  class WindowAbstract implements Window {
 	
@@ -31,26 +29,15 @@ public abstract  class WindowAbstract implements Window {
 		this.getFrame().dispose();
 	}
 	
-	@Override
-	public void showErrorDialog(String title, String message) {
-		componentFactory.createErrorDialog(title, message).setVisible(true);
-	}
-	
-	@Override
-	public void showNotifyDialog(String title, String message, ActionListener actionListener) {
-		componentFactory.createNotifyDialog(title, message, actionListener).setVisible(true);
-	}
-	
 	public GuiComponentFactory getComponentFactory() {
 		return this.componentFactory;
 	}
 	
+	@Override
 	public JFrame getFrame() {
 		return this.frame;
 	}
-		
-	abstract protected ActionListener errorAction(JDialog dialog);
-	
+			
 	protected abstract JPanel createMainPanel();
 
 }

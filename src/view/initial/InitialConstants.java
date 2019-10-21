@@ -1,6 +1,6 @@
 package view.initial;
 
-public final class InitialViewConstants {
+public final class InitialConstants {
 	
 	// package-private constants used by view.initial classes
 
@@ -33,6 +33,6 @@ public final class InitialViewConstants {
 	public static final String ICON_UPLOAD = "icons/upload.png";
 	public static final String ICON_PLAY = "icons/ok.png";
 
-	private InitialViewConstants() {} // static class
+	private InitialConstants() {} // static class
 
 }

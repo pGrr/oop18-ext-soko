@@ -1,7 +1,7 @@
 package view.initial;
 
 import static view.GuiComponentFactoryImpl.*;
-import static view.initial.InitialViewConstants.*;
+import static view.initial.InitialConstants.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
@@ -13,15 +13,14 @@ import javax.swing.SwingUtilities;
 import controller.ControllerFacade;
 import model.level.LevelSchemaImpl.LevelNotValidException;
 import model.sequence.LevelSequence;
+import view.GuiComponentFactory;
 
-public class InitialViewSaveOrLoad {
+public class SaveLoadSequence {
 	
-	private final InitialViewWindowImpl owner;
-	private final InitialViewList list;
+	private final InitialWindowImpl owner;
 
-	public InitialViewSaveOrLoad(InitialViewWindowImpl owner, InitialViewList levelList) {
+	public SaveLoadSequence(InitialWindowImpl owner) {
 		this.owner = owner;
-		this.list = levelList;
 	}
 	
 	public JPanel createPanel() {
@@ -34,22 +33,23 @@ public class InitialViewSaveOrLoad {
 		return panel;
 	}
 	
-	
 	private ActionListener saveSequenceAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = owner.getComponentFactory().createFileChooser(ControllerFacade.getInstance().getLevelSequenceFileDescription(), ControllerFacade.getInstance().getLevelSequenceFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(
+					ControllerFacade.getInstance().getSequenceController().getLevelSequenceFileDescription(), 
+					ControllerFacade.getInstance().getSequenceController().getLevelSequenceFileExtension());
 			fc.showSaveDialog(this.owner.getFrame());
 			try {
-				String path = fc.getSelectedFile().getAbsolutePath() + ControllerFacade.getInstance().getLevelSequenceFileExtension();
+				String path = fc.getSelectedFile().getAbsolutePath() + ControllerFacade.getInstance().getSequenceController().getLevelSequenceFileExtension();
 				String name = fc.getSelectedFile().getName();
-				ControllerFacade.getInstance().saveLevelSequence(path, name, list.getLevelNames());
+				ControllerFacade.getInstance().getSequenceController().saveLevelSequence(path, name, this.owner.getLevelList().getLevelNames());
 			} catch (LevelNotValidException levelNotValidException) {
-				this.owner.showLevelNotValidDialog();
+				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_LEVEL_NOT_CORRECT_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT);
 			} catch (IOException ioException) {
-				this.owner.showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
+				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
 				System.err.println(e);
 			} catch (ClassNotFoundException classNotFoundException) {
-				this.owner.showErrorDialog(DIALOG_CLASS_NOT_FOUND_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT);
+				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_CLASS_NOT_FOUND_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT);
 				System.err.println(classNotFoundException);
 			}
 		});
@@ -57,7 +57,9 @@ public class InitialViewSaveOrLoad {
 	
 	private ActionListener loadSequenceAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			JFileChooser fc = owner.getComponentFactory().createFileChooser(ControllerFacade.getInstance().getLevelSequenceFileDescription(), ControllerFacade.getInstance().getLevelSequenceFileExtension());
+			JFileChooser fc = owner.getComponentFactory().createFileChooser(
+					ControllerFacade.getInstance().getSequenceController().getLevelSequenceFileDescription(), 
+					ControllerFacade.getInstance().getSequenceController().getLevelSequenceFileExtension());
 			fc.showOpenDialog(this.owner.getFrame());
 			try {
 				File file = fc.getSelectedFile();
@@ -65,17 +67,16 @@ public class InitialViewSaveOrLoad {
 				if (file != null) {
 					path = file.getPath();
 				}
-				LevelSequence levelSequence = ControllerFacade.getInstance().loadLevelSequence(path);
+				LevelSequence levelSequence = ControllerFacade.getInstance().getSequenceController().loadLevelSequence(path);
 				List<String> names = levelSequence.getLevelNames();
-				names.stream().forEach(this.list.getListModel()::addElement);
+				names.stream().forEach(this.owner.getLevelList().getListModel()::addElement);
 			} catch (IOException ioException) {
-				this.owner.showErrorDialog(DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
+				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
 				System.err.println(ioException);
 			} catch (ClassNotFoundException classNotFoundException) {
-				this.owner.showErrorDialog(DIALOG_CLASS_NOT_FOUND_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT);
+				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_CLASS_NOT_FOUND_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT);
 				System.err.println(classNotFoundException);
 			}
 		});
 	}
-
 }

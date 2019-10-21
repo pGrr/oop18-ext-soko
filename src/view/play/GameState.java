@@ -1,8 +1,8 @@
 package view.play;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import model.element.Element;
@@ -11,27 +11,22 @@ import view.play.elements.ViewElement;
 import view.play.elements.ViewElementFactory;
 import view.play.elements.ViewElementFactory.ViewElementBox;
 
-public class PlayViewState {
+public class GameState {
 
 	private final List<ViewElement> elements;
 	private final Set<ViewElementBox> boxesOnTarget;
 	
-	public PlayViewState() {
+	public GameState(List<Element> elements) {
 		super();
-		this.elements = new ArrayList<>();
+		Objects.requireNonNull(elements);
+		this.elements = elements.stream()
+								.map(this::translateElement)
+								.collect(Collectors.toList());
 		this.boxesOnTarget = new HashSet<>();
 	}
 
 	public List<ViewElement> getAllElements() {
 		return this.elements;
-	}
-	
-	public void setElements(List<Element> elements) {
-		if (elements == null || elements.isEmpty()) {
-			throw new IllegalArgumentException();
-		}
-		this.elements.clear();
-		this.elements.addAll(elements.stream().map(this::translateElement).collect(Collectors.toList()));
 	}
 	
 	public ViewElement translateElement(Element element) {

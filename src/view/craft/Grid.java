@@ -1,7 +1,7 @@
 package view.craft;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
-import static view.craft.CraftViewConstants.*;
+import static view.craft.CraftWindowConstants.*;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -17,16 +17,14 @@ import model.PairImpl;
 import model.element.Element.Type;
 import model.level.LevelSchema;
 
-public class CraftViewGrid {
+public class Grid {
 
-	private final CraftViewWindowImpl owner;
-	private final CraftViewSelection selection;
+	private final CraftWindowImpl owner;
 	private final List<List<Pair<JButton, Type>>> buttonGrid;
 	private final List<Pair<Type,ImageIcon>> icons;
 	
-	public CraftViewGrid(CraftViewWindowImpl owner, CraftViewSelection selection) {
+	public Grid(CraftWindowImpl owner) {
 		this.owner = owner;
-		this.selection = selection;
 		this.buttonGrid = createButtonGrid(LevelSchema.N_ROWS);
 		this.icons = createIcons();
 	}
@@ -100,18 +98,18 @@ public class CraftViewGrid {
 												  .filter(pair -> pair.getX().equals(clickedButton))
 												  .findFirst()
 												  .orElse(new PairImpl<>(new JButton(), Type.EMPTY));
-			if (clickedPair.getY().equals(this.selection.getSelectedType())) {
+			if (clickedPair.getY().equals(this.owner.getSelection().getSelectedType())) {
 				clickedPair.getX().setIcon(new ImageIcon());
 				clickedPair.setY(Type.EMPTY);
 			} else {
 				int w = (int) Math.round(clickedButton.getWidth() * GRIDBUTTON_RELATIVE_ICON_WIDTH);
 				int h = (int) Math.round(clickedButton.getHeight() * GRIDBUTTON_RELATIVE_ICON_HEIGHT);
-				Icon i = this.selection.getSelectedToggleButton().getIcon();
+				Icon i = this.owner.getSelection().getSelectedToggleButton().getIcon();
 				if (i.getClass() != ImageIcon.class) {
 					throw new IllegalStateException();
 				}
 				clickedPair.getX().setIcon(owner.getComponentFactory().createResizedIcon((ImageIcon)i, w, h));
-				clickedPair.setY(this.selection.getSelectedType());
+				clickedPair.setY(this.owner.getSelection().getSelectedType());
 			}
 		});
 	}

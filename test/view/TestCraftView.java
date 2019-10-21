@@ -1,14 +1,14 @@
 package view;
 
-import view.craft.CraftViewWindow;
-import view.craft.CraftViewWindowImpl;
+import view.craft.CraftWindow;
+import view.craft.CraftWindowImpl;
 
 public class TestCraftView {
 
 	private TestCraftView() {}
 	
 	public static void main(String... args) {
-		CraftViewWindow craftView = new CraftViewWindowImpl();
+		CraftWindow craftView = new CraftWindowImpl();
 		craftView.show();
 	}
 

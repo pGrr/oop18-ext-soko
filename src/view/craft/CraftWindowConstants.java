@@ -1,6 +1,6 @@
 package view.craft;
 
-public final class CraftViewConstants {
+public final class CraftWindowConstants {
 	
 	// package-private constants used by view.craft classes
 	
@@ -30,6 +30,6 @@ public final class CraftViewConstants {
 	public static final String ICON_CANCEL = "icons/cross.png";
 	public static final String ICON_BACK = "icons/back.png";
 
-	private CraftViewConstants() {}
+	private CraftWindowConstants() {}
 
 }

@@ -1,32 +1,24 @@
 package view;
 
-import java.util.List;
-
-import model.element.Element;
+import java.util.Collection;
+import view.craft.CraftWindow;
+import view.initial.InitialWindow;
+import view.play.GameWindow;
 
 public interface ViewFacade {
-	
-	public void showInitialView();
-	
-	public void showCraftLevelView();
-	
-	public void showPlayLevelView(String name);
 
-	int getPlayableAreaWidth();
+	InitialWindow getInitialWindow();
 	
-	int getPlayableAreaHeight();
+	CraftWindow getCraftWindow();
 	
-	void initializePlayView(List<Element> elements);
+	void createGameWindow(String title);
 		
-	void showElements(List<Element> elements);
-	
-	void showBoxesOnTargets(List<Element> boxesCoveringTargets);
-	
-	void showLevelFinishedDialog();
-	
-	void showGameFinishedDialog();
+	GameWindow getGameWindow();
+
+	Collection<Window> getAllWindows();
 	
 	static ViewFacade getInstance() {
 		return ViewFacadeSingleton.getInstance();
 	}
+
 }

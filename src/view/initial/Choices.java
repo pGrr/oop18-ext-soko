@@ -1,7 +1,7 @@
 package view.initial;
 
 import static view.GuiComponentFactoryImpl.*;
-import static view.initial.InitialViewConstants.*;
+import static view.initial.InitialConstants.*;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -9,14 +9,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.ControllerFacade;
 
-public class InitialViewOptions {
+public class Choices {
 
-	private final InitialViewWindowImpl owner;
-	private final InitialViewList levels;
+	private final InitialWindowImpl owner;
 	
-	public InitialViewOptions(InitialViewWindowImpl owner, InitialViewList levels) {
+	public Choices(InitialWindowImpl owner) {
 		this.owner = owner;
-		this.levels = levels;
 	}
 	
 	public JPanel createPanel() {
@@ -38,8 +36,7 @@ public class InitialViewOptions {
 	
 	public ActionListener playAction() {
 		return e -> SwingUtilities.invokeLater(() -> {
-			ControllerFacade.getInstance().playLevelSequence(this.levels.getLevelSequence());
+			ControllerFacade.getInstance().getSequenceController().playLevelSequence(this.owner.getLevelList().getLevelSequence());
 		});
 	}
-
 }

@@ -1,6 +1,6 @@
 package view;
 
-import java.awt.event.ActionListener;
+import javax.swing.JFrame;
 
 public interface Window {
 
@@ -10,7 +10,6 @@ public interface Window {
 	
 	public void close();
 	
-	public void showErrorDialog(String title, String message);
+	public JFrame getFrame();
 
-	void showNotifyDialog(String title, String message, ActionListener actionListener);	
 }

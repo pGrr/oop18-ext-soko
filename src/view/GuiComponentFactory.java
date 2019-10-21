@@ -22,7 +22,11 @@ public interface GuiComponentFactory {
 	
 	JFrame createFrame(String title, double heightToScreenSizeRatio, double widthToHeightRatio);
 	
-	JDialog createDialog(JFrame owner, String title, String message, JButton button);
+	JDialog createDialog(JFrame owner, String title, String message);
+	
+	JDialog createNotifyDialog(JFrame owner, String title, String message);
+	
+	JDialog createNotifyDialog(JFrame owner, String title, String message, ActionListener actionListener);
 	
 	JFileChooser createFileChooser(String description, String fileExtension);
 	
@@ -49,10 +53,6 @@ public interface GuiComponentFactory {
 	Border createEmptyPaddingBorder(int defaultPadding);
 	
 	Border createTitledPaddingBorder(String title, int defaultPadding);
-	
-	JDialog createErrorDialog(String title, String message);
-	
-	JDialog createNotifyDialog(String title, String message, ActionListener actionListener);
 
 	static GuiComponentFactory getDefaultInstance() {
 		return GuiComponentFactoryImpl.getInstance();

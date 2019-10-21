@@ -9,7 +9,7 @@ import model.sequence.LevelSequence;
 
 public interface ModelFacade {
 	
-	void startLevelSequence(LevelSequence levelSequence);
+	void initializeLevelSequence(LevelSequence levelSequence);
 	
 	boolean hasNextSchema();
 	
@@ -17,7 +17,7 @@ public interface ModelFacade {
 	
 	LevelSchema getNextSchema();
 						
-	LevelInstance startLevel(LevelSchema levelSchema, int width, int height);
+	LevelInstance initializeLevel(LevelSchema levelSchema, int width, int height);
 	
 	List<Element> moveUserUp();
 	
