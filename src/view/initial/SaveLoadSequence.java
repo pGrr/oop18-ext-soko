@@ -41,7 +41,7 @@ public class SaveLoadSequence {
 			try {
 				String path = fc.getSelectedFile().getAbsolutePath() + ControllerFacade.getInstance().getSequenceController().getLevelSequenceFileExtension();
 				String name = fc.getSelectedFile().getName();
-				ControllerFacade.getInstance().getSequenceController().saveLevelSequence(path, name, this.owner.getLevelList().getLevelNames());
+				ControllerFacade.getInstance().getSequenceController().saveLevelSequenceFromPaths(path, name, this.owner.getLevelList().getLevelNames());
 			} catch (LevelNotValidException e1) {
 				this.owner.showLevelInvalidDialog(e1.toString());
 			} catch (ClassNotFoundException e1) {
@@ -65,6 +65,7 @@ public class SaveLoadSequence {
 					path = file.getPath();
 				}
 				LevelSequence levelSequence = ControllerFacade.getInstance().getSequenceController().loadLevelSequence(path);
+				this.owner.getLevelList().setLevelSequence(levelSequence);
 				List<String> names = levelSequence.getLevelNames();
 				names.stream().forEach(this.owner.getLevelList().getListModel()::addElement);
 			}  catch (ClassNotFoundException e1) {

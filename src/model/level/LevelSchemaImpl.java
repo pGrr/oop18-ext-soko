@@ -16,7 +16,7 @@ public class LevelSchemaImpl implements LevelSchema, Serializable {
 		this.name = name;
 		this.schema = validate(schema);
 	}
-
+	
 	@Override
 	public String getName() {
 		return name;

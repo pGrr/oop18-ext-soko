@@ -11,10 +11,12 @@ public interface GameController {
 	void moveRight();
 	
 	void restartCurrentLevel();
-	
+		
 	void levelFinishedAccepted();
 	
 	void gameFinishedAccepted();
+	
+	void saveGame();
 	
 	static GameController getDefaultInstance() {
 		return GameControllerImpl.getInstance();

@@ -16,8 +16,7 @@ public class GameState {
 	private final List<ViewElement> elements;
 	private final Set<ViewElementBox> boxesOnTarget;
 	
-	public GameState(List<Element> elements) {
-		super();
+	public GameState(GameWindowImpl owner, List<Element> elements) {
 		Objects.requireNonNull(elements);
 		this.elements = elements.stream()
 								.map(this::translateElement)

@@ -44,10 +44,8 @@ public class Options {
 				ControllerFacade.getInstance().getLevelController().saveLevel(path, new LevelSchemaImpl(fileName, this.owner.getGrid().getCurrentTypeGrid()));
 			} catch (IOException ioException) {
 				this.owner.showIOErrorDialog();
-				ioException.printStackTrace();
 			} catch (LevelNotValidException levelNotValidException) {
 				this.owner.showLevelInvalidDialog(levelNotValidException.toString());
-				levelNotValidException.printStackTrace();
 			}
 		});
 	}

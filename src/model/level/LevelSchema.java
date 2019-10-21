@@ -12,5 +12,5 @@ public interface LevelSchema extends Serializable {
 	String getName();
 
 	List<List<Type>> getSchema();
-	
+		
 }

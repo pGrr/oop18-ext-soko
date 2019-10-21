@@ -97,9 +97,13 @@ public class LevelList {
 		return p;	
 	}
 	
-	private void updateListModel() {
+	public void updateListModel() {
 		this.listModel.removeAllElements();
 		this.levelSequence.getLevelNames().forEach(listModel::addElement);
+	}
+	
+	public void setLevelSequence(LevelSequence sequence) {
+		this.levelSequence = sequence;
 	}
 
 	private ActionListener addLevel() {

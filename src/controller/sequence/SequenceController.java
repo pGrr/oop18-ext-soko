@@ -2,6 +2,8 @@ package controller.sequence;
 
 import java.io.IOException;
 import java.util.List;
+
+import model.level.LevelSchema;
 import model.level.LevelSchemaImpl.LevelNotValidException;
 import model.sequence.LevelSequence;
 
@@ -11,10 +13,9 @@ public interface SequenceController {
 	
 	String getLevelSequenceFileExtension();
 	
-	LevelSequence createLevelSequence(String name, List<String> paths) 
-			throws LevelNotValidException, IOException, ClassNotFoundException;
+	void saveLevelSequence(List<LevelSchema> levelSequence);
 	
-	void saveLevelSequence(String path, String name, List<String> levels) 
+	void saveLevelSequenceFromPaths(String path, String name, List<String> levels) 
 			throws LevelNotValidException, ClassNotFoundException, IOException;
 	
 	void playLevelSequence(LevelSequence levelSequence);
@@ -25,5 +26,6 @@ public interface SequenceController {
 	static SequenceController getDefaultInstance() {
 		return SequenceControllerImpl.getInstance();
 	}
+
 	
 }

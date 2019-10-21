@@ -16,6 +16,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+
 import controller.ControllerFacade;
 import model.ModelFacade;
 import model.level.LevelSchema;
@@ -23,6 +25,7 @@ import model.level.LevelSchemaImpl.LevelNotValidException;
 import model.sequence.LevelSequence;
 import model.sequence.LevelSequenceImpl;
 import view.GuiComponentFactory;
+import view.ViewFacade;
 
 public class SequenceControllerImpl implements SequenceController {
 	
@@ -47,9 +50,8 @@ public class SequenceControllerImpl implements SequenceController {
 		return LEVEL_SEQUENCE_FILE_DESCRIPTION;
 	}
 	
-
-	@Override
-	public LevelSequence createLevelSequence(String name, List<String> paths) throws LevelNotValidException, IOException, ClassNotFoundException {		
+	
+	public LevelSequence createLevelSequenceFromPaths(String name, List<String> paths) throws LevelNotValidException, IOException, ClassNotFoundException {		
 		List<LevelSchema> levelSchemaList = new ArrayList<>();
 		for (String path : paths) {
 			levelSchemaList.add(ControllerFacade.getInstance().getLevelController().loadLevel(path));
@@ -58,12 +60,26 @@ public class SequenceControllerImpl implements SequenceController {
 	}
 
 	@Override
-	public void saveLevelSequence(String path, String name, List<String> levels) throws LevelNotValidException, ClassNotFoundException, IOException {
+	public void saveLevelSequence(List<LevelSchema> levelSequence) {
+		JFileChooser fc = GuiComponentFactory.getDefaultInstance().createFileChooser(LEVEL_SEQUENCE_FILE_DESCRIPTION, LEVEL_SEQUENCE_FILE_EXTENSION);
+		fc.showOpenDialog(ViewFacade.getInstance().getGameWindow().getFrame());
+		try (ObjectOutputStream o = new ObjectOutputStream(
+				new BufferedOutputStream(
+						new FileOutputStream(
+								new File(fc.getSelectedFile().getAbsolutePath() + LEVEL_SEQUENCE_FILE_EXTENSION))))) {
+			o.writeObject(new LevelSequenceImpl(fc.getSelectedFile().getName(), levelSequence));
+		} catch (IOException e) {
+			ViewFacade.getInstance().getGameWindow().showIOErrorDialog();
+		}	
+	}
+	
+	@Override
+	public void saveLevelSequenceFromPaths(String path, String name, List<String> paths) throws LevelNotValidException, ClassNotFoundException, IOException {
 		try (ObjectOutputStream o = new ObjectOutputStream(
 				new BufferedOutputStream(
 						new FileOutputStream(
 								new File(path))))) {
-			o.writeObject(createLevelSequence(name, levels));
+			o.writeObject(createLevelSequenceFromPaths(name, paths));
 		}	
 	}
 

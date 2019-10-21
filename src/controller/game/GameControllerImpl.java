@@ -1,10 +1,11 @@
 package controller.game;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import controller.ControllerFacade;
 import model.ModelFacade;
 import model.element.Element;
+import model.level.LevelSchema;
 import view.ViewFacade;
 
 public class GameControllerImpl implements GameController{
@@ -23,6 +24,16 @@ public class GameControllerImpl implements GameController{
 	@Override
 	public void restartCurrentLevel() {
 		ControllerFacade.getInstance().playLevel(ModelFacade.getInstance().getCurrentSchema());
+	}
+	
+	@Override
+	public void saveGame() {
+		List<LevelSchema> l = new ArrayList<>();
+		l.add(ModelFacade.getInstance().getCurrentSchema());
+		while (ModelFacade.getInstance().hasNextSchema()) {
+			l.add(ModelFacade.getInstance().getNextSchema());
+		}
+		ControllerFacade.getInstance().getSequenceController().saveLevelSequence(l);
 	}
 		
 	@Override
@@ -76,5 +87,4 @@ public class GameControllerImpl implements GameController{
 			}
 		}
 	}
-	
 }

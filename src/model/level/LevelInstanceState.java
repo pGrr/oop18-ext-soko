@@ -1,5 +1,6 @@
 package model.level;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,8 +12,10 @@ import model.element.Element;
 import model.element.Element.Type;
 import model.movement.MovementStrategy;
 
-public class LevelInstanceState {
-	
+public class LevelInstanceState implements Serializable {
+
+	private static final long serialVersionUID = -2621416418809769542L;
+
 	private final double COLLISION_TOLERANCE_PX = 5;
 
 	private final Element user;

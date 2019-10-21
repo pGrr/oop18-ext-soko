@@ -9,7 +9,7 @@ import model.element.Element.Type;
 import model.movement.MovementStrategyFactory;
 
 public class LevelInstanceImpl implements LevelInstance {
-		
+
 	private final LevelSchema schema;
 	private final LevelInstanceState state;
 	private final MovementStrategyFactory movements;

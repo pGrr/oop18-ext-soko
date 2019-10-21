@@ -10,6 +10,10 @@ import controller.ControllerFacade;
 import model.element.Element;
 import view.GuiComponentFactory;
 import view.WindowAbstract;
+
+import static view.initial.InitialConstants.DIALOG_ERROR_TITLE;
+import static view.initial.InitialConstants.DIALOG_IOERROR_TEXT;
+import static view.initial.InitialConstants.DIALOG_LEVEL_NOT_CORRECT_TEXT;
 import static view.play.GameConstants.*;
 
 public class GameWindowImpl extends WindowAbstract implements GameWindow {
@@ -44,7 +48,7 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
 	@Override
 	public void drawElements(List<Element> elements) {
 		if (!this.gameState.isPresent()) {
-			this.gameState = Optional.of(new GameState(elements));
+			this.gameState = Optional.of(new GameState(this, elements));
 		}
 		this.gameArea.drawElements(elements);
 	}
@@ -68,6 +72,21 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
 		}).setVisible(true);
 	}
 	
+	@Override
+	public void showLevelInvalidDialog(String cause) {
+		GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause).setVisible(true);		
+	}
+	
+	@Override
+	public void showIOErrorDialog() {
+		GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+	}
+
+	@Override
+	public void showClassNotFoundErrorDialog() {
+		GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+	}
+	
 	protected GameState getState() {
 		requirePresence(this.gameState);
 		return this.gameState.get();
@@ -78,10 +97,13 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
 		JMenu menu = new JMenu(MENU_TITLE);
 		JMenuItem menuBackItem = new JMenuItem(MENU_BACK_ITEM_TEXT);
 		menuBackItem.addActionListener(e -> ControllerFacade.getInstance().backToInitialView());
+		menu.add(menuBackItem);
 		JMenuItem restartLevelItem = new JMenuItem(MENU_RESTART_LEVEL_TEXT);
 		restartLevelItem.addActionListener(e -> ControllerFacade.getInstance().getGameController().restartCurrentLevel());
-		menu.add(menuBackItem);
 		menu.add(restartLevelItem);
+		JMenuItem saveLevelItem = new JMenuItem(MENU_SAVE_LEVEL_TEXT);
+		saveLevelItem.addActionListener(e -> ControllerFacade.getInstance().getGameController().saveGame());
+		menu.add(saveLevelItem);		
 		menuBar.add(menu);
 		return menuBar;
 	}
