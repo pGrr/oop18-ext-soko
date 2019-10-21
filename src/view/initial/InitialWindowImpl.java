@@ -3,6 +3,8 @@ package view.initial;
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+
+import view.GuiComponentFactory;
 import view.WindowAbstract;
 
 import static view.GuiComponentFactoryImpl.*;
@@ -62,5 +64,20 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
 		p.setBorder(getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
 		p.add(this.levelList.getPanel());
 		return p;
+	}
+
+	@Override
+	public void showIOErrorDialog() {
+		GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+	}
+
+	@Override
+	public void showClassNotFoundErrorDialog() {
+		GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+	}
+
+	@Override
+	public void showLevelInvalidDialog(String cause) {
+		GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause).setVisible(true);		
 	}
 }

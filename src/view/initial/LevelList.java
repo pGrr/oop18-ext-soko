@@ -54,14 +54,16 @@ public class LevelList {
 	}
 	
 	public void loadDefaultLevelSequence() {
+		String path;
 		try {
-			String path = URLDecoder.decode(ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE).getPath(), "UTF-8");
+			path = URLDecoder.decode(ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE).getPath(), "UTF-8");
 			this.levelSequence = ControllerFacade.getInstance().getSequenceController().loadLevelSequence(path);
-			this.updateListModel();
-		} catch (Exception e) {
-			GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_ERROR_TITLE, DIALOG_DEFAULT_LEVEL_SEQUENCE_ERROR_TEXT).setVisible(true);;
-			e.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			this.owner.showClassNotFoundErrorDialog();
+		} catch (IOException e2) {
+			this.owner.showIOErrorDialog();
 		}
+		this.updateListModel();
 	}
 	
 	protected JPanel createPanel(List<String> levels) {
@@ -107,13 +109,16 @@ public class LevelList {
 					ControllerFacade.getInstance().getLevelController().getLevelFileExtension());
 			fc.showOpenDialog(this.owner.getFrame());
 			String path = fc.getSelectedFile().getAbsolutePath();
-				try {
-					this.levelSequence.add(ControllerFacade.getInstance().getLevelController().loadLevel(path));
-				} catch (ClassNotFoundException | LevelNotValidException | IOException exc) {
-					GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_ERROR_TITLE, DIALOG_ERROR_LOAD_LEVEL_TEXT).setVisible(true);
-					exc.printStackTrace();
-				}
-				updateListModel();
+			try {
+				this.levelSequence.add(ControllerFacade.getInstance().getLevelController().loadLevel(path));
+			} catch (ClassNotFoundException e1) {
+				this.owner.showClassNotFoundErrorDialog();
+			} catch (LevelNotValidException e1) {
+				this.owner.showLevelInvalidDialog(e1.toString());
+			} catch (IOException e1) {
+				this.owner.showIOErrorDialog();
+			}
+			updateListModel();
 		});
 	}
 	

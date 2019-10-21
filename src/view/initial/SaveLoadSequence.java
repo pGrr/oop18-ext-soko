@@ -13,7 +13,6 @@ import javax.swing.SwingUtilities;
 import controller.ControllerFacade;
 import model.level.LevelSchemaImpl.LevelNotValidException;
 import model.sequence.LevelSequence;
-import view.GuiComponentFactory;
 
 public class SaveLoadSequence {
 	
@@ -43,14 +42,12 @@ public class SaveLoadSequence {
 				String path = fc.getSelectedFile().getAbsolutePath() + ControllerFacade.getInstance().getSequenceController().getLevelSequenceFileExtension();
 				String name = fc.getSelectedFile().getName();
 				ControllerFacade.getInstance().getSequenceController().saveLevelSequence(path, name, this.owner.getLevelList().getLevelNames());
-			} catch (LevelNotValidException levelNotValidException) {
-				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_LEVEL_NOT_CORRECT_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT);
-			} catch (IOException ioException) {
-				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
-				System.err.println(e);
-			} catch (ClassNotFoundException classNotFoundException) {
-				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_CLASS_NOT_FOUND_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT);
-				System.err.println(classNotFoundException);
+			} catch (LevelNotValidException e1) {
+				this.owner.showLevelInvalidDialog(e1.toString());
+			} catch (ClassNotFoundException e1) {
+				this.owner.showClassNotFoundErrorDialog();
+			} catch (IOException e2) {
+				this.owner.showIOErrorDialog();
 			}
 		});
 	}
@@ -70,12 +67,10 @@ public class SaveLoadSequence {
 				LevelSequence levelSequence = ControllerFacade.getInstance().getSequenceController().loadLevelSequence(path);
 				List<String> names = levelSequence.getLevelNames();
 				names.stream().forEach(this.owner.getLevelList().getListModel()::addElement);
-			} catch (IOException ioException) {
-				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT);
-				System.err.println(ioException);
-			} catch (ClassNotFoundException classNotFoundException) {
-				GuiComponentFactory.getDefaultInstance().createNotifyDialog(this.owner.getFrame(), DIALOG_CLASS_NOT_FOUND_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT);
-				System.err.println(classNotFoundException);
+			}  catch (ClassNotFoundException e1) {
+				this.owner.showClassNotFoundErrorDialog();
+			} catch (IOException e2) {
+				this.owner.showIOErrorDialog();
 			}
 		});
 	}
