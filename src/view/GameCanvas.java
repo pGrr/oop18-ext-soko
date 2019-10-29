@@ -2,19 +2,24 @@ package view;
 
 import static view.GameConstants.TIMER_DELAY_MS;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Collection;
+import java.util.List;
+
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import controller.Controller;
 import model.Direction;
 import model.Element;
-import model.Grid;
 import model.Model;
 import model.Position;
-import model.PositionImpl;
-import model.Type;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -37,17 +42,13 @@ public class GameCanvas extends JPanel {
     /** The graphics. */
     private Graphics graphics;
 
-    /** The images. */
-    private Map<Type, Image> images;
-
     /**
      * Instantiates a new game canvas.
      *
      * @param owner the owner
      */
-    public GameCanvas(GameWindowImpl owner) {
+    public GameCanvas(final GameWindowImpl owner) {
         this.owner = owner;
-        this.images = createResizedImages();
         this.timer = new Timer(TIMER_DELAY_MS, this.timerAction());
         this.keyPressedCode = null;
         this.graphics = null;
@@ -63,11 +64,10 @@ public class GameCanvas extends JPanel {
      * @param g the g
      */
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(final Graphics g) {
         super.paintComponent(g);
         this.graphics = g;
-        Model.getInstance().getCurrentLevelSequence().getCurrentLevel().getGrid().getAllElements()
-                .forEach(this::drawElement);
+        drawAllElements(Model.getInstance().getCurrentLevelSequence().getCurrentLevel().getGrid().getAllElements());
     }
 
     /**
@@ -83,43 +83,16 @@ public class GameCanvas extends JPanel {
     }
 
     /**
-     * Draw element.
+     * Draw all elements.
      *
-     * @param element the element
+     * @param elements the elements
      */
-    public void drawElement(Element element) {
-        if (graphics != null && images != null) {
-            Position absolutePosition = convertRelativeToAbsolute(element.getPosition());
-            graphics.drawImage(images.get(element.getType()), absolutePosition.getRowIndex(),
-                    absolutePosition.getColumnIndex(), this);
+    public void drawAllElements(final Collection<Element> elements) {
+        for (Element element : elements) {
+            Position pos = this.owner.convertRelativeToAbsolute(element.getPosition());
+            this.graphics.drawImage(this.owner.getImages().get(element.getType()), pos.getColumnIndex(),
+                    pos.getRowIndex(), this.owner.getFrame());
         }
-        this.repaint(TIMER_DELAY_MS);
-    }
-
-    /**
-     * Creates the resized images.
-     *
-     * @return the map
-     */
-    public Map<Type, Image> createResizedImages() {
-        Map<Type, Image> imageMap = new HashMap<>();
-        for (TypeImage t : TypeImage.values()) {
-            imageMap.put(t.getType(),
-                    t.getImage().getScaledInstance((int) Math.round(this.getPreferredSize().getWidth() / Grid.N_ROWS),
-                            (int) Math.round(this.getPreferredSize().getHeight() / Grid.N_ROWS), Image.SCALE_DEFAULT));
-        }
-        return imageMap;
-    }
-
-    /**
-     * Convert relative to absolute.
-     *
-     * @param position the position
-     * @return the position
-     */
-    private Position convertRelativeToAbsolute(Position position) {
-        return new PositionImpl(position.getColumnIndex() * Integer.divideUnsigned(this.getWidth(), Grid.N_ROWS),
-                position.getRowIndex() * Integer.divideUnsigned(this.getHeight(), Grid.N_ROWS));
     }
 
     /**
@@ -131,7 +104,7 @@ public class GameCanvas extends JPanel {
         return new KeyAdapter() {
 
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyPressed(final KeyEvent e) {
                 SwingUtilities.invokeLater(() -> GameCanvas.this.keyPressedCode = e.getKeyCode());
             }
         };

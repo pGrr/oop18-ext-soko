@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,13 +56,12 @@ public class InitialLevelList {
      *
      * @param owner the owner
      */
-    public InitialLevelList(InitialWindowImpl owner) {
+    public InitialLevelList(final InitialWindowImpl owner) {
         this.owner = owner;
         this.listModel = new DefaultListModel<>();
         this.levelList = new JList<>(this.listModel);
         this.levelSequence = new LevelSequenceImpl("");
-        this.panel = createPanel(
-                levelSequence.getAllLevels().stream().map(Level::getName).collect(Collectors.toList()));
+        this.panel = createPanel();
     }
 
     /**
@@ -105,40 +105,41 @@ public class InitialLevelList {
      */
     public void loadDefaultLevelSequence() {
         String path = "";
-        try {
-            path = URLDecoder.decode(ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE).getPath(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            this.owner.showIOErrorDialog();
-            e.printStackTrace();
+        URL url = ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE);
+        if (url != null) {
+            try {
+                path = URLDecoder.decode(url.getPath(), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                this.owner.showIOErrorDialog();
+                e.printStackTrace();
+            }
+            if (path.isEmpty()) {
+                throw new IllegalStateException();
+            }
+            try {
+                this.levelSequence = Controller.getInstance().getSequenceController().loadLevelSequence(path);
+            } catch (ClassNotFoundException e) {
+                this.owner.showClassNotFoundErrorDialog();
+                e.printStackTrace();
+            } catch (IOException e) {
+                this.owner.showIOErrorDialog();
+                e.printStackTrace();
+            }
+            this.updateListModel();
         }
-        if (path.isEmpty()) {
-            throw new IllegalStateException();
-        }
-        try {
-            this.levelSequence = Controller.getInstance().getSequenceController().loadLevelSequence(path);
-        } catch (ClassNotFoundException e) {
-            this.owner.showClassNotFoundErrorDialog();
-            e.printStackTrace();
-        } catch (IOException e) {
-            this.owner.showIOErrorDialog();
-            e.printStackTrace();
-        }
-        this.updateListModel();
     }
 
     /**
      * Creates the panel.
      *
-     * @param levels the levels
      * @return the j panel
      */
-    protected JPanel createPanel(List<String> levels) {
+    protected JPanel createPanel() {
         JPanel p = new JPanel(new BorderLayout());
         // level list panel
         JPanel levelListPanel = new JPanel(new BorderLayout());
         levelListPanel.setBorder(GuiComponentFactory.getDefaultInstance()
                 .createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
-        levels.forEach(this.listModel::addElement);
         JScrollPane scrollPane = new JScrollPane(this.levelList);
         levelListPanel.add(scrollPane);
         p.add(levelListPanel, BorderLayout.CENTER);

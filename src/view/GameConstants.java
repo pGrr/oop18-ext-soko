@@ -7,7 +7,7 @@ package view;
 public final class GameConstants {
 
     /** The Constant TIMER_DELAY_MS. */
-    public static final int TIMER_DELAY_MS = 100;
+    public static final int TIMER_DELAY_MS = 50;
 
     /** The Constant HEIGHT_TO_SCREENSIZE_RATIO. */
     public static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;

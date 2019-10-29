@@ -84,7 +84,7 @@ public class ElementImpl implements Element {
         if (isTypeMovable()) {
             boolean hasMoved = this.grid.moveAttempt(this, direction);
             if (hasMoved) {
-                View.getInstance().getGameWindow().drawElement(this);
+                View.getInstance().getGameWindow().draw(this);
             }
         }
     }

@@ -101,11 +101,9 @@ public final class GameControllerImpl implements GameController {
     }
 
     /*
-     * This is called after every movement. If the level isn't finished it doesn't
-     * do anything. If the level is finished but there is any other next in the
-     * sequence it commands the view to show the level finished dialog. If the last
-     * level in the sequence is finished it commands the view to show the game
-     * finished dialog.
+     * This is called after every movement. If the level is finished and there is at
+     * least one next in the sequence it shows the level finished dialog. If the
+     * last level in the sequence is finished it shows the game finished dialog.
      */
     private void checkLevelFinished() {
         if (Model.getInstance().getCurrentLevelSequence().getCurrentLevel().isFinished()) {

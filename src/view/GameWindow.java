@@ -15,7 +15,7 @@ public interface GameWindow extends Window {
      *
      * @param element the element
      */
-    void drawElement(Element element);
+    void draw(Element element);
 
     /**
      * Show save game file chooser.

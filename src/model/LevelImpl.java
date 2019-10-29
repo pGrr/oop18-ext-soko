@@ -20,6 +20,8 @@ public class LevelImpl implements Level {
     /** The grid. */
     private final Grid grid;
 
+    private Element user;
+
     /**
      * Instantiates a new level impl.
      *
@@ -59,8 +61,11 @@ public class LevelImpl implements Level {
      */
     @Override
     public Element getUser() {
-        return this.grid.getAllElements().stream().filter(e -> e.getType().equals(Type.USER)).findFirst()
-                .orElseThrow(IllegalStateException::new);
+        if (this.user == null) {
+            this.user = this.grid.getAllElements().stream().filter(e -> e.getType().equals(Type.USER)).findFirst()
+                    .orElseThrow(IllegalStateException::new);
+        }
+        return this.user;
     }
 
     /**
