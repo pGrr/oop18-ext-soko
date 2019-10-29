@@ -1,14 +1,24 @@
 package view;
 
-import view.initial.InitialWindow;
-import view.initial.InitialWindowImpl;
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestInitialView.
+ */
 public class TestInitialView {
 
-	private TestInitialView() {}
+    /**
+     * Instantiates a new test initial view.
+     */
+    private TestInitialView() {
+    }
 
-	public static void main(String ...args) {
-		InitialWindow initialView = new InitialWindowImpl();
-		initialView.show();
-	}
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
+    public static void main(String... args) {
+        InitialWindow initialView = new InitialWindowImpl();
+        initialView.show();
+    }
 }

@@ -1,13 +1,24 @@
 package view;
 
-import view.play.GameWindowImpl;
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestPlayView.
+ */
 public class TestPlayView {
 
-	private TestPlayView() {}
-	
-	public static void main(String ...args) {
-		new GameWindowImpl("").show();
-	}
+    /**
+     * Instantiates a new test play view.
+     */
+    private TestPlayView() {
+    }
+
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
+    public static void main(String... args) {
+        // new GameWindowImpl("").show();
+    }
 
 }

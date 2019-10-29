@@ -1,15 +1,25 @@
 package view;
 
-import view.craft.CraftWindow;
-import view.craft.CraftWindowImpl;
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestCraftView.
+ */
 public class TestCraftView {
 
-	private TestCraftView() {}
-	
-	public static void main(String... args) {
-		CraftWindow craftView = new CraftWindowImpl();
-		craftView.show();
-	}
+    /**
+     * Instantiates a new test craft view.
+     */
+    private TestCraftView() {
+    }
+
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
+    public static void main(String... args) {
+        CraftWindow craftView = new CraftWindowImpl();
+        craftView.show();
+    }
 
 }

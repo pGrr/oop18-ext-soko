@@ -1,11 +1,24 @@
 package controller;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestController.
+ */
 public class TestController {
 
-	private TestController() {}
+    /**
+     * Instantiates a new test controller.
+     */
+    private TestController() {
+    }
 
-	public static void main(String ...args) {
-		ControllerFacade c = ControllerFacadeSingleton.getInstance();
-		c.start();
-	}		
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
+    public static void main(String... args) {
+        Controller c = ControllerSingleton.getInstance();
+        c.startApplication();
+    }
 }
