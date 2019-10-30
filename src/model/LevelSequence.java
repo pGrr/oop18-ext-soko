@@ -1,7 +1,14 @@
 package model;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.List;
+import java.util.Optional;
+
+import controller.Controller;
+
+import static controller.ControllerConstants.*;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -82,7 +89,7 @@ public interface LevelSequence extends Serializable {
      * @param name the name
      * @return the level sequence
      */
-    static LevelSequence defaultCreateEmpty(String name) {
+    static LevelSequence createEmpty(String name) {
         return new LevelSequenceImpl(name);
     }
 
@@ -96,4 +103,25 @@ public interface LevelSequence extends Serializable {
     static LevelSequence createFromLevels(String name, List<Level> levels) {
         return new LevelSequenceImpl(name, levels);
     }
+
+    /**
+     * Creates the default.
+     *
+     * @return the optional
+     */
+    static Optional<LevelSequence> createDefault() {
+        try {
+            return Optional.of(Controller.getInstance().getSequenceController()
+                    .loadLevelSequence(ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE).getPath()));
+        } catch (Exception e) {
+            // if the default sequence can't be loaded, no problem will occur. There will
+            // just be an initial empty level sequence
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    Level getCurrentLevelOriginalVersion();
+
+    void setCurrentLevel(Level level);
 }

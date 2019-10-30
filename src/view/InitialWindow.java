@@ -23,4 +23,6 @@ public interface InitialWindow extends Window {
      */
     void showLevelInvalidDialog(String cause);
 
+    void updateListModel();
+
 }

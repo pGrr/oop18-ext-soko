@@ -18,6 +18,7 @@ import controller.Controller;
 import model.Level;
 import model.LevelSequence;
 import model.LevelSequenceImpl;
+import model.Model;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -69,7 +70,7 @@ public class InitialSaveLoad {
                 String name = fc.getSelectedFile().getName();
                 if (name != null && !name.isEmpty()) {
                     LevelSequence levelSequence = new LevelSequenceImpl(name,
-                            this.owner.getLevelList().getLevelSequence().getAllLevels());
+                            Model.getInstance().getCurrentLevelSequence().getAllLevels());
                     try {
                         Controller.getInstance().getSequenceController().saveLevelSequence(levelSequence,
                                 fc.getSelectedFile().getAbsolutePath() + fileExtension);
@@ -101,7 +102,7 @@ public class InitialSaveLoad {
             try {
                 LevelSequence levelSequence;
                 levelSequence = Controller.getInstance().getSequenceController().loadLevelSequence(path);
-                this.owner.getLevelList().setLevelSequence(levelSequence);
+                Model.getInstance().setCurrentLevelSequence(levelSequence);
                 List<String> names = levelSequence.getAllLevels().stream().map(Level::getName)
                         .collect(Collectors.toList());
                 names.stream().forEach(this.owner.getLevelList().getListModel()::addElement);

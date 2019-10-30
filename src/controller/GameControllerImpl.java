@@ -39,8 +39,10 @@ public final class GameControllerImpl implements GameController {
      */
     @Override
     public void restartCurrentLevel() {
-        Controller.getInstance().getNavigationController()
-                .toGameLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
+        Model.getInstance().getCurrentLevelSequence().setCurrentLevel(
+                Model.getInstance().getCurrentLevelSequence().getCurrentLevelOriginalVersion());;
+        Controller.getInstance().getNavigationController().toGameLevel(
+                Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
     }
 
     /**
@@ -60,8 +62,10 @@ public final class GameControllerImpl implements GameController {
             ls.setNextLevel();
             levels.add(ls.getCurrentLevel());
         }
-        Controller.getInstance().getSequenceController()
-                .saveLevelSequence(LevelSequence.createFromLevels(ls.getName(), levels), path);
+        LevelSequence newLs = LevelSequence.createFromLevels(ls.getName(), levels);
+        Controller.getInstance().getSequenceController().saveLevelSequence(newLs,
+                path + Controller.getInstance().getSequenceController().getLevelSequenceFileExtension());
+        Controller.getInstance().getSequenceController().startLevelSequence(newLs);
     }
 
     /**

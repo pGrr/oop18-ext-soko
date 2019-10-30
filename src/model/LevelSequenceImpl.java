@@ -25,6 +25,8 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
 
     /** The current level. */
     private transient Level currentLevel;
+    
+    private transient Level currentLevelOriginalVersion;
 
     /**
      * Instantiates a new level sequence impl.
@@ -36,6 +38,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
         this.levels = new ArrayList<>();
         this.iterator = this.levels.iterator();
         this.currentLevel = new LevelImpl("", Grid.createEmpty());
+        this.currentLevelOriginalVersion = new LevelImpl("", Grid.createEmpty());
     }
 
     /**
@@ -50,6 +53,11 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
         this.levels = levels;
         this.iterator = levels.iterator();
         this.currentLevel = null;
+        this.currentLevelOriginalVersion = null;
+    }
+    
+    public LevelSequenceImpl(LevelSequence levelSequence) {
+        this(levelSequence.getName(), levelSequence.getAllLevels());
     }
 
     /**
@@ -81,7 +89,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
      */
     @Override
     public List<Level> getAllLevels() {
-        return Collections.unmodifiableList(levels);
+        return new ArrayList<>(this.levels);
     }
 
     /**
@@ -143,6 +151,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
     @Override
     public void setNextLevel() {
         this.currentLevel = iterator.next();
+        this.currentLevelOriginalVersion = new LevelImpl(this.currentLevel.getName(), new GridImpl(this.currentLevel.getGrid()));
     }
 
     /**
@@ -164,6 +173,25 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
     public Level getCurrentLevel() {
         if (this.currentLevel != null) {
             return this.currentLevel;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+    
+    @Override
+    public void setCurrentLevel(Level level) {
+        this.currentLevel = level;
+    }
+    
+    /**
+     * Gets the current level.
+     *
+     * @return the current level original version
+     */
+    @Override
+    public Level getCurrentLevelOriginalVersion() {
+        if (this.currentLevelOriginalVersion != null) {
+            return this.currentLevelOriginalVersion;
         } else {
             throw new IllegalStateException();
         }

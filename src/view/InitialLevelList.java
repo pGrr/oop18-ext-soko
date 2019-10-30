@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.swing.DefaultListModel;
@@ -29,6 +31,7 @@ import model.Level;
 import model.LevelNotValidException;
 import model.LevelSequence;
 import model.LevelSequenceImpl;
+import model.Model;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -48,9 +51,6 @@ public class InitialLevelList {
     /** The list model. */
     private final DefaultListModel<String> listModel;
 
-    /** The level sequence. */
-    private LevelSequence levelSequence;
-
     /**
      * Instantiates a new initial level list.
      *
@@ -60,7 +60,6 @@ public class InitialLevelList {
         this.owner = owner;
         this.listModel = new DefaultListModel<>();
         this.levelList = new JList<>(this.listModel);
-        this.levelSequence = new LevelSequenceImpl("");
         this.panel = createPanel();
     }
 
@@ -71,15 +70,6 @@ public class InitialLevelList {
      */
     public JPanel getPanel() {
         return this.panel;
-    }
-
-    /**
-     * Gets the level sequence.
-     *
-     * @return the level sequence
-     */
-    public final LevelSequence getLevelSequence() {
-        return this.levelSequence;
     }
 
     /**
@@ -97,36 +87,8 @@ public class InitialLevelList {
      * @return the level names
      */
     public final List<String> getLevelNames() {
-        return levelSequence.getAllLevels().stream().map(Level::getName).collect(Collectors.toList());
-    }
-
-    /**
-     * Load default level sequence.
-     */
-    public void loadDefaultLevelSequence() {
-        String path = "";
-        URL url = ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE);
-        if (url != null) {
-            try {
-                path = URLDecoder.decode(url.getPath(), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                this.owner.showIOErrorDialog();
-                e.printStackTrace();
-            }
-            if (path.isEmpty()) {
-                throw new IllegalStateException();
-            }
-            try {
-                this.levelSequence = Controller.getInstance().getSequenceController().loadLevelSequence(path);
-            } catch (ClassNotFoundException e) {
-                this.owner.showClassNotFoundErrorDialog();
-                e.printStackTrace();
-            } catch (IOException e) {
-                this.owner.showIOErrorDialog();
-                e.printStackTrace();
-            }
-            this.updateListModel();
-        }
+        return Model.getInstance().getCurrentLevelSequence().getAllLevels().stream().map(Level::getName)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -153,9 +115,9 @@ public class InitialLevelList {
         editListPanel.add(removeLevelButton);
         editListPanel.setBorder(GuiComponentFactory.getDefaultInstance()
                 .createTitledPaddingBorder(PANEL_EDIT_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
-        JButton upButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_UP, moveUp());
+        JButton upButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_UP, move(i -> i - 1));
         editListPanel.add(upButton);
-        JButton downButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_DOWN, moveDown());
+        JButton downButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_DOWN, move(i -> i + 1));
         editListPanel.add(downButton);
         JButton cancelButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_RESET, removeAll());
         editListPanel.add(cancelButton);
@@ -172,16 +134,8 @@ public class InitialLevelList {
      */
     public void updateListModel() {
         this.listModel.removeAllElements();
-        this.levelSequence.getAllLevels().stream().map(Level::getName).forEach(listModel::addElement);
-    }
-
-    /**
-     * Sets the level sequence.
-     *
-     * @param sequence the new level sequence
-     */
-    public void setLevelSequence(LevelSequence sequence) {
-        this.levelSequence = sequence;
+        Model.getInstance().getCurrentLevelSequence().getAllLevels().stream().map(Level::getName)
+                .forEach(listModel::addElement);
     }
 
     /**
@@ -197,7 +151,7 @@ public class InitialLevelList {
             fc.showOpenDialog(this.owner.getFrame());
             String path = fc.getSelectedFile().getAbsolutePath();
             try {
-                this.levelSequence.add(Controller.getInstance().getLevelController().loadLevel(path));
+                Model.getInstance().getCurrentLevelSequence().add(Controller.getInstance().getLevelController().loadLevel(path));
             } catch (ClassNotFoundException e1) {
                 this.owner.showClassNotFoundErrorDialog();
                 e1.printStackTrace();
@@ -213,33 +167,18 @@ public class InitialLevelList {
     }
 
     /**
-     * Move up.
-     *
-     * @return the action listener
-     */
-    private ActionListener moveUp() {
-        return e -> SwingUtilities.invokeLater(() -> {
-            if (this.levelList.getSelectedIndex() > 0) {
-                int selectedIndex = this.levelList.getSelectedIndex();
-                this.levelSequence.swap(selectedIndex, selectedIndex - 1);
-                updateListModel();
-                levelList.setSelectedIndex(selectedIndex - 1);
-            }
-        });
-    }
-
-    /**
      * Move down.
      *
      * @return the action listener
      */
-    private ActionListener moveDown() {
+    private ActionListener move(final Function<Integer, Integer> computeNewIndex) {
         return e -> SwingUtilities.invokeLater(() -> {
-            if (this.levelList.getSelectedIndex() > 0) {
-                int selectedIndex = this.levelList.getSelectedIndex();
-                this.levelSequence.swap(selectedIndex, selectedIndex + 1);
+            int selectedIndex = this.levelList.getSelectedIndex();
+            int newIndex = computeNewIndex.apply(selectedIndex);
+            if (newIndex >= 0 && newIndex < this.listModel.getSize()) {
+                Model.getInstance().getCurrentLevelSequence().swap(selectedIndex, newIndex);
                 updateListModel();
-                levelList.setSelectedIndex(selectedIndex + 1);
+                levelList.setSelectedIndex(newIndex);
             }
         });
     }
@@ -251,7 +190,7 @@ public class InitialLevelList {
      */
     private ActionListener removeSelected() {
         return e -> SwingUtilities.invokeLater(() -> {
-            this.levelSequence.remove(this.levelList.getSelectedIndex());
+            Model.getInstance().getCurrentLevelSequence().remove(this.levelList.getSelectedIndex());
             updateListModel();
         });
     }
@@ -263,7 +202,7 @@ public class InitialLevelList {
      */
     private ActionListener removeAll() {
         return e -> SwingUtilities.invokeLater(() -> {
-            this.levelSequence.clear();
+            Model.getInstance().getCurrentLevelSequence().clear();
             updateListModel();
         });
     }

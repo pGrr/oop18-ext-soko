@@ -1,5 +1,10 @@
 package controller;
 
+import java.io.IOException;
+import java.util.Optional;
+
+import model.LevelSequence;
+import model.Model;
 import view.View;
 
 /**
@@ -27,6 +32,11 @@ public final class ControllerSingleton implements Controller {
     @Override
     public void startApplication() {
         View.getInstance().getInitialWindow().show();
+        Optional<LevelSequence> ls = LevelSequence.createDefault();
+        if (ls.isPresent()) {
+            Model.getInstance().setCurrentLevelSequence(ls.get());
+            View.getInstance().getInitialWindow().updateListModel();
+        }
     }
 
     /**

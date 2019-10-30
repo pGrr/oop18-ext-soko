@@ -1,8 +1,10 @@
 package view;
 
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
@@ -37,6 +39,7 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
         this.images = createResizedImages();
         this.getFrame().add(createMainPanel());
         this.getFrame().pack();
+        this.getFrame().setResizable(false);
     }
 
     public Map<Type, Image> getImages() {
@@ -129,13 +132,31 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu(MENU_TITLE);
         JMenuItem menuBackItem = new JMenuItem(MENU_BACK_ITEM_TEXT);
-        menuBackItem.addActionListener(e -> Controller.getInstance().getNavigationController().toInitialView());
+        menuBackItem.addActionListener(backToInitialView());
         menu.add(menuBackItem);
         JMenuItem restartLevelItem = new JMenuItem(MENU_RESTART_LEVEL_TEXT);
-        restartLevelItem.addActionListener(e -> Controller.getInstance().getGameController().restartCurrentLevel());
+        restartLevelItem.addActionListener(restartCurrentLevel());
         menu.add(restartLevelItem);
         JMenuItem saveLevelItem = new JMenuItem(MENU_SAVE_LEVEL_TEXT);
-        saveLevelItem.addActionListener(e -> {
+        saveLevelItem.addActionListener(saveLevel());
+        menu.add(saveLevelItem);
+        menuBar.add(menu);
+        return menuBar;
+    }
+    
+    private ActionListener backToInitialView() {
+        return e -> {
+            Model.getInstance().setCurrentLevelSequence(new LevelSequenceImpl(Model.getInstance().getCurrentLevelSequence()));
+            Controller.getInstance().getNavigationController().toInitialView();
+        };
+    }
+    
+    private ActionListener restartCurrentLevel() {
+        return e -> Controller.getInstance().getGameController().restartCurrentLevel();
+    }
+    
+    private ActionListener saveLevel() {
+        return e -> {
             try {
                 File file = showSaveGameFileChooser();
                 if (file != null) {
@@ -145,10 +166,7 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
                 this.showIOErrorDialog();
                 e1.printStackTrace();
             }
-        });
-        menu.add(saveLevelItem);
-        menuBar.add(menu);
-        return menuBar;
+        };
     }
 
     /**

@@ -33,9 +33,6 @@ public final class InitialConstants {
     /** The Constant DIALOG_DEFAULT_LEVEL_SEQUENCE_ERROR_TEXT. */
     public static final String DIALOG_DEFAULT_LEVEL_SEQUENCE_ERROR_TEXT = "An error occurred while attempting to load the default level sequence.";
 
-    /** The Constant DEFAULT_LEVEL_SEQUENCE. */
-    public static final String DEFAULT_LEVEL_SEQUENCE = "default.sokolevelsequence";
-
     /** The Constant ICON_CRAFT. */
     public static final String ICON_CRAFT = "icons/craft.png";
 

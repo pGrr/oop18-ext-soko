@@ -27,13 +27,23 @@ public class GridImpl implements Grid {
         this.elements = new HashSet<>();
     }
 
+    public GridImpl(Grid grid) {
+        this.elements = new HashSet<>();
+        grid.getAllElements().forEach(e -> this.elements.add(
+                new ElementImpl(
+                        e.getType(), 
+                        new PositionImpl(e.getPosition().getRowIndex(), e.getPosition().getColumnIndex()),
+                        this
+                )));
+    }
+
     /**
      * Adds the.
      *
      * @param element the element
      */
     @Override
-    public void add(Element element) {
+    public void add(final Element element) {
         this.elements.add(element);
     }
 
@@ -43,7 +53,7 @@ public class GridImpl implements Grid {
      * @param element the element
      */
     @Override
-    public void remove(Element element) {
+    public void remove(final Element element) {
         this.elements.remove(element);
     }
 
@@ -64,7 +74,7 @@ public class GridImpl implements Grid {
      * @return the elements at
      */
     @Override
-    public Collection<Element> getElementsAt(Position position) {
+    public Collection<Element> getElementsAt(final Position position) {
         return this.elements.stream().filter(e -> e.getPosition().equals(position)).collect(Collectors.toList());
     }
 
@@ -103,13 +113,16 @@ public class GridImpl implements Grid {
      * @return true, if successful
      */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         GridImpl other = (GridImpl) obj;
         return Objects.equals(elements, other.elements);
     }
@@ -122,26 +135,28 @@ public class GridImpl implements Grid {
      * @return true, if successful
      */
     @Override
-    public boolean moveAttempt(Element element, Direction direction) {
+    public boolean moveAttempt(final Element element, final Direction direction) {
         boolean success = false;
         if (element.getType().equals(Type.USER) || element.getType().equals(Type.BOX)) {
             Position newPosition = findNewPosition(element.getPosition(), direction);
-            Collection<Element> obstacles = getElementsAt(newPosition);
-            if (obstacles.isEmpty() || obstacles.stream().allMatch(bo -> bo.getType().equals(Type.TARGET))) {
-                element.setPosition(newPosition);
-                success = true;
-            } else {
-                for (Element obstacle : obstacles) {
-                    if (element.getType().equals(Type.USER)) {
-                        if (obstacle.getType().equals(Type.BOX)) {
-                            boolean boxHasMoved = moveAttempt(obstacle, direction);
-                            if (boxHasMoved) {
-                                element.setPosition(newPosition);
-                                success = true;
+            if (Integer.max(newPosition.getRowIndex(), newPosition.getColumnIndex()) < N_ROWS
+                    && Integer.min(newPosition.getRowIndex(), newPosition.getColumnIndex()) >= 0) {
+                Collection<Element> obstacles = getElementsAt(newPosition);
+                if (obstacles.isEmpty() || obstacles.stream().allMatch(bo -> bo.getType().equals(Type.TARGET))) {
+                    element.setPosition(newPosition);
+                    success = true;
+                } else {
+                    for (Element obstacle : obstacles) {
+                        if (element.getType().equals(Type.USER)) {
+                            if (obstacle.getType().equals(Type.BOX)) {
+                                boolean boxHasMoved = moveAttempt(obstacle, direction);
+                                if (boxHasMoved) {
+                                    element.setPosition(newPosition);
+                                    success = true;
+                                }
                             }
                         }
                     }
-
                 }
             }
         }
@@ -155,7 +170,7 @@ public class GridImpl implements Grid {
      * @param direction the direction
      * @return the position
      */
-    private Position findNewPosition(Position position, Direction direction) {
+    private Position findNewPosition(final Position position, final Direction direction) {
         int r = position.getRowIndex();
         int c = position.getColumnIndex();
         switch (direction) {
@@ -170,6 +185,8 @@ public class GridImpl implements Grid {
             break;
         case RIGHT:
             c += 1;
+            break;
+        default:
             break;
         }
         return new PositionImpl(r, c);

@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import model.Level;
+import model.LevelSequence;
+import model.Model;
+
 import static view.GuiComponentFactoryImpl.*;
 import static view.InitialConstants.*;
 
@@ -38,10 +42,10 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
      */
     @Override
     public void show() {
-        this.levelList.loadDefaultLevelSequence();
         super.show();
+        this.levelList.updateListModel();
     }
-
+    
     /**
      * Creates the main panel.
      *
@@ -66,6 +70,14 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
         return this.levelList;
     }
 
+    /**
+     * Update list model.
+     */
+    @Override
+    public void updateListModel() {
+        this.levelList.updateListModel();
+    }
+    
     /**
      * Gets the choices.
      *

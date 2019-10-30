@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import controller.Controller;
+import model.Model;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -64,7 +65,7 @@ public class InitialOptions {
     public ActionListener playAction() {
         return e -> SwingUtilities.invokeLater(() -> {
             Controller.getInstance().getSequenceController()
-                    .startLevelSequence(this.owner.getLevelList().getLevelSequence());
+                    .startLevelSequence(Model.getInstance().getCurrentLevelSequence());
         });
     }
 }
