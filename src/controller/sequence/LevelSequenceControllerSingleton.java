@@ -73,7 +73,7 @@ public final class LevelSequenceControllerSingleton implements LevelSequenceCont
         if (Model.getInstance().getCurrentLevelSequence().hasNextLevel()) {
             Model.getInstance().getCurrentLevelSequence().setNextLevel();
             Controller.getInstance().getNavigationController()
-                    .toGameLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
+                    .toGameLevelView(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
         } else {
             GuiComponentFactory.getDefaultInstance()
                     .createNotifyDialog(null, DIALOG_ERROR_TITLE, DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT)

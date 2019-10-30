@@ -18,9 +18,8 @@ public final class ControllerConstants {
     /** The level file extension. */
     public static final String LEVEL_FILE_EXTENSION = ".sokolevel";
 
-    /** The Constant DEFAULT_LEVEL_SEQUENCE. */
+    /** The default level sequence file name. */
     public static final String DEFAULT_LEVEL_SEQUENCE = "default.sokolevelsequence";
-
 
     /**
      * Cannot be instantiated.

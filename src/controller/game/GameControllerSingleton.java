@@ -39,7 +39,7 @@ public final class GameControllerSingleton implements GameController {
         Model.getInstance().getCurrentLevelSequence()
                 .setCurrentLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevelInitialState());
         Controller.getInstance().getNavigationController()
-                .toGameLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
+                .toGameLevelView(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
     }
 
     @Override
@@ -67,7 +67,7 @@ public final class GameControllerSingleton implements GameController {
     public void levelFinishedAccepted() {
         Model.getInstance().getCurrentLevelSequence().setNextLevel();
         Controller.getInstance().getNavigationController()
-                .toGameLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
+                .toGameLevelView(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
     }
 
     @Override

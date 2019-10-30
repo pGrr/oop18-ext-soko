@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.Optional;
-
 import controller.game.GameController;
 import controller.level.LevelController;
 import controller.navigation.NavigationController;
@@ -30,19 +29,6 @@ public final class ControllerSingleton implements Controller {
     }
 
     /**
-     * Starts the application.
-     */
-    @Override
-    public void startApplication() {
-        View.getInstance().getInitialWindow().show();
-        Optional<LevelSequence> ls = LevelSequence.createDefault();
-        if (ls.isPresent()) {
-            Model.getInstance().setCurrentLevelSequence(ls.get());
-            View.getInstance().getInitialWindow().updateListModel();
-        }
-    }
-
-    /**
      * Gets the single instance of ControllerSingleton.
      *
      * @return single instance of ControllerSingleton
@@ -54,45 +40,31 @@ public final class ControllerSingleton implements Controller {
         return singleton;
     }
 
-    /**
-     * Gets the navigation controller, which is responsible for showing and hiding
-     * Windows.
-     *
-     * @return the navigation controller
-     */
+    @Override
+    public void startApplication() {
+        View.getInstance().getInitialWindow().show();
+        Optional<LevelSequence> ls = LevelSequence.createDefault();
+        if (ls.isPresent()) {
+            Model.getInstance().setCurrentLevelSequence(ls.get());
+            View.getInstance().getInitialWindow().updateListModel();
+        }
+    }
+
     @Override
     public NavigationController getNavigationController() {
         return this.navigationController;
     }
 
-    /**
-     * Gets the level controller, which is responsible for the main operations
-     * concerning levels.
-     *
-     * @return the level controller
-     */
     @Override
     public LevelController getLevelController() {
         return this.levelController;
     }
 
-    /**
-     * Gets the sequence controller, which is responsible for the main operations
-     * concerning level sequences.
-     *
-     * @return the sequence controller
-     */
     @Override
     public LevelSequenceController getLevelSequenceController() {
         return this.levelSequenceController;
     }
 
-    /**
-     * Gets the game controller, which is responsible for the operations necessary
-     * when playing a level.
-     *
-     * @return the game controller
-     */
     @Override
     public GameController getGameController() {
         return this.gameController;

@@ -53,7 +53,7 @@ public class InitialOptions {
      */
     public ActionListener crafAction() {
         return e -> SwingUtilities.invokeLater(() -> {
-            Controller.getInstance().getNavigationController().toCraftLevel();
+            Controller.getInstance().getNavigationController().toCraftLevelView();
         });
     }
 
