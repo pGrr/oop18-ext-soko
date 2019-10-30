@@ -3,84 +3,53 @@ package model;
 import java.util.Objects;
 import view.View;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ElementImpl.
+ * An implementation class for the {@link Element} interface.
  */
 public class ElementImpl implements Element {
 
-    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 477897545325345634L;
 
-    /** The grid. */
     private final Grid grid;
-
-    /** The type. */
     private final Type type;
-
-    /** The position. */
     private Position position;
 
     /**
-     * Instantiates a new element impl.
+     * Instantiates a new ElementImpl object with a given type and position and
+     * specifying the grid to which the element belongs.
      *
-     * @param type     the type
-     * @param position the position
-     * @param grid     the grid
+     * @param type     the type of the element
+     * @param position the position of the element
+     * @param grid     the grid to which the element belongs
      */
-    public ElementImpl(Type type, Position position, Grid grid) {
+    public ElementImpl(final Type type, final Position position, final Grid grid) {
         this.type = type;
         this.position = position;
         this.grid = grid;
     }
 
-    /**
-     * Gets the type.
-     *
-     * @return the type
-     */
     @Override
-    public Type getType() {
+    public final Type getType() {
         return type;
     }
 
-    /**
-     * Gets the position.
-     *
-     * @return the position
-     */
     @Override
-    public Position getPosition() {
+    public final Position getPosition() {
         return position;
     }
 
-    /**
-     * Sets the position.
-     *
-     * @param position the new position
-     */
     @Override
-    public void setPosition(Position position) {
+    public final void setPosition(final Position position) {
         this.position = position;
     }
 
-    /**
-     * Checks if is type movable.
-     *
-     * @return true, if is type movable
-     */
     @Override
-    public boolean isTypeMovable() {
+    public final boolean isTypeMovable() {
         return type.equals(Type.USER) || type.equals(Type.BOX);
     }
 
-    /**
-     * Move.
-     *
-     * @param direction the direction
-     */
     @Override
-    public void move(Direction direction) {
+    public final void move(final Direction direction) {
         if (isTypeMovable()) {
             boolean hasMoved = this.grid.moveAttempt(this, direction);
             if (hasMoved) {
@@ -89,42 +58,28 @@ public class ElementImpl implements Element {
         }
     }
 
-    /**
-     * Hash code.
-     *
-     * @return the int
-     */
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return Objects.hash(position, type);
     }
 
-    /**
-     * Equals.
-     *
-     * @param obj the obj
-     * @return true, if successful
-     */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public final boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         ElementImpl other = (ElementImpl) obj;
         return Objects.equals(position, other.position) && type == other.type;
     }
 
-    /**
-     * To string.
-     *
-     * @return the string
-     */
     @Override
-    public String toString() {
+    public final String toString() {
         return "ElementImpl [type=" + type + ", position=" + position + ", grid=" + grid + "]";
     }
-
 }

@@ -2,61 +2,60 @@ package model;
 
 import java.io.Serializable;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface Element.
+ * An element of the game, which has a type and a position.
  */
 public interface Element extends Serializable {
 
     /**
-     * Gets the type.
+     * Gets the type of the element, which stays constant.
      *
-     * @return the type
+     * @return the type of the element
      */
     Type getType();
 
     /**
-     * Gets the position.
+     * Gets the position of the element, which can change in time.
      *
-     * @return the position
+     * @return the current position of the element
      */
     Position getPosition();
 
     /**
-     * Sets the position.
+     * Sets the position of the element.
      *
-     * @param position the new position
+     * @param position the new position of the element
      */
     void setPosition(Position position);
 
     /**
-     * Checks if is type movable.
+     * Checks if the element is movable (e.g. user or box).
      *
      * @return true, if is type movable
      */
     boolean isTypeMovable();
 
     /**
-     * Move.
+     * Moves the element in a given direction if that movement is possible.
      *
      * @param direction the direction
      */
     void move(Direction direction);
 
     /**
-     * Equals.
+     * Elements are compared basing upon their position and type.
      *
-     * @param obj the obj
+     * @param obj the object to be compared with the element
      * @return true, if successful
      */
     @Override
-    public boolean equals(Object obj);
+    boolean equals(Object obj);
 
     /**
-     * Hash code.
+     * The element hash code is computed on its position and type.
      *
-     * @return the int
+     * @return the computed hashCode
      */
     @Override
-    public int hashCode();
+    int hashCode();
 }

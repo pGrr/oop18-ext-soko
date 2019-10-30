@@ -1,8 +1,7 @@
 package model;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Enum Direction.
+ * The directions of movement.
  */
 public enum Direction {
 
