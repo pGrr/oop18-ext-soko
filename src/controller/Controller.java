@@ -1,5 +1,7 @@
 package controller;
 
+import controller.game.GameController;
+
 /**
  * The main controller interface, it is the entry point for the View and the
  * model. It is responsible to start the application and to get a reference to

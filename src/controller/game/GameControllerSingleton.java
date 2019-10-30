@@ -1,10 +1,11 @@
-package controller;
+package controller.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import controller.Controller;
 import model.Direction;
 import model.Level;
 import model.LevelSequence;
@@ -13,12 +14,13 @@ import view.View;
 
 /**
  * The default implementation of the {@link GameController} interface.
+ * Implements the Singleton design pattern.
  */
-public final class GameControllerImpl implements GameController {
+public final class GameControllerSingleton implements GameController {
 
     private static GameController singleton;
 
-    private GameControllerImpl() {
+    private GameControllerSingleton() {
     }
 
     /**
@@ -28,7 +30,7 @@ public final class GameControllerImpl implements GameController {
      */
     public static GameController getInstance() {
         if (singleton == null) {
-            singleton = new GameControllerImpl();
+            singleton = new GameControllerSingleton();
         }
         return singleton;
     }
@@ -50,9 +52,9 @@ public final class GameControllerImpl implements GameController {
     /**
      * Saves the current game. More specifically, it creates a new level sequence
      * with the current level in its current state as a first level and all the
-     * ordered remaining levels after it.
+     * remaining levels following in order.
      *
-     * @param path the path
+     * @param path the path of the file to be saved
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
@@ -61,18 +63,13 @@ public final class GameControllerImpl implements GameController {
         List<Level> levels = new ArrayList<>();
         levels.add(levelSequence.getCurrentLevel());
 
-        int currentLevelIndex = levelSequence.getAllLevels()
-                .indexOf(levelSequence.getCurrentLevel());
+        int currentLevelIndex = levelSequence.getAllLevels().indexOf(levelSequence.getCurrentLevel());
         currentLevelIndex += 1;
         IntStream.range(currentLevelIndex, levelSequence.getAllLevels().size())
-                .mapToObj(i -> levelSequence.getAllLevels().get(i))
-                .map(o -> (Level)o)
-                .forEachOrdered(levels::add);
+                .mapToObj(i -> levelSequence.getAllLevels().get(i)).map(o -> (Level) o).forEachOrdered(levels::add);
         LevelSequence newLs = LevelSequence.createFromLevels(levelSequence.getName(), levels);
         Controller.getInstance().getSequenceController().saveLevelSequence(newLs,
                 path + Controller.getInstance().getSequenceController().getLevelSequenceFileExtension());
-        //Model.getInstance().setCurrentLevelSequence(Model.getInstance().getCurrentLevelSequenceInitialState());
-        //Controller.getInstance().getNavigationController().toInitialView();
     }
 
     /**
@@ -81,7 +78,7 @@ public final class GameControllerImpl implements GameController {
      * updates the model subsequently upon the game logics (the movement can result
      * in a change of element positions or not).
      *
-     * @param direction the direction
+     * @param direction the direction of the movement
      */
     @Override
     public void move(final Direction direction) {

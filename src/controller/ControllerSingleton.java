@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.Optional;
+
+import controller.game.GameController;
 import model.LevelSequence;
 import model.Model;
 import view.View;

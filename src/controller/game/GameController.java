@@ -1,4 +1,4 @@
-package controller;
+package controller.game;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ public interface GameController {
      * updates the model subsequently upon the game logics (the movement can result
      * in a change of element positions or not).
      *
-     * @param direction the direction
+     * @param direction the direction of the movement
      */
     void move(Direction direction);
 
@@ -47,7 +47,7 @@ public interface GameController {
      * with the current level in its current state as a first level and all the
      * ordered remaining levels next to it.
      *
-     * @param path the path
+     * @param path the path of the file to be saved
      * @throws IOException Signals that an I/O exception has occurred.
      */
     void saveGame(String path) throws IOException;
@@ -56,9 +56,9 @@ public interface GameController {
      * Gets the default game controller object.
      *
      * @return the single instance of the default implementing class, which is
-     *         {@link GameControllerImpl}.
+     *         {@link GameControllerSingleton}.
      */
     static GameController getDefaultInstance() {
-        return GameControllerImpl.getInstance();
+        return GameControllerSingleton.getInstance();
     }
 }

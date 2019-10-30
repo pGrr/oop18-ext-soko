@@ -3,7 +3,7 @@ package app;
 import controller.Controller;
 
 /**
- * The Class containing the main method to start the Sokoban application.
+ * The Class containing the main method to start the "Extendible-Sokoban" application.
  */
 public final class SokobanApp {
 
