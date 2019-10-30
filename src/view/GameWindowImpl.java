@@ -25,9 +25,8 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
     /** The canvas. */
     private final GameCanvas canvas;
 
-    /** The images. */
-    private Map<Type, Image> images;
-
+    
+    
     /**
      * Instantiates a new game window impl.
      */
@@ -36,14 +35,9 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
                 WIDTH_TO_HEIGHT_RATIO);
         this.getFrame().setJMenuBar(createMenuBar());
         this.canvas = new GameCanvas(this);
-        this.images = createResizedImages();
         this.getFrame().add(createMainPanel());
         this.getFrame().pack();
         this.getFrame().setResizable(false);
-    }
-
-    public Map<Type, Image> getImages() {
-        return this.images;
     }
 
     /**
@@ -62,9 +56,8 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
      * @param element the element
      */
     public void draw(final Element element) {
-        Image img = this.getImages().get(element.getType());
-        int w = img.getWidth(null);
-        int h = img.getHeight(null);
+        int w = this.canvas.getElementWidth();
+        int h = this.canvas.getElementHeight();
         Position absolutePosition = this.convertRelativeToAbsolute(element.getPosition());
         int x = absolutePosition.getColumnIndex();
         int y = absolutePosition.getRowIndex();
@@ -181,21 +174,6 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
                 Controller.getInstance().getSequenceController().getLevelSequenceFileExtension());
         fc.showOpenDialog(this.getFrame());
         return fc.getSelectedFile();
-    }
-
-    /**
-     * Creates the resized images.
-     *
-     * @return the map
-     */
-    public Map<Type, Image> createResizedImages() {
-        Map<Type, Image> imageMap = new HashMap<>();
-        for (TypeImage t : TypeImage.values()) {
-            imageMap.put(t.getType(), t.getImage().getScaledInstance(
-                    (int) Math.round(this.canvas.getPreferredSize().getWidth() / Grid.N_ROWS),
-                    (int) Math.round(this.canvas.getPreferredSize().getHeight() / Grid.N_ROWS), Image.SCALE_DEFAULT));
-        }
-        return imageMap;
     }
 
     /**

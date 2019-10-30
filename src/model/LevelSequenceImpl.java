@@ -24,9 +24,9 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
     private transient Iterator<Level> iterator;
 
     /** The current level. */
-    private transient Level currentLevel;
+    private transient Level currentLevelCurrentState;
     
-    private transient Level currentLevelOriginalVersion;
+    private transient Level currentLevelInitialState;
 
     /**
      * Instantiates a new level sequence impl.
@@ -37,8 +37,8 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
         this.name = name;
         this.levels = new ArrayList<>();
         this.iterator = this.levels.iterator();
-        this.currentLevel = new LevelImpl("", Grid.createEmpty());
-        this.currentLevelOriginalVersion = new LevelImpl("", Grid.createEmpty());
+        this.currentLevelCurrentState = new LevelImpl("", Grid.createEmpty());
+        this.currentLevelInitialState = new LevelImpl("", Grid.createEmpty());
     }
 
     /**
@@ -52,8 +52,8 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
         this.name = name;
         this.levels = levels;
         this.iterator = levels.iterator();
-        this.currentLevel = null;
-        this.currentLevelOriginalVersion = null;
+        this.currentLevelCurrentState = null;
+        this.currentLevelInitialState = null;
     }
     
     public LevelSequenceImpl(LevelSequence levelSequence) {
@@ -150,8 +150,8 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
      */
     @Override
     public void setNextLevel() {
-        this.currentLevel = iterator.next();
-        this.currentLevelOriginalVersion = new LevelImpl(this.currentLevel.getName(), new GridImpl(this.currentLevel.getGrid()));
+        this.currentLevelCurrentState = iterator.next();
+        this.currentLevelInitialState = new LevelImpl(this.currentLevelCurrentState.getName(), new GridImpl(this.currentLevelCurrentState.getGrid()));
     }
 
     /**
@@ -161,7 +161,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
      */
     @Override
     public boolean hasCurrentLevel() {
-        return this.currentLevel != null;
+        return this.currentLevelCurrentState != null;
     }
 
     /**
@@ -171,8 +171,8 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
      */
     @Override
     public Level getCurrentLevel() {
-        if (this.currentLevel != null) {
-            return this.currentLevel;
+        if (this.currentLevelCurrentState != null) {
+            return this.currentLevelCurrentState;
         } else {
             throw new IllegalStateException();
         }
@@ -180,7 +180,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
     
     @Override
     public void setCurrentLevel(Level level) {
-        this.currentLevel = level;
+        this.currentLevelCurrentState = level;
     }
     
     /**
@@ -189,9 +189,9 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
      * @return the current level original version
      */
     @Override
-    public Level getCurrentLevelOriginalVersion() {
-        if (this.currentLevelOriginalVersion != null) {
-            return this.currentLevelOriginalVersion;
+    public Level getCurrentLevelInitialState() {
+        if (this.currentLevelInitialState != null) {
+            return this.currentLevelInitialState;
         } else {
             throw new IllegalStateException();
         }

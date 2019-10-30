@@ -1,8 +1,10 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,9 +66,27 @@ public class GridImpl implements Grid {
      */
     @Override
     public Collection<Element> getAllElements() {
-        return Collections.unmodifiableCollection(this.elements);
+        return new ArrayList<>(elements);
     }
-
+    
+    @Override
+    public Collection<Element> getBoxesOnTarget() {
+        List<Element> boxes = this.elements.stream()
+                     .filter(e -> e.getType().equals(Type.BOX))
+                     .collect(Collectors.toList());
+        List<Element> targets = this.elements.stream()
+                                    .filter(e -> e.getType().equals(Type.TARGET))
+                                    .collect(Collectors.toList());
+        List<Element> boxesOnTarget = new ArrayList<>();
+        boxes.forEach(b -> {
+            targets.forEach(t -> {
+                if (b.getPosition().equals(t.getPosition())) {
+                    boxesOnTarget.add(b);
+                }
+            });
+        });
+        return boxesOnTarget;
+    }
     /**
      * Gets the elements at.
      *

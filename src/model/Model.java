@@ -29,4 +29,6 @@ public interface Model {
         return ModelSingleton.getInstance();
     }
 
+    LevelSequence getCurrentLevelSequenceInitialState();
+
 }

@@ -12,13 +12,16 @@ public class ModelSingleton implements Model {
     private static Model SINGLETON;
 
     /** The level sequence. */
-    private LevelSequence levelSequence;
+    private LevelSequence levelSequenceCurrentState;
+    
+    private LevelSequence levelSequenceInitialState;
 
     /**
      * Instantiates a new model singleton.
      */
     private ModelSingleton() {
-        this.levelSequence = new LevelSequenceImpl("");
+        this.levelSequenceCurrentState = new LevelSequenceImpl("");
+        this.levelSequenceInitialState = LevelSequence.createCopyOf(levelSequenceCurrentState);
     }
 
     /**
@@ -28,13 +31,23 @@ public class ModelSingleton implements Model {
      */
     @Override
     public LevelSequence getCurrentLevelSequence() {
-        if (levelSequence != null) {
-            return levelSequence;
+        if (levelSequenceCurrentState != null) {
+            return levelSequenceCurrentState;
         } else {
             throw new IllegalArgumentException();
         }
     }
 
+    @Override
+    public LevelSequence getCurrentLevelSequenceInitialState() {
+        if (levelSequenceInitialState != null) {
+            return levelSequenceInitialState;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    
     /**
      * Sets the current level sequence.
      *
@@ -42,7 +55,8 @@ public class ModelSingleton implements Model {
      */
     @Override
     public void setCurrentLevelSequence(LevelSequence levelSequence) {
-        this.levelSequence = levelSequence;
+        this.levelSequenceCurrentState = levelSequence;
+        this.levelSequenceInitialState = LevelSequence.createCopyOf(levelSequenceCurrentState);
     }
 
     /**

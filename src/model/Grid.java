@@ -80,4 +80,6 @@ public interface Grid extends Serializable {
     static Grid createEmpty() {
         return new GridImpl();
     }
+
+    Collection<Element> getBoxesOnTarget();
 }

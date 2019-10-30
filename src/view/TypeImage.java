@@ -16,7 +16,7 @@ public enum TypeImage {
     TARGET(Type.TARGET, "icons/target.png"),
     /** The box. */
     BOX(Type.BOX, "icons/box.png"),
-
+    
     /** The wall. */
     WALL(Type.WALL, "icons/wall.png");
 

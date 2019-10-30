@@ -3,6 +3,7 @@ package model;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,6 +105,13 @@ public interface LevelSequence extends Serializable {
         return new LevelSequenceImpl(name, levels);
     }
 
+    static LevelSequence createCopyOf(LevelSequence levelSequence) {
+        List<Level> levelsCopy = new ArrayList<>();
+        levelSequence.getAllLevels().forEach(l -> levelsCopy.add(
+                new LevelImpl(new String(l.getName()), new GridImpl(l.getGrid()))));
+        return new LevelSequenceImpl(new String(levelSequence.getName()), levelsCopy);
+    }
+
     /**
      * Creates the default.
      *
@@ -121,7 +129,7 @@ public interface LevelSequence extends Serializable {
         }
     }
 
-    Level getCurrentLevelOriginalVersion();
+    Level getCurrentLevelInitialState();
 
     void setCurrentLevel(Level level);
 }

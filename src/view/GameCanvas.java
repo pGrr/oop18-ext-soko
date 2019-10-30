@@ -10,16 +10,22 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import controller.Controller;
 import model.Direction;
 import model.Element;
+import model.Grid;
 import model.Model;
 import model.Position;
+import model.Type;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -42,6 +48,11 @@ public class GameCanvas extends JPanel {
     /** The graphics. */
     private Graphics graphics;
 
+    /** The images. */
+    private Map<Type, Image> images;
+
+    Image boxOnTargetImage;
+
     /**
      * Instantiates a new game canvas.
      *
@@ -55,6 +66,8 @@ public class GameCanvas extends JPanel {
         this.setSize(this.getPreferredSize());
         this.setFocusable(true);
         this.addKeyListener(buttonPressed());
+        this.images = createResizedImages();
+        this.boxOnTargetImage = boxOnTargetImage();
         this.timer.start();
     }
 
@@ -88,11 +101,31 @@ public class GameCanvas extends JPanel {
      * @param elements the elements
      */
     public void drawAllElements(final Collection<Element> elements) {
+        Collection<Position> boxesOnTargetPositions = Model.getInstance().getCurrentLevelSequence().getCurrentLevel()
+                .getGrid().getBoxesOnTarget().stream().map(b -> b.getPosition()).collect(Collectors.toList());
         for (Element element : elements) {
             Position pos = this.owner.convertRelativeToAbsolute(element.getPosition());
-            this.graphics.drawImage(this.owner.getImages().get(element.getType()), pos.getColumnIndex(),
-                    pos.getRowIndex(), this.owner.getFrame());
+            if (boxesOnTargetPositions.contains(element.getPosition())) {
+                this.graphics.drawImage(boxOnTargetImage, pos.getColumnIndex(), pos.getRowIndex(),
+                        this.owner.getFrame());
+            } else {
+                this.graphics.drawImage(this.images.get(element.getType()), pos.getColumnIndex(), pos.getRowIndex(),
+                        this.owner.getFrame());
+            }
         }
+    }
+
+    public int getElementWidth() {
+        return (int) Math.round(this.getPreferredSize().getWidth() / Grid.N_ROWS);
+    }
+
+    public int getElementHeight() {
+        return (int) Math.round(this.getPreferredSize().getHeight() / Grid.N_ROWS);
+    }
+
+    private Image boxOnTargetImage() {
+        return new ImageIcon(ClassLoader.getSystemResource("icons/box-on-target.png")).getImage()
+                .getScaledInstance(getElementWidth(), getElementHeight(), Image.SCALE_DEFAULT);
     }
 
     /**
@@ -132,4 +165,20 @@ public class GameCanvas extends JPanel {
             }
         });
     }
+
+    /**
+     * Creates the resized images.
+     *
+     * @return the map
+     */
+    public Map<Type, Image> createResizedImages() {
+        Map<Type, Image> imageMap = new HashMap<>();
+        for (TypeImage t : TypeImage.values()) {
+            imageMap.put(t.getType(),
+                    t.getImage().getScaledInstance((int) Math.round(this.getPreferredSize().getWidth() / Grid.N_ROWS),
+                            (int) Math.round(this.getPreferredSize().getHeight() / Grid.N_ROWS), Image.SCALE_DEFAULT));
+        }
+        return imageMap;
+    }
+
 }
