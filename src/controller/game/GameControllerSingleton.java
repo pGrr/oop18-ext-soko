@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
 import controller.Controller;
 import model.Direction;
 import model.Level;
@@ -35,12 +34,6 @@ public final class GameControllerSingleton implements GameController {
         return singleton;
     }
 
-    /**
-     * Restarts the current level. Every movement performed since the beginning of
-     * the level will be lost and every element will return to the original
-     * position. This is called from the view when the user triggers the
-     * corresponding event.
-     */
     @Override
     public void restartCurrentLevel() {
         Model.getInstance().getCurrentLevelSequence()
@@ -49,14 +42,6 @@ public final class GameControllerSingleton implements GameController {
                 .toGameLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
     }
 
-    /**
-     * Saves the current game. More specifically, it creates a new level sequence
-     * with the current level in its current state as a first level and all the
-     * remaining levels following in order.
-     *
-     * @param path the path of the file to be saved
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
     @Override
     public void saveGame(final String path) throws IOException {
         LevelSequence levelSequence = Model.getInstance().getCurrentLevelSequence();
@@ -72,25 +57,12 @@ public final class GameControllerSingleton implements GameController {
                 path + Controller.getInstance().getSequenceController().getLevelSequenceFileExtension());
     }
 
-    /**
-     * Performs the action of the user trying to move in a specified direction. It
-     * is called from the view when the player triggers the movement event and it
-     * updates the model subsequently upon the game logics (the movement can result
-     * in a change of element positions or not).
-     *
-     * @param direction the direction of the movement
-     */
     @Override
     public void move(final Direction direction) {
         Model.getInstance().getCurrentLevelSequence().getCurrentLevel().getUser().move(direction);
         checkLevelFinished();
     }
 
-    /**
-     * This is called when the user accepts the level finished message which is
-     * called when a level is finished and there is another one next. This function
-     * starts the next level.
-     */
     @Override
     public void levelFinishedAccepted() {
         Model.getInstance().getCurrentLevelSequence().setNextLevel();
@@ -98,11 +70,6 @@ public final class GameControllerSingleton implements GameController {
                 .toGameLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
     }
 
-    /**
-     * This is called when the user accepts the game finished message, wich is
-     * called when the last level of a sequence is finished. This function go back
-     * to the initial view.
-     */
     @Override
     public void gameFinishedAccepted() {
         Controller.getInstance().getNavigationController().toInitialView();

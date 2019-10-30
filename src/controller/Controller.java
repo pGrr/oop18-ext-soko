@@ -1,6 +1,9 @@
 package controller;
 
 import controller.game.GameController;
+import controller.level.LevelController;
+import controller.levelsequence.LevelSequenceController;
+import controller.navigation.NavigationController;
 
 /**
  * The main controller interface, it is the entry point for the View and the

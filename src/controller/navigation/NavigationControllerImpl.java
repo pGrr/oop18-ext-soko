@@ -1,4 +1,4 @@
-package controller;
+package controller.navigation;
 
 import model.Level;
 import view.View;

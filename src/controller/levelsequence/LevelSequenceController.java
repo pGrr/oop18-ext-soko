@@ -1,4 +1,4 @@
-package controller;
+package controller.levelsequence;
 
 import java.io.IOException;
 

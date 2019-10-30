@@ -1,4 +1,4 @@
-package controller;
+package controller.levelsequence;
 
 import static controller.ControllerConstants.*;
 import static view.InitialConstants.*;
@@ -8,6 +8,8 @@ import model.Model;
 import model.LevelSequence;
 
 import java.io.*;
+
+import controller.Controller;
 
 // TODO: Auto-generated Javadoc
 /**
