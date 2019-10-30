@@ -168,8 +168,8 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
     @Override
     public File showSaveGameFileChooser() {
         JFileChooser fc = GuiComponentFactory.getDefaultInstance().createFileChooser(
-                Controller.getInstance().getSequenceController().getLevelSequenceFileDescription(),
-                Controller.getInstance().getSequenceController().getLevelSequenceFileExtension());
+                Controller.getInstance().getLevelSequenceController().getLevelSequenceFileDescription(),
+                Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension());
         fc.showOpenDialog(this.getFrame());
         return fc.getSelectedFile();
     }

@@ -53,8 +53,8 @@ public final class GameControllerSingleton implements GameController {
         IntStream.range(currentLevelIndex, levelSequence.getAllLevels().size())
                 .mapToObj(i -> levelSequence.getAllLevels().get(i)).map(o -> (Level) o).forEachOrdered(levels::add);
         LevelSequence newLs = LevelSequence.createFromLevels(levelSequence.getName(), levels);
-        Controller.getInstance().getSequenceController().saveLevelSequence(newLs,
-                path + Controller.getInstance().getSequenceController().getLevelSequenceFileExtension());
+        Controller.getInstance().getLevelSequenceController().saveLevelSequence(newLs,
+                path + Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension());
     }
 
     @Override

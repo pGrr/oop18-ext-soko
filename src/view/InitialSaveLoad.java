@@ -61,8 +61,8 @@ public class InitialSaveLoad {
      */
     private ActionListener saveSequenceAction() {
         return e -> SwingUtilities.invokeLater(() -> {
-            String fileExtension = Controller.getInstance().getSequenceController().getLevelSequenceFileExtension();
-            String fileDescription = Controller.getInstance().getSequenceController().getLevelSequenceFileDescription();
+            String fileExtension = Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension();
+            String fileDescription = Controller.getInstance().getLevelSequenceController().getLevelSequenceFileDescription();
             JFileChooser fc = owner.getComponentFactory().createFileChooser(fileDescription, fileExtension);
             fc.showSaveDialog(this.owner.getFrame());
             File selectedFile = fc.getSelectedFile();
@@ -72,7 +72,7 @@ public class InitialSaveLoad {
                     LevelSequence levelSequence = new LevelSequenceImpl(name,
                             Model.getInstance().getCurrentLevelSequence().getAllLevels());
                     try {
-                        Controller.getInstance().getSequenceController().saveLevelSequence(levelSequence,
+                        Controller.getInstance().getLevelSequenceController().saveLevelSequence(levelSequence,
                                 fc.getSelectedFile().getAbsolutePath() + fileExtension);
                     } catch (IOException e1) {
                         this.owner.showIOErrorDialog();
@@ -91,8 +91,8 @@ public class InitialSaveLoad {
     private ActionListener loadSequenceAction() {
         return e -> SwingUtilities.invokeLater(() -> {
             JFileChooser fc = owner.getComponentFactory().createFileChooser(
-                    Controller.getInstance().getSequenceController().getLevelSequenceFileDescription(),
-                    Controller.getInstance().getSequenceController().getLevelSequenceFileExtension());
+                    Controller.getInstance().getLevelSequenceController().getLevelSequenceFileDescription(),
+                    Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension());
             fc.showOpenDialog(this.owner.getFrame());
             File file = fc.getSelectedFile();
             String path = new String();
@@ -101,7 +101,7 @@ public class InitialSaveLoad {
             }
             try {
                 LevelSequence levelSequence;
-                levelSequence = Controller.getInstance().getSequenceController().loadLevelSequence(path);
+                levelSequence = Controller.getInstance().getLevelSequenceController().loadLevelSequence(path);
                 Model.getInstance().setCurrentLevelSequence(levelSequence);
                 List<String> names = levelSequence.getAllLevels().stream().map(Level::getName)
                         .collect(Collectors.toList());

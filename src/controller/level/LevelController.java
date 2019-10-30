@@ -40,7 +40,7 @@ public interface LevelController {
     /**
      * Saves the given level to the given path in the file-system.
      *
-     * @param path  the path to which save the file
+     * @param path  the absolute path to which save the file
      * @param level the level to be saved
      * @throws IOException Signals that an I/O exception has occurred.
      */

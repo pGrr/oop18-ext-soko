@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import controller.game.GameController;
 import controller.level.LevelController;
-import controller.levelsequence.LevelSequenceController;
 import controller.navigation.NavigationController;
+import controller.sequence.LevelSequenceController;
 import model.LevelSequence;
 import model.Model;
 import view.View;
@@ -83,7 +83,7 @@ public final class ControllerSingleton implements Controller {
      * @return the sequence controller
      */
     @Override
-    public LevelSequenceController getSequenceController() {
+    public LevelSequenceController getLevelSequenceController() {
         return this.levelSequenceController;
     }
 

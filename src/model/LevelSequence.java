@@ -119,7 +119,7 @@ public interface LevelSequence extends Serializable {
      */
     static Optional<LevelSequence> createDefault() {
         try {
-            return Optional.of(Controller.getInstance().getSequenceController()
+            return Optional.of(Controller.getInstance().getLevelSequenceController()
                     .loadLevelSequence(ClassLoader.getSystemResource(DEFAULT_LEVEL_SEQUENCE).getPath()));
         } catch (Exception e) {
             // if the default sequence can't be loaded, no problem will occur. There will

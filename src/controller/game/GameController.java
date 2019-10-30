@@ -47,7 +47,7 @@ public interface GameController {
      * with the current level in its current state as a first level and all the
      * ordered remaining levels next to it.
      *
-     * @param path the path of the file to be saved
+     * @param path the absolute path of the file to be saved
      * @throws IOException Signals that an I/O exception has occurred.
      */
     void saveGame(String path) throws IOException;

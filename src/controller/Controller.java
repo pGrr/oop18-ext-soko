@@ -2,8 +2,8 @@ package controller;
 
 import controller.game.GameController;
 import controller.level.LevelController;
-import controller.levelsequence.LevelSequenceController;
 import controller.navigation.NavigationController;
+import controller.sequence.LevelSequenceController;
 
 /**
  * The main controller interface, it is the entry point for the View and the
@@ -39,7 +39,7 @@ public interface Controller {
      *
      * @return the sequence controller
      */
-    LevelSequenceController getSequenceController();
+    LevelSequenceController getLevelSequenceController();
 
     /**
      * Gets the game controller, which is responsible for the operations necessary
