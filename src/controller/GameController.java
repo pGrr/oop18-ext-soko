@@ -61,5 +61,4 @@ public interface GameController {
     static GameController getDefaultInstance() {
         return GameControllerImpl.getInstance();
     }
-
 }

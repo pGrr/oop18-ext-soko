@@ -3,6 +3,8 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
+
 import model.Direction;
 import model.Level;
 import model.LevelSequence;
@@ -39,34 +41,38 @@ public final class GameControllerImpl implements GameController {
      */
     @Override
     public void restartCurrentLevel() {
-        Model.getInstance().getCurrentLevelSequence().setCurrentLevel(
-                Model.getInstance().getCurrentLevelSequence().getCurrentLevelInitialState());;
-        Controller.getInstance().getNavigationController().toGameLevel(
-                Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
+        Model.getInstance().getCurrentLevelSequence()
+                .setCurrentLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevelInitialState());
+        Controller.getInstance().getNavigationController()
+                .toGameLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
     }
 
     /**
      * Saves the current game. More specifically, it creates a new level sequence
      * with the current level in its current state as a first level and all the
-     * ordered remaining levels next to it.
+     * ordered remaining levels after it.
      *
      * @param path the path
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void saveGame(final String path) throws IOException {
+        LevelSequence levelSequence = Model.getInstance().getCurrentLevelSequence();
         List<Level> levels = new ArrayList<>();
-        LevelSequence ls = Model.getInstance().getCurrentLevelSequence();
-        levels.add(ls.getCurrentLevel());
-        while (ls.hasNextLevel()) {
-            ls.setNextLevel();
-            levels.add(ls.getCurrentLevel());
-        }
-        LevelSequence newLs = LevelSequence.createFromLevels(ls.getName(), levels);
+        levels.add(levelSequence.getCurrentLevel());
+
+        int currentLevelIndex = levelSequence.getAllLevels()
+                .indexOf(levelSequence.getCurrentLevel());
+        currentLevelIndex += 1;
+        IntStream.range(currentLevelIndex, levelSequence.getAllLevels().size())
+                .mapToObj(i -> levelSequence.getAllLevels().get(i))
+                .map(o -> (Level)o)
+                .forEachOrdered(levels::add);
+        LevelSequence newLs = LevelSequence.createFromLevels(levelSequence.getName(), levels);
         Controller.getInstance().getSequenceController().saveLevelSequence(newLs,
                 path + Controller.getInstance().getSequenceController().getLevelSequenceFileExtension());
-        Model.getInstance().setCurrentLevelSequence(Model.getInstance().getCurrentLevelSequenceInitialState());
-        Controller.getInstance().getNavigationController().toInitialView();
+        //Model.getInstance().setCurrentLevelSequence(Model.getInstance().getCurrentLevelSequenceInitialState());
+        //Controller.getInstance().getNavigationController().toInitialView();
     }
 
     /**

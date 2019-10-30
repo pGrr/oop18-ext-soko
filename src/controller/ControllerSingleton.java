@@ -1,8 +1,6 @@
 package controller;
 
-import java.io.IOException;
 import java.util.Optional;
-
 import model.LevelSequence;
 import model.Model;
 import view.View;

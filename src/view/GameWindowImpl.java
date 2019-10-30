@@ -25,8 +25,6 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
     /** The canvas. */
     private final GameCanvas canvas;
 
-    
-    
     /**
      * Instantiates a new game window impl.
      */
@@ -131,24 +129,24 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
         restartLevelItem.addActionListener(restartCurrentLevel());
         menu.add(restartLevelItem);
         JMenuItem saveLevelItem = new JMenuItem(MENU_SAVE_LEVEL_TEXT);
-        saveLevelItem.addActionListener(saveLevel());
+        saveLevelItem.addActionListener(saveGame());
         menu.add(saveLevelItem);
         menuBar.add(menu);
         return menuBar;
     }
-    
+
     private ActionListener backToInitialView() {
         return e -> {
-            Model.getInstance().setCurrentLevelSequence(new LevelSequenceImpl(Model.getInstance().getCurrentLevelSequence()));
+            Model.getInstance().setCurrentLevelSequence(Model.getInstance().getCurrentLevelSequenceInitialState());
             Controller.getInstance().getNavigationController().toInitialView();
         };
     }
-    
+
     private ActionListener restartCurrentLevel() {
         return e -> Controller.getInstance().getGameController().restartCurrentLevel();
     }
-    
-    private ActionListener saveLevel() {
+
+    private ActionListener saveGame() {
         return e -> {
             try {
                 File file = showSaveGameFileChooser();
