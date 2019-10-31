@@ -1,36 +1,25 @@
 package model;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class LevelNotValidException.
+ * The exception meaning a level is not valid. It's thrown when a level is
+ * validated or created if the level is not correct. A level is correct if and
+ * only if contains exactly one user, at least one target and an equal number of
+ * targets and boxes.
  */
 public class LevelNotValidException extends Exception {
 
-    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 7024248848064914746L;
-
-    /** The Constant BASE_MESSAGE. */
-    private final static String BASE_MESSAGE = "Level not valid. ";
-
-    /** The Constant UNCORRECT_POSITION_MESSAGE. */
-    private final static String UNCORRECT_POSITION_MESSAGE = "Uncorrect position found.";
-
-    /** The Constant NO_INITIAL_POINT_MESSAGE. */
-    private final static String NO_INITIAL_POINT_MESSAGE = "No initial point was found.";
-
-    /** The Constant MULTIPLE_INITIAL_POINT_MESSAGE. */
-    private final static String MULTIPLE_INITIAL_POINT_MESSAGE = "Initial point is not singular.";
-
-    /** The Constant NO_TARGET_MESSAGE. */
-    private final static String NO_TARGET_MESSAGE = "No target was found.";
-
-    /** The Constant UNEQUAL_BOX_AND_TARGET_MESSAGE. */
-    private final static String UNEQUAL_BOX_AND_TARGET_MESSAGE = "Boxes and targets quantity is not equal.";
+    private static final String BASE_MESSAGE = "Level not valid. ";
+    private static final String UNCORRECT_POSITION_MESSAGE = "Uncorrect position found.";
+    private static final String NO_INITIAL_POINT_MESSAGE = "No initial point was found.";
+    private static final String MULTIPLE_INITIAL_POINT_MESSAGE = "Initial point is not singular.";
+    private static final String NO_TARGET_MESSAGE = "No target was found.";
+    private static final String UNEQUAL_BOX_AND_TARGET_MESSAGE = "Boxes and targets quantity is not equal.";
 
     /**
-     * To string.
-     *
-     * @return the string
+     * Returns the base error message saying the level is not valid. Sub-classes
+     * will include this message at the start of their own and more specific
+     * message.
      */
     @Override
     public String toString() {
@@ -38,96 +27,68 @@ public class LevelNotValidException extends Exception {
     }
 
     /**
-     * The Class UncorrectPositionException.
+     * The exception meaning that one or more positions are not in the correct range
+     * allowed by the grid.
      */
     public static class UncorrectPositionException extends LevelNotValidException {
 
-        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = 2049339700366934644L;
 
-        /**
-         * To string.
-         *
-         * @return the string
-         */
         @Override
-        public String toString() {
+        public final String toString() {
             return super.toString() + UNCORRECT_POSITION_MESSAGE;
         }
     }
 
     /**
-     * The Class NoInitialPointException.
+     * The exception meaning no initial position of the user was found.
      */
     public static class NoInitialPointException extends LevelNotValidException {
 
-        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = -1894510007823585149L;
 
-        /**
-         * To string.
-         *
-         * @return the string
-         */
         @Override
-        public String toString() {
+        public final String toString() {
             return super.toString() + NO_INITIAL_POINT_MESSAGE;
         }
     }
 
     /**
-     * The Class MultipleInitialPointException.
+     * The exception meaning that more than one initial position of the user were
+     * found.
      */
     public static class MultipleInitialPointException extends LevelNotValidException {
 
-        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = -3154665343553697380L;
 
-        /**
-         * To string.
-         *
-         * @return the string
-         */
         @Override
-        public String toString() {
+        public final String toString() {
             return super.toString() + MULTIPLE_INITIAL_POINT_MESSAGE;
         }
     }
 
     /**
-     * The Class NoTargetException.
+     * The Exception meaning no target was found.
      */
     public static class NoTargetException extends LevelNotValidException {
 
-        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = 3081257022270340114L;
 
-        /**
-         * To string.
-         *
-         * @return the string
-         */
         @Override
-        public String toString() {
+        public final String toString() {
             return super.toString() + NO_TARGET_MESSAGE;
         }
     }
 
     /**
-     * The Class UnequalBoxAndTargetNumberException.
+     * The Exception meaning boxes and targets are not in equal number.
      */
     public static class UnequalBoxAndTargetNumberException extends LevelNotValidException {
 
-        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = -594628595864277803L;
 
-        /**
-         * To string.
-         *
-         * @return the string
-         */
         @Override
-        public String toString() {
+        public final String toString() {
             return super.toString() + UNEQUAL_BOX_AND_TARGET_MESSAGE;
         }
     }
