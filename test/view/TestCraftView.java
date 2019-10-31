@@ -1,5 +1,8 @@
 package view;
 
+import view.craft.CraftWindow;
+import view.craft.CraftWindowImpl;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class TestCraftView.

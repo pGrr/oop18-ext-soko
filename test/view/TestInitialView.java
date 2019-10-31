@@ -1,5 +1,8 @@
 package view;
 
+import view.initial.InitialWindow;
+import view.initial.InitialWindowImpl;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class TestInitialView.

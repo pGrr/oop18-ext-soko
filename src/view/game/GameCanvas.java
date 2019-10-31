@@ -1,6 +1,6 @@
-package view;
+package view.game;
 
-import static view.GameConstants.TIMER_DELAY_MS;
+import static view.game.GameConstants.TIMER_DELAY_MS;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -24,7 +24,7 @@ import model.Model;
 import model.element.Element;
 import model.element.Position;
 import model.element.Type;
-import model.grid.Direction;
+import model.grid.MovementDirection;
 import model.grid.Grid;
 
 // TODO: Auto-generated Javadoc
@@ -153,13 +153,13 @@ public class GameCanvas extends JPanel {
             if (this.keyPressedCode != null) {
                 Integer key = keyPressedCode;
                 if (key.equals(KeyEvent.VK_DOWN) || key.equals(KeyEvent.VK_KP_DOWN)) {
-                    Controller.getInstance().getGameController().move(Direction.DOWN);
+                    Controller.getInstance().getGameController().move(MovementDirection.DOWN);
                 } else if (key.equals(KeyEvent.VK_UP) || key.equals(KeyEvent.VK_KP_UP)) {
-                    Controller.getInstance().getGameController().move(Direction.UP);
+                    Controller.getInstance().getGameController().move(MovementDirection.UP);
                 } else if (key.equals(KeyEvent.VK_LEFT) || key.equals(KeyEvent.VK_KP_LEFT)) {
-                    Controller.getInstance().getGameController().move(Direction.LEFT);
+                    Controller.getInstance().getGameController().move(MovementDirection.LEFT);
                 } else if (key.equals(KeyEvent.VK_RIGHT) || key.equals(KeyEvent.VK_KP_RIGHT)) {
-                    Controller.getInstance().getGameController().move(Direction.RIGHT);
+                    Controller.getInstance().getGameController().move(MovementDirection.RIGHT);
                 }
                 this.keyPressedCode = null;
             }

@@ -69,7 +69,7 @@ public interface Grid extends Serializable {
      * @param direction the direction of the movement
      * @return true, if the movement succeeded
      */
-    boolean moveAttempt(Element element, Direction direction);
+    boolean moveAttempt(Element element, MovementDirection direction);
 
     /**
      * The grid hash code is computed on grid elements.

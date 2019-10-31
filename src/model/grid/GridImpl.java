@@ -85,7 +85,7 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public final boolean moveAttempt(final Element element, final Direction direction) {
+    public final boolean moveAttempt(final Element element, final MovementDirection direction) {
         boolean success = false;
         if (element.getType().equals(Type.USER) || element.getType().equals(Type.BOX)) {
             Position newPosition = direction.computeTargetPosition(element.getPosition());

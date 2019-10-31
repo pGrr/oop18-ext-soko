@@ -1,7 +1,4 @@
-package view;
-
-import static view.CraftConstants.*;
-import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
+package view.craft;
 
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -17,7 +14,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 import model.element.Element;
 import model.element.ElementImpl;
 import model.element.Position;
@@ -25,31 +21,32 @@ import model.element.PositionImpl;
 import model.element.Type;
 import model.grid.Grid;
 import model.level.Level;
+import view.game.TypeImage;
 
-// TODO: Auto-generated Javadoc
+import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
+
 /**
- * The Class CraftGrid.
+ * The class responsible for the button grid of the {@link CraftWindowImpl}
+ * window.
  */
 public class CraftGrid {
 
-    /** The level grid. */
+    private static final String PANEL_GRID_TITLE = "Level grid";
+    private static final double GRIDBUTTON_RELATIVE_ICON_WIDTH = 0.5;
+    private static final double GRIDBUTTON_RELATIVE_ICON_HEIGHT = 0.7;
+
+    private final CraftWindowImpl owner;
+    private final Map<Type, Icon> resizedIcons;
+    private final List<List<JButton>> buttonGrid;
     private Grid levelGrid;
 
-    /** The owner. */
-    private final CraftWindowImpl owner;
-
-    /** The button grid. */
-    private final List<List<JButton>> buttonGrid;
-
-    /** The resized icons. */
-    private final Map<Type, Icon> resizedIcons;
-
     /**
-     * Instantiates a new craft grid.
+     * Instantiates a new craft grid object.
      *
-     * @param owner the owner
+     * @param owner the {@link CraftWindowImpl} object which creates and contains
+     *              this object
      */
-    public CraftGrid(CraftWindowImpl owner) {
+    public CraftGrid(final CraftWindowImpl owner) {
         this.owner = owner;
         this.levelGrid = Grid.createEmpty();
         this.buttonGrid = createButtonGrid();
@@ -57,19 +54,43 @@ public class CraftGrid {
     }
 
     /**
-     * Sets the level.
+     * Gets the {@link Grid} object representing the button grid in its current
+     * state as it has been edited by the user.
      *
-     * @param level the new level
+     * @return the {@link Grid} object
      */
-    public void setLevel(Level level) {
+    public Grid getGrid() {
+        return this.levelGrid;
+    }
+
+    /**
+     * Sets the current state of this object to represent the given level's
+     * {@link Grid}. It is used when a level is loaded by the user.
+     *
+     * @param level the level to be loaded
+     */
+    public void setLevel(final Level level) {
         this.levelGrid = level.getGrid();
         updateButtonGrid();
     }
 
     /**
-     * Creates the panel.
+     * Resets the current state of this object to the initial empty-grid state. It
+     * is the action listener of the "reset" button.
      *
-     * @return the j panel
+     * @return the reset button action listener
+     */
+    public ActionListener resetButtonActionListener() {
+        return e -> SwingUtilities.invokeLater(() -> {
+            this.levelGrid.clear();
+            updateButtonGrid();
+        });
+    }
+
+    /**
+     * Creates the panel containing the empty squared button-grid.
+     *
+     * @return the created JPanel
      */
     public final JPanel createPanel() {
         JPanel panel = new JPanel(new GridLayout(Grid.N_ROWS, Grid.N_ROWS));
@@ -82,18 +103,27 @@ public class CraftGrid {
     }
 
     /**
-     * Gets the grid.
-     *
-     * @return the grid
+     * Creates the resized icons images in order to not re-create them at every use.
+     * Since the icon size is relative to the button size which is relative to the
+     * window size, the icons dimensions are known only when the Window is set
+     * visible. Thus, this must be public as it must be called from
+     * {@link CraftWindowImpl} in its show method.
+     * 
+     * @return a {@link Map} which link every {@link Type} with its own resized
+     *         {@link Icon}
      */
-    public Grid getGrid() {
-        return this.levelGrid;
+    public Map<Type, Icon> createResizedIcons() {
+        int w = (int) Math.round(this.buttonGrid.get(0).get(0).getWidth() * GRIDBUTTON_RELATIVE_ICON_WIDTH);
+        int h = (int) Math.round(this.buttonGrid.get(0).get(0).getHeight() * GRIDBUTTON_RELATIVE_ICON_HEIGHT);
+        for (TypeImage typeImage : TypeImage.values()) {
+            this.resizedIcons.put(typeImage.getType(),
+                    new ImageIcon(typeImage.getImage().getScaledInstance(w, h, Image.SCALE_DEFAULT)));
+        }
+        return this.resizedIcons;
     }
 
     /**
      * Creates the button grid.
-     *
-     * @return the list
      */
     private List<List<JButton>> createButtonGrid() {
         List<List<JButton>> grid = new ArrayList<>();
@@ -107,29 +137,14 @@ public class CraftGrid {
     }
 
     /**
-     * Creates the resized icons.
-     *
-     * @return the map
-     */
-    public Map<Type, Icon> createResizedIcons() {
-        int w = (int) Math.round(this.buttonGrid.get(0).get(0).getWidth() * GRIDBUTTON_RELATIVE_ICON_WIDTH);
-        int h = (int) Math.round(this.buttonGrid.get(0).get(0).getHeight() * GRIDBUTTON_RELATIVE_ICON_HEIGHT);
-        for (TypeImage typeImage : TypeImage.values()) {
-            this.resizedIcons.put(typeImage.getType(),
-                    new ImageIcon(typeImage.getImage().getScaledInstance(w, h, Image.SCALE_DEFAULT)));
-        }
-        return this.resizedIcons;
-    }
-
-    /**
-     * Reset button grid.
+     * Resets the button grid.
      */
     private void resetButtonGrid() {
         this.buttonGrid.stream().flatMap(List::stream).forEach(b -> b.setIcon(new ImageIcon()));
     }
 
     /**
-     * Update button grid.
+     * Updates the button grid to mirror the level grid state.
      */
     private void updateButtonGrid() {
         resetButtonGrid();
@@ -140,9 +155,13 @@ public class CraftGrid {
     }
 
     /**
-     * Grid button action listener.
-     *
-     * @return the action listener
+     * The action listener invoked when the user clicks on the button grid. It
+     * inserts the currently selected toggle button (representing a Type) in the
+     * level grid at that specific position and then updates the button grid to
+     * reflect the changes. If the selected position already contains the selected
+     * Type, it erases it making the position empty. If the selected position
+     * already contains a Type different from the selected one, the selected one
+     * substitutes the old one.
      */
     private ActionListener gridButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
@@ -164,24 +183,9 @@ public class CraftGrid {
     }
 
     /**
-     * Reset button action listener.
-     *
-     * @return the action listener
+     * Converts the button index into a position.
      */
-    public ActionListener resetButtonActionListener() {
-        return e -> SwingUtilities.invokeLater(() -> {
-            this.levelGrid.clear();
-            updateButtonGrid();
-        });
-    }
-
-    /**
-     * Find button position.
-     *
-     * @param button the button
-     * @return the position
-     */
-    private Position findButtonPosition(JButton button) {
+    private Position findButtonPosition(final JButton button) {
         for (List<JButton> row : this.buttonGrid) {
             for (JButton b : row) {
                 if (b == button) {

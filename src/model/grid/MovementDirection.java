@@ -7,15 +7,15 @@ import model.element.PositionImpl;
 /**
  * The directions of movement.
  */
-public enum Direction {
+public enum MovementDirection {
 
-    /** The up direction. */
+    /** The upwards movement direction. */
     UP(position -> new PositionImpl(position.getRowIndex() - 1, position.getColumnIndex())),
-    /** The down direction. */
+    /** The downwards movement direction. */
     DOWN(position -> new PositionImpl(position.getRowIndex() + 1, position.getColumnIndex())),
-    /** The left direction. */
+    /** The leftwards movement direction. */
     LEFT(position -> new PositionImpl(position.getRowIndex(), position.getColumnIndex() - 1)),
-    /** The right direction. */
+    /** The rightwards movement direction. */
     RIGHT(position -> new PositionImpl(position.getRowIndex(), position.getColumnIndex() + 1));
 
     /** The compute target position. */
@@ -28,7 +28,7 @@ public enum Direction {
      *                              computes the target position basing upon the
      *                              direction
      */
-    Direction(final Function<Position, Position> computeTargetPosition) {
+    MovementDirection(final Function<Position, Position> computeTargetPosition) {
         this.computeTargetPosition = computeTargetPosition;
     }
 

@@ -1,10 +1,12 @@
-package view;
+package view.initial;
+
+import view.Window;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface CraftWindow.
+ * The Interface InitialWindow.
  */
-public interface CraftWindow extends Window {
+public interface InitialWindow extends Window {
 
     /**
      * Show IO error dialog.
@@ -22,5 +24,7 @@ public interface CraftWindow extends Window {
      * @param cause the cause
      */
     void showLevelInvalidDialog(String cause);
+
+    void updateListModel();
 
 }

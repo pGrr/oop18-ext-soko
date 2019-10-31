@@ -1,4 +1,4 @@
-package view;
+package view.initial;
 
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
@@ -7,9 +7,11 @@ import javax.swing.JPanel;
 import model.Model;
 import model.level.Level;
 import model.sequence.LevelSequence;
+import view.GuiComponentFactory;
+import view.WindowAbstract;
 
 import static view.GuiComponentFactoryImpl.*;
-import static view.InitialConstants.*;
+import static view.initial.InitialConstants.*;
 
 // TODO: Auto-generated Javadoc
 /**

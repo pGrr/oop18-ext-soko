@@ -1,6 +1,6 @@
 package view;
 
-import static view.GameConstants.*;
+import static view.game.GameConstants.*;
 
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;

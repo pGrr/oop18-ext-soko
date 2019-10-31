@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import controller.Controller;
 import model.Model;
-import model.grid.Direction;
+import model.grid.MovementDirection;
 import model.level.Level;
 import model.sequence.LevelSequence;
 import model.sequence.LevelSequenceImpl;
@@ -58,7 +58,7 @@ public final class GameControllerSingleton implements GameController {
     }
 
     @Override
-    public void move(final Direction direction) {
+    public void move(final MovementDirection direction) {
         Model.getInstance().getCurrentState().getCurrentLevel().getUser().move(direction);
         checkLevelFinished();
     }

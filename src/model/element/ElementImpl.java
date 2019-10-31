@@ -2,7 +2,7 @@ package model.element;
 
 import java.util.Objects;
 
-import model.grid.Direction;
+import model.grid.MovementDirection;
 import model.grid.Grid;
 import view.View;
 
@@ -52,7 +52,7 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public final void move(final Direction direction) {
+    public final void move(final MovementDirection direction) {
         if (isTypeMovable()) {
             boolean hasMoved = this.grid.moveAttempt(this, direction);
             if (hasMoved) {

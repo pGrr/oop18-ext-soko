@@ -1,28 +1,33 @@
-package view;
+package view.craft;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
+import view.GuiComponentFactory;
+import view.WindowAbstract;
 
-import static view.CraftConstants.*;
-import static view.GuiComponentFactoryImpl.*;
+import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
+import static view.craft.CraftConstants.DIALOG_ERROR_TITLE;
+import static view.craft.CraftConstants.DIALOG_IOERROR_TEXT;
+import static view.craft.CraftConstants.DIALOG_FILE_CORRUPTED_TEXT;
+import static view.craft.CraftConstants.DIALOG_LEVEL_NOT_CORRECT_TEXT;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class CraftWindowImpl.
+ * An implementation for the {@link CraftWindow} interface. It is composed by a
+ * {@link CraftGrid}, a {@link CraftSelection} and a {@link CraftOptions} object
+ * which are responsible for specific responsibilities.
  */
 public final class CraftWindowImpl extends WindowAbstract implements CraftWindow {
 
-    /** The grid. */
+    private static final String TITLE = "SOKOBAN - Craft your level";
+    private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
+    private static final double WIDTH_TO_HEIGHT_RATIO = 1;
+
     private final CraftGrid grid;
-
-    /** The selection. */
     private final CraftSelection selection;
-
-    /** The options. */
     private final CraftOptions options;
 
     /**
-     * Instantiates a new craft window impl.
+     * Instantiates a new CraftWindowImpl object with an initially empty grid.
      */
     public CraftWindowImpl() {
         super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
@@ -32,11 +37,6 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
         this.getFrame().add(createMainPanel());
     }
 
-    /**
-     * Creates the main panel.
-     *
-     * @return the j panel
-     */
     @Override
     protected JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -47,62 +47,49 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
         return mainPanel;
     }
 
-    /**
-     * Show.
-     */
     @Override
     public void show() {
         this.getFrame().setVisible(true);
         this.grid.createResizedIcons();
     }
 
-    /**
-     * Show IO error dialog.
-     */
     @Override
     public void showIOErrorDialog() {
         GuiComponentFactory.getDefaultInstance()
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
-        ;
     }
 
-    /**
-     * Show class not found error dialog.
-     */
     @Override
     public void showClassNotFoundErrorDialog() {
         GuiComponentFactory.getDefaultInstance()
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_FILE_CORRUPTED_TEXT).setVisible(true);
     }
 
-    /**
-     * Show level invalid dialog.
-     *
-     * @param cause the cause
-     */
     @Override
-    public void showLevelInvalidDialog(String cause) {
+    public void showLevelInvalidDialog(final String cause) {
         GuiComponentFactory.getDefaultInstance()
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + " " + cause)
                 .setVisible(true);
     }
 
     /**
-     * Gets the grid.
+     * Gets the reference to the {@link CraftGrid} object. It has package-private
+     * visibility as it is used by the other objects of the {@link view.craft}
+     * package.
      *
-     * @return the grid
+     * @return the {@link CraftGrid} object
      */
-    protected CraftGrid getGrid() {
+    CraftGrid getGrid() {
         return this.grid;
     }
 
     /**
-     * Gets the selection.
-     *
-     * @return the selection
+     * Gets the reference to the {@link CraftSelection} object. It has package-private
+     * visibility as it is used by the other objects of the {@link view.craft}
+     * package.     *
+     * @return the {@link CraftSelection} object
      */
-    protected CraftSelection getSelection() {
+    CraftSelection getSelection() {
         return this.selection;
     }
-
 }

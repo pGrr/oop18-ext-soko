@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import view.craft.CraftWindow;
+import view.craft.CraftWindowImpl;
+import view.game.GameWindow;
+import view.game.GameWindowImpl;
+import view.initial.InitialWindow;
+import view.initial.InitialWindowImpl;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class ViewSingleton.

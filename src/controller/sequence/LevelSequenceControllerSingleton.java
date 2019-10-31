@@ -14,9 +14,9 @@ import view.GuiComponentFactory;
 import controller.Controller;
 
 import static controller.ControllerConstants.LEVEL_SEQUENCE_FILE_EXTENSION;
+import static view.initial.InitialConstants.DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT;
+import static view.initial.InitialConstants.DIALOG_ERROR_TITLE;
 import static controller.ControllerConstants.LEVEL_SEQUENCE_FILE_DESCRIPTION;
-import static view.InitialConstants.DIALOG_ERROR_TITLE;
-import static view.InitialConstants.DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT;
 
 /**
  * The default implementation of the {@link LevelSequenceController} interface.

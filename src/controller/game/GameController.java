@@ -2,7 +2,7 @@ package controller.game;
 
 import java.io.IOException;
 
-import model.grid.Direction;
+import model.grid.MovementDirection;
 
 /**
  * The Game controller, which is responsible for the operations necessary when
@@ -18,7 +18,7 @@ public interface GameController {
      *
      * @param direction the direction of the movement
      */
-    void move(Direction direction);
+    void move(MovementDirection direction);
 
     /**
      * Restarts the current level. Every movement performed since the beginning of

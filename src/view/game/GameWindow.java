@@ -1,8 +1,9 @@
-package view;
+package view.game;
 
 import java.io.File;
 
 import model.element.Element;
+import view.Window;
 
 // TODO: Auto-generated Javadoc
 /**

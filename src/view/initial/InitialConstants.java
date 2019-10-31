@@ -1,4 +1,4 @@
-package view;
+package view.initial;
 
 // TODO: Auto-generated Javadoc
 /**

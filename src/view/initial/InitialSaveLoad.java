@@ -1,7 +1,7 @@
-package view;
+package view.initial;
 
 import static view.GuiComponentFactoryImpl.*;
-import static view.InitialConstants.*;
+import static view.initial.InitialConstants.*;
 
 import java.awt.event.ActionListener;
 import java.io.File;

@@ -1,7 +1,4 @@
-package view;
-
-import static view.CraftConstants.*;
-import static view.GuiComponentFactoryImpl.*;
+package view.craft;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -11,35 +8,42 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
-
 import model.element.Type;
 
-// TODO: Auto-generated Javadoc
+import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
+import static view.craft.CraftConstants.ICON_USER;
+import static view.craft.CraftConstants.ICON_BOX;
+import static view.craft.CraftConstants.ICON_TARGET;
+import static view.craft.CraftConstants.ICON_WALL;
+
 /**
- * The Class CraftSelection.
+ * The class responsible for the {@link Type} selection in the
+ * {@link CraftWindowImpl} window, i.e. the toggle buttons.
  */
 public class CraftSelection {
 
-    /** The owner. */
-    private final CraftWindowImpl owner;
+    private static final String LABEL_WELCOME_TEXT = "Welcome! Click on a element to select it and then the cell's grid to mark them.";
+    private static final int TOGGLE_BUTTON_ICON_EDGE_SIZE_PX = 30;
 
-    /** The toggle buttons. */
+    private final CraftWindowImpl owner;
     private final Map<Type, JToggleButton> toggleButtons;
 
     /**
-     * Instantiates a new craft selection.
+     * Instantiates a new craft selection object.
      *
-     * @param owner the owner
+     * @param owner the {@link CraftWindowImpl} object which creates and contains
+     *              this object
      */
-    public CraftSelection(CraftWindowImpl owner) {
+    public CraftSelection(final CraftWindowImpl owner) {
         this.owner = owner;
         this.toggleButtons = createToggleButtonSelectionList();
     }
 
     /**
-     * Creates the panel.
+     * Creates the panel containing the toggle buttons for the {@link Type}
+     * selection.
      *
-     * @return the j panel
+     * @return the created JPanel
      */
     public JPanel createPanel() {
         JPanel upperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -70,9 +74,10 @@ public class CraftSelection {
     }
 
     /**
-     * Toggle button action listener.
+     * This is the action listener of toggle buttons. It set the clicked button as
+     * selected and all the others as non-selected.
      *
-     * @return the action listener
+     * @return the toggle buttons action listener
      */
     private ActionListener toggleButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
@@ -82,9 +87,11 @@ public class CraftSelection {
     }
 
     /**
-     * Creates the toggle button selection list.
+     * Creates the toggle buttons {@link Map} which links every {@link Type} with a
+     * {@link JToggleButton}.
      *
-     * @return the map
+     * @return the {@link Map} which links every {@link Type} with a
+     *         {@link JToggleButton}
      */
     private Map<Type, JToggleButton> createToggleButtonSelectionList() {
         Map<Type, JToggleButton> toggleButtons = new HashMap<>();
@@ -114,5 +121,4 @@ public class CraftSelection {
                                 toggleButtonActionListener()));
         return toggleButtons;
     }
-
 }

@@ -2,6 +2,10 @@ package view;
 
 import java.util.Collection;
 
+import view.craft.CraftWindow;
+import view.game.GameWindow;
+import view.initial.InitialWindow;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Interface View.

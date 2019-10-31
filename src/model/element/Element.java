@@ -2,7 +2,7 @@ package model.element;
 
 import java.io.Serializable;
 
-import model.grid.Direction;
+import model.grid.MovementDirection;
 
 /**
  * An element of the game, which has a type and a position.
@@ -42,7 +42,7 @@ public interface Element extends Serializable {
      *
      * @param direction the direction
      */
-    void move(Direction direction);
+    void move(MovementDirection direction);
 
     /**
      * The element hash code is computed on its position and type.

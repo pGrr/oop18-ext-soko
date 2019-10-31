@@ -1,4 +1,4 @@
-package view;
+package view.game;
 
 import java.awt.Image;
 import java.awt.event.ActionListener;
@@ -14,11 +14,13 @@ import model.element.Element;
 import model.element.Position;
 import model.element.PositionImpl;
 import model.grid.Grid;
+import view.GuiComponentFactory;
+import view.WindowAbstract;
 
-import static view.GameConstants.*;
-import static view.InitialConstants.DIALOG_ERROR_TITLE;
-import static view.InitialConstants.DIALOG_IOERROR_TEXT;
-import static view.InitialConstants.DIALOG_LEVEL_NOT_CORRECT_TEXT;
+import static view.game.GameConstants.*;
+import static view.initial.InitialConstants.DIALOG_ERROR_TITLE;
+import static view.initial.InitialConstants.DIALOG_IOERROR_TEXT;
+import static view.initial.InitialConstants.DIALOG_LEVEL_NOT_CORRECT_TEXT;
 
 // TODO: Auto-generated Javadoc
 /**

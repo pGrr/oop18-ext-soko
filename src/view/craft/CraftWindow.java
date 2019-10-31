@@ -1,10 +1,11 @@
-package view;
+package view.craft;
 
-// TODO: Auto-generated Javadoc
+import view.Window;
+
 /**
- * The Interface InitialWindow.
+ * The "Craft a level" window.
  */
-public interface InitialWindow extends Window {
+public interface CraftWindow extends Window {
 
     /**
      * Show IO error dialog.
@@ -19,10 +20,7 @@ public interface InitialWindow extends Window {
     /**
      * Show level invalid dialog.
      *
-     * @param cause the cause
+     * @param cause the message of the {@link LevelNotValidException}
      */
     void showLevelInvalidDialog(String cause);
-
-    void updateListModel();
-
 }

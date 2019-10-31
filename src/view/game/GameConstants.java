@@ -1,4 +1,4 @@
-package view;
+package view.game;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -1,9 +1,6 @@
-package view;
+package view.craft;
 
-import static view.CraftConstants.*;
-import static view.GuiComponentFactoryImpl.*;
-
-import java.awt.*;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.swing.JFileChooser;
@@ -13,29 +10,42 @@ import controller.Controller;
 import model.level.Level;
 import model.level.LevelImpl;
 import model.level.LevelNotValidException;
+import view.View;
 
-// TODO: Auto-generated Javadoc
+import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
+
 /**
- * The Class CraftOptions.
+ * The class responsible for the options of the {@link CraftWindowImpl} window,
+ * i.e. save, load, reset and go back to initial view.
  */
 public class CraftOptions {
 
-    /** The owner. */
+    private static final String PANEL_OPTIONS_TITLE = "Edit level options";
+    private static final String BUTTON_SAVE_TEXT = "SAVE";
+    private static final String BUTTON_LOAD_TEXT = "LOAD";
+    private static final String BUTTON_RESET_TEXT = "RESET";
+    private static final String BUTTON_BACK_TEXT = "BACK";
+    private static final String ICON_SAVE = "icons/download.png";
+    private static final String ICON_LOAD = "icons/upload.png";
+    private static final String ICON_CANCEL = "icons/cross.png";
+    private static final String ICON_BACK = "icons/back.png";
+
     private final CraftWindowImpl owner;
 
     /**
-     * Instantiates a new craft options.
+     * Instantiates a new craft options object.
      *
-     * @param owner the owner
+     * @param owner the {@link CraftWindowImpl} object which creates and contains
+     *              this object
      */
-    public CraftOptions(CraftWindowImpl owner) {
+    public CraftOptions(final CraftWindowImpl owner) {
         this.owner = owner;
     }
 
     /**
-     * Creates the panel.
+     * Creates the panel containing the options buttons.
      *
-     * @return the j panel
+     * @return the created JPanel
      */
     public JPanel createPanel() {
         JPanel choicesPanel = new JPanel(new GridLayout(1, 4, DEFAULT_PADDING, DEFAULT_PADDING));
@@ -53,9 +63,11 @@ public class CraftOptions {
     }
 
     /**
-     * Save button action listener.
-     *
-     * @return the action listener
+     * This is the action listener of the save button. It does the following: 1) It
+     * gets the {@link Grid} object representing the current state of the edited
+     * grid from the {@link CraftGrid} object 2) it shows a save file-chooser dialog
+     * asking the user to input a target file 3) it creates a new Level with the
+     * file name as level name and the created grid object as its grid.
      */
     private ActionListener saveButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
@@ -83,9 +95,13 @@ public class CraftOptions {
     }
 
     /**
-     * Load button action listener.
+     * This is the action listener of the load button. It does the following: 1) it
+     * shows an open file-chooser to ask the user to select a target file 2) it
+     * opens the target file using the controller 3) if the loading succeeded, it
+     * sets the loaded leve's grid as the current grid in the {@link CraftGrid}
+     * object.
      *
-     * @return the action listener
+     * @return the load button action listener
      */
     private ActionListener loadButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
@@ -111,9 +127,10 @@ public class CraftOptions {
     }
 
     /**
-     * Back button action listener.
+     * This is the action listener of the back button. It asks the controller to go
+     * back to the initial view.
      *
-     * @return the action listener
+     * @return the back button action listener
      */
     private ActionListener backButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {

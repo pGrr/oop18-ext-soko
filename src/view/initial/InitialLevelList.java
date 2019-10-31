@@ -1,10 +1,10 @@
 /*
  * 
  */
-package view;
+package view.initial;
 
 import static view.GuiComponentFactoryImpl.*;
-import static view.InitialConstants.*;
+import static view.initial.InitialConstants.*;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -32,6 +32,7 @@ import model.level.Level;
 import model.level.LevelNotValidException;
 import model.sequence.LevelSequence;
 import model.sequence.LevelSequenceImpl;
+import view.GuiComponentFactory;
 
 // TODO: Auto-generated Javadoc
 /**
