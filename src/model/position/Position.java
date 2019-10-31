@@ -2,9 +2,8 @@ package model.position;
 
 import java.io.Serializable;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface Position.
+ * The Position in the grid-like world, expressed as row index and column index.
  */
 public interface Position extends Serializable {
 
@@ -23,20 +22,19 @@ public interface Position extends Serializable {
     int getColumnIndex();
 
     /**
-     * Equals.
+     * Two positions are equal if their row index and column index are equals.
      *
-     * @param obj the obj
+     * @param obj the object to be compared
      * @return true, if successful
      */
-    @Override
-    public boolean equals(Object obj);
+    @Override 
+    boolean equals(Object obj);
 
     /**
-     * Hash code.
+     * The hash code of a position is computed on its row and column indexes.
      *
-     * @return the int
+     * @return the computed hash code
      */
-    @Override
-    public int hashCode();
-
+    @Override 
+    int hashCode();
 }
