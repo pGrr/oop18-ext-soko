@@ -88,7 +88,7 @@ public class GridImpl implements Grid {
     public final boolean moveAttempt(final Element element, final Direction direction) {
         boolean success = false;
         if (element.getType().equals(Type.USER) || element.getType().equals(Type.BOX)) {
-            Position newPosition = findNewPosition(element.getPosition(), direction);
+            Position newPosition = direction.computeTargetPosition(element.getPosition());
             if (Integer.max(newPosition.getRowIndex(), newPosition.getColumnIndex()) < N_ROWS
                     && Integer.min(newPosition.getRowIndex(), newPosition.getColumnIndex()) >= 0) {
                 Collection<Element> obstacles = getElementsAt(newPosition);
@@ -136,24 +136,5 @@ public class GridImpl implements Grid {
     @Override
     public final String toString() {
         return "GridImpl [elements=" + elements + "]";
-    }
-
-    /*
-     * Given an initial position and the direction of the movement, returns the
-     * target position
-     */
-    private Position findNewPosition(final Position position, final Direction direction) {
-        int r = position.getRowIndex();
-        int c = position.getColumnIndex();
-        if (direction.equals(Direction.UP)) {
-            r -= 1;
-        } else if (direction.equals(Direction.DOWN)) {
-            r += 1;
-        } else if (direction.equals(Direction.LEFT)) {
-            c -= 1;
-        } else if (direction.equals(Direction.RIGHT)) {
-            c += 1;
-        }
-        return new PositionImpl(r, c);
     }
 }
