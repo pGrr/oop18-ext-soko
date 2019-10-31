@@ -11,7 +11,7 @@ import model.sequence.LevelSequences;
 import view.View;
 
 /**
- * The implementation class for the Controller interface, it implements the
+ * The implementation class for the {@link Controller} interface, it implements the
  * Singleton design pattern.
  */
 public final class ControllerSingleton implements Controller {

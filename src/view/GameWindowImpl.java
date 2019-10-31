@@ -11,9 +11,9 @@ import javax.swing.*;
 import controller.*;
 import model.*;
 import model.element.Element;
+import model.element.Position;
+import model.element.PositionImpl;
 import model.grid.Grid;
-import model.position.Position;
-import model.position.PositionImpl;
 
 import static view.GameConstants.*;
 import static view.InitialConstants.DIALOG_ERROR_TITLE;
@@ -33,7 +33,7 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
      * Instantiates a new game window impl.
      */
     public GameWindowImpl() {
-        super(Model.getInstance().getCurrentLevelSequence().getClass().getName(), HEIGHT_TO_SCREENSIZE_RATIO,
+        super(Model.getInstance().getCurrentState().getClass().getName(), HEIGHT_TO_SCREENSIZE_RATIO,
                 WIDTH_TO_HEIGHT_RATIO);
         this.getFrame().setJMenuBar(createMenuBar());
         this.canvas = new GameCanvas(this);
@@ -141,7 +141,7 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
 
     private ActionListener backToInitialView() {
         return e -> {
-            Model.getInstance().setCurrentLevelSequence(Model.getInstance().getCurrentLevelSequenceInitialState());
+            Model.getInstance().setCurrentLevelSequence(Model.getInstance().getInitialState());
             Controller.getInstance().getNavigationController().toInitialView();
         };
     }

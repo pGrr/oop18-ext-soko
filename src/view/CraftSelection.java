@@ -11,7 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
-import model.Type;
+
+import model.element.Type;
 
 // TODO: Auto-generated Javadoc
 /**

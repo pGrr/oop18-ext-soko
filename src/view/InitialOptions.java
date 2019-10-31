@@ -65,7 +65,7 @@ public class InitialOptions {
     public ActionListener playAction() {
         return e -> SwingUtilities.invokeLater(() -> {
             Controller.getInstance().getLevelSequenceController()
-                    .startLevelSequence(Model.getInstance().getCurrentLevelSequence());
+                    .startLevelSequence(Model.getInstance().getCurrentState());
         });
     }
 }

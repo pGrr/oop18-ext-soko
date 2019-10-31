@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
-import model.Type;
 import model.element.Element;
+import model.element.Type;
 import model.grid.Grid;
 
 /**

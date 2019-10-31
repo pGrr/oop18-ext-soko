@@ -1,66 +1,47 @@
 package model;
 
-import java.util.ArrayList;
-
 import model.sequence.LevelSequence;
 import model.sequence.LevelSequenceImpl;
 import model.sequence.LevelSequences;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ModelSingleton.
+ * The implementation class for the {@link Model} interface. Implements the
+ * Singleton design pattern.
  */
-public class ModelSingleton implements Model {
+public final class ModelSingleton implements Model {
 
-    /** The singleton. */
-    private static Model SINGLETON;
+    private static Model singleton;
 
-    /** The level sequence. */
-    private LevelSequence levelSequenceCurrentState;
-    
-    private LevelSequence levelSequenceInitialState;
+    private LevelSequence lsCurrentState;
+    private LevelSequence lsInitialState;
 
-    /**
-     * Instantiates a new model singleton.
-     */
     private ModelSingleton() {
-        this.levelSequenceCurrentState = new LevelSequenceImpl("");
-        this.levelSequenceInitialState = LevelSequences.createCopyOf(levelSequenceCurrentState);
+        this.lsCurrentState = new LevelSequenceImpl("");
+        this.lsInitialState = LevelSequences.createCopyOf(lsCurrentState);
     }
 
-    /**
-     * Gets the current level sequence.
-     *
-     * @return the current level sequence
-     */
     @Override
-    public LevelSequence getCurrentLevelSequence() {
-        if (levelSequenceCurrentState != null) {
-            return levelSequenceCurrentState;
+    public void setCurrentLevelSequence(final LevelSequence levelSequence) {
+        this.lsCurrentState = levelSequence;
+        this.lsInitialState = LevelSequences.createCopyOf(lsCurrentState);
+    }
+
+    @Override
+    public LevelSequence getCurrentState() {
+        if (lsCurrentState != null) {
+            return lsCurrentState;
         } else {
             throw new IllegalArgumentException();
         }
     }
 
     @Override
-    public LevelSequence getCurrentLevelSequenceInitialState() {
-        if (levelSequenceInitialState != null) {
-            return levelSequenceInitialState;
+    public LevelSequence getInitialState() {
+        if (lsInitialState != null) {
+            return lsInitialState;
         } else {
             throw new IllegalArgumentException();
         }
-    }
-
-    
-    /**
-     * Sets the current level sequence.
-     *
-     * @param levelSequence the new current level sequence
-     */
-    @Override
-    public void setCurrentLevelSequence(LevelSequence levelSequence) {
-        this.levelSequenceCurrentState = levelSequence;
-        this.levelSequenceInitialState = LevelSequences.createCopyOf(levelSequenceCurrentState);
     }
 
     /**
@@ -69,10 +50,9 @@ public class ModelSingleton implements Model {
      * @return single instance of ModelSingleton
      */
     public static Model getInstance() {
-        if (SINGLETON == null) {
-            SINGLETON = new ModelSingleton();
+        if (singleton == null) {
+            singleton = new ModelSingleton();
         }
-        return SINGLETON;
+        return singleton;
     }
-
 }

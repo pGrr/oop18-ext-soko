@@ -2,10 +2,8 @@ package model.element;
 
 import java.util.Objects;
 
-import model.Direction;
-import model.Type;
+import model.grid.Direction;
 import model.grid.Grid;
-import model.position.Position;
 import view.View;
 
 /**

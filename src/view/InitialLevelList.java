@@ -87,7 +87,7 @@ public class InitialLevelList {
      * @return the level names
      */
     public final List<String> getLevelNames() {
-        return Model.getInstance().getCurrentLevelSequence().getAllLevels().stream().map(Level::getName)
+        return Model.getInstance().getCurrentState().getAllLevels().stream().map(Level::getName)
                 .collect(Collectors.toList());
     }
 
@@ -134,7 +134,7 @@ public class InitialLevelList {
      */
     public void updateListModel() {
         this.listModel.removeAllElements();
-        Model.getInstance().getCurrentLevelSequence().getAllLevels().stream().map(Level::getName)
+        Model.getInstance().getCurrentState().getAllLevels().stream().map(Level::getName)
                 .forEach(listModel::addElement);
     }
 
@@ -151,7 +151,7 @@ public class InitialLevelList {
             fc.showOpenDialog(this.owner.getFrame());
             String path = fc.getSelectedFile().getAbsolutePath();
             try {
-                Model.getInstance().getCurrentLevelSequence().add(Controller.getInstance().getLevelController().loadLevel(path));
+                Model.getInstance().getCurrentState().add(Controller.getInstance().getLevelController().loadLevel(path));
             } catch (ClassNotFoundException e1) {
                 this.owner.showClassNotFoundErrorDialog();
                 e1.printStackTrace();
@@ -176,7 +176,7 @@ public class InitialLevelList {
             int selectedIndex = this.levelList.getSelectedIndex();
             int newIndex = computeNewIndex.apply(selectedIndex);
             if (newIndex >= 0 && newIndex < this.listModel.getSize()) {
-                Model.getInstance().getCurrentLevelSequence().swap(selectedIndex, newIndex);
+                Model.getInstance().getCurrentState().swap(selectedIndex, newIndex);
                 updateListModel();
                 levelList.setSelectedIndex(newIndex);
             }
@@ -190,7 +190,7 @@ public class InitialLevelList {
      */
     private ActionListener removeSelected() {
         return e -> SwingUtilities.invokeLater(() -> {
-            Model.getInstance().getCurrentLevelSequence().remove(this.levelList.getSelectedIndex());
+            Model.getInstance().getCurrentState().remove(this.levelList.getSelectedIndex());
             updateListModel();
         });
     }
@@ -202,7 +202,7 @@ public class InitialLevelList {
      */
     private ActionListener removeAll() {
         return e -> SwingUtilities.invokeLater(() -> {
-            Model.getInstance().getCurrentLevelSequence().clear();
+            Model.getInstance().getCurrentState().clear();
             updateListModel();
         });
     }

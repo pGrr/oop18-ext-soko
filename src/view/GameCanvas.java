@@ -20,12 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import controller.Controller;
-import model.Direction;
 import model.Model;
-import model.Type;
 import model.element.Element;
+import model.element.Position;
+import model.element.Type;
+import model.grid.Direction;
 import model.grid.Grid;
-import model.position.Position;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -80,7 +80,7 @@ public class GameCanvas extends JPanel {
     protected void paintComponent(final Graphics g) {
         super.paintComponent(g);
         this.graphics = g;
-        drawAllElements(Model.getInstance().getCurrentLevelSequence().getCurrentLevel().getGrid().getAllElements());
+        drawAllElements(Model.getInstance().getCurrentState().getCurrentLevel().getGrid().getAllElements());
     }
 
     /**
@@ -101,7 +101,7 @@ public class GameCanvas extends JPanel {
      * @param elements the elements
      */
     public void drawAllElements(final Collection<Element> elements) {
-        Collection<Position> boxesOnTargetPositions = Model.getInstance().getCurrentLevelSequence().getCurrentLevel()
+        Collection<Position> boxesOnTargetPositions = Model.getInstance().getCurrentState().getCurrentLevel()
                 .getGrid().getBoxesOnTarget().stream().map(b -> b.getPosition()).collect(Collectors.toList());
         for (Element element : elements) {
             Position pos = this.owner.convertRelativeToAbsolute(element.getPosition());

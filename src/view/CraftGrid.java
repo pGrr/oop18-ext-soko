@@ -18,13 +18,13 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import model.Type;
 import model.element.Element;
 import model.element.ElementImpl;
+import model.element.Position;
+import model.element.PositionImpl;
+import model.element.Type;
 import model.grid.Grid;
 import model.level.Level;
-import model.position.Position;
-import model.position.PositionImpl;
 
 // TODO: Auto-generated Javadoc
 /**

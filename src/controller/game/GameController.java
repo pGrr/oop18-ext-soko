@@ -2,7 +2,7 @@ package controller.game;
 
 import java.io.IOException;
 
-import model.Direction;
+import model.grid.Direction;
 
 /**
  * The Game controller, which is responsible for the operations necessary when

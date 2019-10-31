@@ -6,9 +6,9 @@ import controller.navigation.NavigationController;
 import controller.sequence.LevelSequenceController;
 
 /**
- * The main controller interface, it is the entry point for the View and the
- * model. It is responsible to start the application and to get a reference to
- * more specific controllers.
+ * The main controller interface, it is the entry point to get any controller
+ * function. It is responsible to start the application and to get a reference
+ * to more specific controllers.
  */
 public interface Controller {
 

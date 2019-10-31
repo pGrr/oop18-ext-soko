@@ -2,18 +2,11 @@ package model;
 
 import model.sequence.LevelSequence;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface Model.
+ * The main model interface, it contains a reference to the current level
+ * sequence, which is the entry point to get any model function.
  */
 public interface Model {
-
-    /**
-     * Gets the current level sequence.
-     *
-     * @return the current level sequence
-     */
-    LevelSequence getCurrentLevelSequence();
 
     /**
      * Sets the current level sequence.
@@ -23,6 +16,20 @@ public interface Model {
     void setCurrentLevelSequence(LevelSequence levelSequence);
 
     /**
+     * Gets the current level sequence in its current state.
+     *
+     * @return the current level sequence
+     */
+    LevelSequence getCurrentState();
+
+    /**
+     * Gets the current level sequence in its initial state.
+     *
+     * @return the current level sequence in its initial state
+     */
+    LevelSequence getInitialState();
+
+    /**
      * Gets the single instance of Model.
      *
      * @return single instance of Model
@@ -30,7 +37,4 @@ public interface Model {
     static Model getInstance() {
         return ModelSingleton.getInstance();
     }
-
-    LevelSequence getCurrentLevelSequenceInitialState();
-
 }

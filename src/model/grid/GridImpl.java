@@ -8,12 +8,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import model.Direction;
-import model.Type;
 import model.element.Element;
 import model.element.ElementImpl;
-import model.position.Position;
-import model.position.PositionImpl;
+import model.element.Position;
+import model.element.PositionImpl;
+import model.element.Type;
 
 /**
  * An implementation class for the {@link Grid} interface.

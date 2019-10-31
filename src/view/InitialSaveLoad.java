@@ -70,7 +70,7 @@ public class InitialSaveLoad {
                 String name = fc.getSelectedFile().getName();
                 if (name != null && !name.isEmpty()) {
                     LevelSequence levelSequence = new LevelSequenceImpl(name,
-                            Model.getInstance().getCurrentLevelSequence().getAllLevels());
+                            Model.getInstance().getCurrentState().getAllLevels());
                     try {
                         Controller.getInstance().getLevelSequenceController().saveLevelSequence(levelSequence,
                                 fc.getSelectedFile().getAbsolutePath() + fileExtension);

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import controller.Controller;
-import model.Direction;
 import model.Model;
+import model.grid.Direction;
 import model.level.Level;
 import model.sequence.LevelSequence;
 import model.sequence.LevelSequenceImpl;
@@ -37,14 +37,14 @@ public final class GameControllerSingleton implements GameController {
 
     @Override
     public void restartCurrentLevel() {
-        Model.getInstance().getCurrentLevelSequence().restartCurrentLevel();
+        Model.getInstance().getCurrentState().restartCurrentLevel();
         Controller.getInstance().getNavigationController()
-                .toGameLevelView(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
+                .toGameLevelView(Model.getInstance().getCurrentState().getCurrentLevel());
     }
 
     @Override
     public void saveGame(final String path) throws IOException {
-        LevelSequence levelSequence = Model.getInstance().getCurrentLevelSequence();
+        LevelSequence levelSequence = Model.getInstance().getCurrentState();
         List<Level> levels = new ArrayList<>();
         levels.add(levelSequence.getCurrentLevel());
 
@@ -59,15 +59,15 @@ public final class GameControllerSingleton implements GameController {
 
     @Override
     public void move(final Direction direction) {
-        Model.getInstance().getCurrentLevelSequence().getCurrentLevel().getUser().move(direction);
+        Model.getInstance().getCurrentState().getCurrentLevel().getUser().move(direction);
         checkLevelFinished();
     }
 
     @Override
     public void levelFinishedAccepted() {
-        Model.getInstance().getCurrentLevelSequence().setNextLevelAsCurrent();
+        Model.getInstance().getCurrentState().setNextLevelAsCurrent();
         Controller.getInstance().getNavigationController()
-                .toGameLevelView(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
+                .toGameLevelView(Model.getInstance().getCurrentState().getCurrentLevel());
     }
 
     @Override
@@ -81,8 +81,8 @@ public final class GameControllerSingleton implements GameController {
      * last level in the sequence is finished it shows the game finished dialog.
      */
     private void checkLevelFinished() {
-        if (Model.getInstance().getCurrentLevelSequence().getCurrentLevel().isFinished()) {
-            if (Model.getInstance().getCurrentLevelSequence().hasNextLevel()) {
+        if (Model.getInstance().getCurrentState().getCurrentLevel().isFinished()) {
+            if (Model.getInstance().getCurrentState().hasNextLevel()) {
                 View.getInstance().getGameWindow().showLevelFinishedDialog();
             } else {
                 View.getInstance().getGameWindow().showGameFinishedDialog();

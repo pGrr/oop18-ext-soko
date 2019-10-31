@@ -2,7 +2,8 @@ package view;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import model.Type;
+
+import model.element.Type;
 
 // TODO: Auto-generated Javadoc
 /**

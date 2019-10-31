@@ -3,9 +3,8 @@ package model.grid;
 import java.io.Serializable; 
 import java.util.Collection;
 
-import model.Direction;
 import model.element.Element;
-import model.position.Position;
+import model.element.Position;
 
 /**
  * The squared-grid-world in which the elements are.
