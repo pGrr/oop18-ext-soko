@@ -1,6 +1,10 @@
-package model;
+package model.element;
 
 import java.io.Serializable;
+
+import model.Direction;
+import model.Type;
+import model.position.Position;
 
 /**
  * An element of the game, which has a type and a position.

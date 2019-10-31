@@ -15,10 +15,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import controller.Controller;
-import model.Level;
-import model.LevelSequence;
-import model.LevelSequenceImpl;
 import model.Model;
+import model.level.Level;
+import model.sequence.LevelSequence;
+import model.sequence.LevelSequenceImpl;
 
 // TODO: Auto-generated Javadoc
 /**

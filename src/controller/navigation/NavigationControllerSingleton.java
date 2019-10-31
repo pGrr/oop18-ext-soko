@@ -1,6 +1,6 @@
 package controller.navigation;
 
-import model.Level;
+import model.level.Level;
 import view.View;
 
 /**

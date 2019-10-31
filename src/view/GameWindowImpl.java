@@ -10,6 +10,10 @@ import java.util.Map;
 import javax.swing.*;
 import controller.*;
 import model.*;
+import model.element.Element;
+import model.grid.Grid;
+import model.position.Position;
+import model.position.PositionImpl;
 
 import static view.GameConstants.*;
 import static view.InitialConstants.DIALOG_ERROR_TITLE;

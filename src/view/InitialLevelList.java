@@ -27,11 +27,11 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import controller.Controller;
-import model.Level;
-import model.LevelNotValidException;
-import model.LevelSequence;
-import model.LevelSequenceImpl;
 import model.Model;
+import model.level.Level;
+import model.level.LevelNotValidException;
+import model.sequence.LevelSequence;
+import model.sequence.LevelSequenceImpl;
 
 // TODO: Auto-generated Javadoc
 /**

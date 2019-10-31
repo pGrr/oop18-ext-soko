@@ -17,13 +17,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import model.Grid;
-import model.Level;
-import model.Position;
-import model.PositionImpl;
+
 import model.Type;
-import model.Element;
-import model.ElementImpl;
+import model.element.Element;
+import model.element.ElementImpl;
+import model.grid.Grid;
+import model.level.Level;
+import model.position.Position;
+import model.position.PositionImpl;
 
 // TODO: Auto-generated Javadoc
 /**

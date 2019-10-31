@@ -5,8 +5,9 @@ import controller.game.GameController;
 import controller.level.LevelController;
 import controller.navigation.NavigationController;
 import controller.sequence.LevelSequenceController;
-import model.LevelSequence;
 import model.Model;
+import model.sequence.LevelSequence;
+import model.sequence.LevelSequences;
 import view.View;
 
 /**
@@ -43,7 +44,7 @@ public final class ControllerSingleton implements Controller {
     @Override
     public void startApplication() {
         View.getInstance().getInitialWindow().show();
-        Optional<LevelSequence> ls = LevelSequence.createDefault();
+        Optional<LevelSequence> ls = LevelSequences.createDefault();
         if (ls.isPresent()) {
             Model.getInstance().setCurrentLevelSequence(ls.get());
             View.getInstance().getInitialWindow().updateListModel();

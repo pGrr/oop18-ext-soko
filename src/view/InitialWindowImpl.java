@@ -4,9 +4,9 @@ import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import model.Level;
-import model.LevelSequence;
 import model.Model;
+import model.level.Level;
+import model.sequence.LevelSequence;
 
 import static view.GuiComponentFactoryImpl.*;
 import static view.InitialConstants.*;

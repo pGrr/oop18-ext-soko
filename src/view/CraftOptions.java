@@ -10,9 +10,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.Controller;
-import model.Level;
-import model.LevelImpl;
-import model.LevelNotValidException;
+import model.level.Level;
+import model.level.LevelImpl;
+import model.level.LevelNotValidException;
 
 // TODO: Auto-generated Javadoc
 /**

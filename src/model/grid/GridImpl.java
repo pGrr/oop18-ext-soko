@@ -1,4 +1,4 @@
-package model;
+package model.grid;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +7,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import model.Direction;
+import model.Type;
+import model.element.Element;
+import model.element.ElementImpl;
+import model.position.Position;
+import model.position.PositionImpl;
 
 /**
  * An implementation class for the {@link Grid} interface.

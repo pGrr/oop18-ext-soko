@@ -1,6 +1,9 @@
-package model;
+package model.level;
 
 import java.io.Serializable;
+
+import model.element.Element;
+import model.grid.Grid;
 
 /**
  * A Level of the game. Has a name and a grid, it can be validated and played.
@@ -29,7 +32,7 @@ public interface Level extends Serializable {
     Element getUser();
 
     /**
-     * Checks if the level is finished, e.g. all the boxes are on a target.
+     * Checks if the level is finished, i.e. all the boxes are on a target.
      *
      * @return true, if is finished
      */

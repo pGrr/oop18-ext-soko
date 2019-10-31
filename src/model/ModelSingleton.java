@@ -2,6 +2,10 @@ package model;
 
 import java.util.ArrayList;
 
+import model.sequence.LevelSequence;
+import model.sequence.LevelSequenceImpl;
+import model.sequence.LevelSequences;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class ModelSingleton.
@@ -21,7 +25,7 @@ public class ModelSingleton implements Model {
      */
     private ModelSingleton() {
         this.levelSequenceCurrentState = new LevelSequenceImpl("");
-        this.levelSequenceInitialState = LevelSequence.createCopyOf(levelSequenceCurrentState);
+        this.levelSequenceInitialState = LevelSequences.createCopyOf(levelSequenceCurrentState);
     }
 
     /**
@@ -56,7 +60,7 @@ public class ModelSingleton implements Model {
     @Override
     public void setCurrentLevelSequence(LevelSequence levelSequence) {
         this.levelSequenceCurrentState = levelSequence;
-        this.levelSequenceInitialState = LevelSequence.createCopyOf(levelSequenceCurrentState);
+        this.levelSequenceInitialState = LevelSequences.createCopyOf(levelSequenceCurrentState);
     }
 
     /**

@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import model.Model;
+import model.sequence.LevelSequence;
 import view.GuiComponentFactory;
-import model.LevelSequence;
 import controller.Controller;
 
 import static controller.ControllerConstants.LEVEL_SEQUENCE_FILE_EXTENSION;
@@ -71,7 +71,7 @@ public final class LevelSequenceControllerSingleton implements LevelSequenceCont
     public void startLevelSequence(final LevelSequence levelSequence) {
         Model.getInstance().setCurrentLevelSequence(levelSequence);
         if (Model.getInstance().getCurrentLevelSequence().hasNextLevel()) {
-            Model.getInstance().getCurrentLevelSequence().setNextLevel();
+            Model.getInstance().getCurrentLevelSequence().setNextLevelAsCurrent();
             Controller.getInstance().getNavigationController()
                     .toGameLevelView(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
         } else {

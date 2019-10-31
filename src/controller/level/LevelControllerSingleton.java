@@ -7,8 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import model.Level;
-import model.LevelNotValidException;
+
+import model.level.Level;
+import model.level.LevelNotValidException;
 
 import static controller.ControllerConstants.LEVEL_FILE_DESCRIPTION;
 import static controller.ControllerConstants.LEVEL_FILE_EXTENSION;

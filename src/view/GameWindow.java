@@ -2,7 +2,7 @@ package view;
 
 import java.io.File;
 
-import model.Element;
+import model.element.Element;
 
 // TODO: Auto-generated Javadoc
 /**

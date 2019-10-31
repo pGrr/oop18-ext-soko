@@ -1,8 +1,17 @@
-package model;
+package model.level;
 
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+
+import model.Type;
+import model.element.Element;
+import model.grid.Grid;
+import model.level.LevelNotValidException.MultipleInitialPointException;
+import model.level.LevelNotValidException.NoInitialPointException;
+import model.level.LevelNotValidException.NoTargetException;
+import model.level.LevelNotValidException.UncorrectPositionException;
+import model.level.LevelNotValidException.UnequalBoxAndTargetNumberException;
 
 /**
  * An implementation class for the {@link Level} interface.

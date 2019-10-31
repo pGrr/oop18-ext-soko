@@ -2,7 +2,7 @@ package controller.sequence;
 
 import java.io.IOException;
 
-import model.LevelSequence;
+import model.sequence.LevelSequence;
 
 /**
  * The level sequence controller, which is responsible for the main operations

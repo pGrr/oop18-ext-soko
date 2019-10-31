@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.stream.IntStream;
 import controller.Controller;
 import model.Direction;
-import model.Level;
-import model.LevelSequence;
 import model.Model;
+import model.level.Level;
+import model.sequence.LevelSequence;
+import model.sequence.LevelSequenceImpl;
 import view.View;
 
 /**
@@ -36,8 +37,7 @@ public final class GameControllerSingleton implements GameController {
 
     @Override
     public void restartCurrentLevel() {
-        Model.getInstance().getCurrentLevelSequence()
-                .setCurrentLevel(Model.getInstance().getCurrentLevelSequence().getCurrentLevelInitialState());
+        Model.getInstance().getCurrentLevelSequence().restartCurrentLevel();
         Controller.getInstance().getNavigationController()
                 .toGameLevelView(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
     }
@@ -52,7 +52,7 @@ public final class GameControllerSingleton implements GameController {
         currentLevelIndex += 1;
         IntStream.range(currentLevelIndex, levelSequence.getAllLevels().size())
                 .mapToObj(i -> levelSequence.getAllLevels().get(i)).map(o -> (Level) o).forEachOrdered(levels::add);
-        LevelSequence newLs = LevelSequence.createFromLevels(levelSequence.getName(), levels);
+        LevelSequence newLs = new LevelSequenceImpl(levelSequence.getName(), levels);
         Controller.getInstance().getLevelSequenceController().saveLevelSequence(newLs,
                 path + Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension());
     }
@@ -65,7 +65,7 @@ public final class GameControllerSingleton implements GameController {
 
     @Override
     public void levelFinishedAccepted() {
-        Model.getInstance().getCurrentLevelSequence().setNextLevel();
+        Model.getInstance().getCurrentLevelSequence().setNextLevelAsCurrent();
         Controller.getInstance().getNavigationController()
                 .toGameLevelView(Model.getInstance().getCurrentLevelSequence().getCurrentLevel());
     }

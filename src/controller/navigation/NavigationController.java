@@ -1,6 +1,6 @@
 package controller.navigation;
 
-import model.Level;
+import model.level.Level;
 
 /**
  * The navigation controller, which is responsible for showing and hiding

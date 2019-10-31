@@ -1,5 +1,7 @@
 package model;
 
+import model.sequence.LevelSequence;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Interface Model.

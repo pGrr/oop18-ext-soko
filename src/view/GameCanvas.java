@@ -21,11 +21,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import controller.Controller;
 import model.Direction;
-import model.Element;
-import model.Grid;
 import model.Model;
-import model.Position;
 import model.Type;
+import model.element.Element;
+import model.grid.Grid;
+import model.position.Position;
 
 // TODO: Auto-generated Javadoc
 /**

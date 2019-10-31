@@ -1,8 +1,9 @@
 package controller.level;
 
 import java.io.IOException;
-import model.Level;
-import model.LevelNotValidException;
+
+import model.level.Level;
+import model.level.LevelNotValidException;
 
 /**
  * The level controller, which is responsible for the operations concerning
