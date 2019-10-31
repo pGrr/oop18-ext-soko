@@ -11,10 +11,6 @@ import javax.swing.SwingUtilities;
 import model.element.Type;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
-import static view.craft.CraftConstants.ICON_USER;
-import static view.craft.CraftConstants.ICON_BOX;
-import static view.craft.CraftConstants.ICON_TARGET;
-import static view.craft.CraftConstants.ICON_WALL;
 
 /**
  * The class responsible for the {@link Type} selection in the
@@ -23,6 +19,10 @@ import static view.craft.CraftConstants.ICON_WALL;
 public class CraftSelection {
 
     private static final String LABEL_WELCOME_TEXT = "Welcome! Click on a element to select it and then the cell's grid to mark them.";
+    private static final String ICON_WALL = "icons/wall.png";
+    private static final String ICON_BOX = "icons/box.png";
+    private static final String ICON_TARGET = "icons/target.png";
+    private static final String ICON_USER = "icons/user.png";
     private static final int TOGGLE_BUTTON_ICON_EDGE_SIZE_PX = 30;
 
     private final CraftWindowImpl owner;

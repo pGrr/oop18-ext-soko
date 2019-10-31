@@ -150,6 +150,10 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
 
     /**
      * When a level sequence is loaded from the file-system, it starts the iterator.
+     * 
+     * @param in the input stream
+     * @throws ClassNotFoundException the class not found exception
+     * @throws IOException            Signals that an I/O exception has occurred.
      */
     private void readObject(final ObjectInputStream in) throws ClassNotFoundException, IOException {
         in.defaultReadObject();

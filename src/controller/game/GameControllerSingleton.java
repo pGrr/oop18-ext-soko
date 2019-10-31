@@ -75,7 +75,7 @@ public final class GameControllerSingleton implements GameController {
         Controller.getInstance().getNavigationController().toInitialView();
     }
 
-    /*
+    /**
      * This is called after every movement. If the level is finished and there is at
      * least one next in the sequence it shows the level finished dialog. If the
      * last level in the sequence is finished it shows the game finished dialog.

@@ -75,19 +75,6 @@ public class CraftGrid {
     }
 
     /**
-     * Resets the current state of this object to the initial empty-grid state. It
-     * is the action listener of the "reset" button.
-     *
-     * @return the reset button action listener
-     */
-    public ActionListener resetButtonActionListener() {
-        return e -> SwingUtilities.invokeLater(() -> {
-            this.levelGrid.clear();
-            updateButtonGrid();
-        });
-    }
-
-    /**
      * Creates the panel containing the empty squared button-grid.
      *
      * @return the created JPanel
@@ -123,7 +110,52 @@ public class CraftGrid {
     }
 
     /**
+     * Resets the current state of this object to the initial empty-grid state. It
+     * is the action listener of the "reset" button.
+     *
+     * @return the reset button action listener
+     */
+    public ActionListener resetButtonActionListener() {
+        return e -> SwingUtilities.invokeLater(() -> {
+            this.levelGrid.clear();
+            updateButtonGrid();
+        });
+    }
+
+    /**
+     * The action listener invoked when the user clicks on the button grid. It
+     * inserts the currently selected toggle button (representing a Type) in the
+     * level grid at that specific position and then updates the button grid to
+     * reflect the changes. If the selected position already contains the selected
+     * Type, it erases it making the position empty. If the selected position
+     * already contains a Type different from the selected one, the selected one
+     * substitutes the old one.
+     *
+     * @return the button grid action listener
+     */
+    private ActionListener gridButtonActionListener() {
+        return e -> SwingUtilities.invokeLater(() -> {
+            JButton clickedButton = (JButton) e.getSource();
+            Position position = findButtonPosition(clickedButton);
+            Collection<Element> elementsInPosition = this.levelGrid.getElementsAt(position);
+            Element newElement = new ElementImpl(this.owner.getSelection().getSelectedType(), position, this.levelGrid);
+            if (elementsInPosition.isEmpty()) {
+                this.levelGrid.add(newElement);
+            }
+            elementsInPosition.forEach(oldElement -> {
+                this.levelGrid.remove(oldElement);
+                if (!oldElement.getType().equals(owner.getSelection().getSelectedType())) {
+                    this.levelGrid.add(newElement);
+                }
+            });
+            updateButtonGrid();
+        });
+    }
+
+    /**
      * Creates the button grid.
+     * 
+     * @return the button grid i.e. a 2D list of JButtons
      */
     private List<List<JButton>> createButtonGrid() {
         List<List<JButton>> grid = new ArrayList<>();
@@ -155,35 +187,10 @@ public class CraftGrid {
     }
 
     /**
-     * The action listener invoked when the user clicks on the button grid. It
-     * inserts the currently selected toggle button (representing a Type) in the
-     * level grid at that specific position and then updates the button grid to
-     * reflect the changes. If the selected position already contains the selected
-     * Type, it erases it making the position empty. If the selected position
-     * already contains a Type different from the selected one, the selected one
-     * substitutes the old one.
-     */
-    private ActionListener gridButtonActionListener() {
-        return e -> SwingUtilities.invokeLater(() -> {
-            JButton clickedButton = (JButton) e.getSource();
-            Position position = findButtonPosition(clickedButton);
-            Collection<Element> elementsInPosition = this.levelGrid.getElementsAt(position);
-            Element newElement = new ElementImpl(this.owner.getSelection().getSelectedType(), position, this.levelGrid);
-            if (elementsInPosition.isEmpty()) {
-                this.levelGrid.add(newElement);
-            }
-            elementsInPosition.forEach(oldElement -> {
-                this.levelGrid.remove(oldElement);
-                if (!oldElement.getType().equals(owner.getSelection().getSelectedType())) {
-                    this.levelGrid.add(newElement);
-                }
-            });
-            updateButtonGrid();
-        });
-    }
-
-    /**
      * Converts the button index into a position.
+     *
+     * @param button the button
+     * @return the position
      */
     private Position findButtonPosition(final JButton button) {
         for (List<JButton> row : this.buttonGrid) {

@@ -1,55 +1,44 @@
 package view.game;
 
-import java.io.File;
-
 import model.element.Element;
 import view.Window;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface GameWindow.
+ * The "play a level" window.
  */
 public interface GameWindow extends Window {
 
     /**
-     * Draw element.
+     * Draws an element in the game canvas.
      *
-     * @param element the element
+     * @param element the element to be drawn
      */
     void draw(Element element);
 
     /**
-     * Show save game file chooser.
+     * Shows the level invalid dialog.
      *
-     * @return the file
-     */
-    File showSaveGameFileChooser();
-
-    /**
-     * Show level invalid dialog.
-     *
-     * @param cause the cause
+     * @param cause the message of the {@link LevelNotValidException}
      */
     void showLevelInvalidDialog(String cause);
 
     /**
-     * Show level finished dialog.
+     * Shows the level finished dialog.
      */
     void showLevelFinishedDialog();
 
     /**
-     * Show game finished dialog.
+     * Shows the game finished dialog.
      */
     void showGameFinishedDialog();
 
     /**
-     * Show class not found error dialog.
+     * Show the class not found error dialog.
      */
     void showClassNotFoundErrorDialog();
 
     /**
-     * Show IO error dialog.
+     * Show the input/output error dialog.
      */
     void showIOErrorDialog();
-
 }

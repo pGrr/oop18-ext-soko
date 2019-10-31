@@ -1,15 +1,15 @@
 package view.game;
 
-import java.awt.Image;
 import java.awt.event.ActionListener;
-import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.*;
-import controller.*;
-import model.*;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import controller.Controller;
+import model.Model;
 import model.element.Element;
 import model.element.Position;
 import model.element.PositionImpl;
@@ -17,22 +17,30 @@ import model.grid.Grid;
 import view.GuiComponentFactory;
 import view.WindowAbstract;
 
-import static view.game.GameConstants.*;
-import static view.initial.InitialConstants.DIALOG_ERROR_TITLE;
 import static view.initial.InitialConstants.DIALOG_IOERROR_TEXT;
 import static view.initial.InitialConstants.DIALOG_LEVEL_NOT_CORRECT_TEXT;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class GameWindowImpl.
+ * An implementation for the {@link GameWindow} interface. It creates uses a
+ * {@link GameCanvas} object to manage the canvas drawings.
  */
 public class GameWindowImpl extends WindowAbstract implements GameWindow {
 
-    /** The canvas. */
+    private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
+    private static final double WIDTH_TO_HEIGHT_RATIO = 1;
+    private static final String DIALOG_ERROR_TITLE = "ERROR";
+    private static final String MENU_TITLE = "Menu";
+    private static final String LEVEL_FINISHED_MESSAGE = "You made it!! Congratulations!";
+    private static final String GAME_FINISHED_MESSAGE = "...and that was the last one!! You won!! Congratulations!";
+    private static final String MENU_BACK_ITEM_TEXT = "Go back to initial view";
+    private static final String MENU_RESTART_LEVEL_TEXT = "Restart current level";
+    private static final String LEVEL_FINISHED_TITLE = "LEVEL COMPLETE";
+    private static final String MENU_SAVE_LEVEL_TEXT = "Save game";
+
     private final GameCanvas canvas;
 
     /**
-     * Instantiates a new game window impl.
+     * Instantiates a new game window.
      */
     public GameWindowImpl() {
         super(Model.getInstance().getCurrentState().getClass().getName(), HEIGHT_TO_SCREENSIZE_RATIO,
@@ -44,78 +52,52 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
         this.getFrame().setResizable(false);
     }
 
-    /**
-     * Creates the main panel.
-     *
-     * @return the j panel
-     */
     @Override
-    protected JPanel createMainPanel() {
+    protected final JPanel createMainPanel() {
         return (JPanel) this.canvas;
     }
 
-    /**
-     * Draw element.
-     *
-     * @param element the element
-     */
-    public void draw(final Element element) {
+    @Override
+    public final void draw(final Element element) {
         int w = this.canvas.getElementWidth();
         int h = this.canvas.getElementHeight();
         Position absolutePosition = this.convertRelativeToAbsolute(element.getPosition());
         int x = absolutePosition.getColumnIndex();
         int y = absolutePosition.getRowIndex();
-        this.canvas.repaint(TIMER_DELAY_MS, x - w, y - h, w * 3, h * 3);
+        this.canvas.repaint(x - w, y - h, w * 3, h * 3);
     }
 
-    /**
-     * Show level finished dialog.
-     */
     @Override
-    public void showLevelFinishedDialog() {
+    public final void showLevelInvalidDialog(final String cause) {
+        GuiComponentFactory.getDefaultInstance()
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
+                .setVisible(true);
+    }
+
+    @Override
+    public final void showLevelFinishedDialog() {
         GuiComponentFactory.getDefaultInstance()
                 .createNotifyDialog(this.getFrame(), LEVEL_FINISHED_TITLE, LEVEL_FINISHED_MESSAGE, e -> {
                     Controller.getInstance().getGameController().levelFinishedAccepted();
                 }).setVisible(true);
     }
 
-    /**
-     * Show game finished dialog.
-     */
     @Override
-    public void showGameFinishedDialog() {
+    public final void showGameFinishedDialog() {
         GuiComponentFactory.getDefaultInstance()
                 .createNotifyDialog(this.getFrame(), LEVEL_FINISHED_TITLE, GAME_FINISHED_MESSAGE, e -> {
                     Controller.getInstance().getGameController().gameFinishedAccepted();
                 }).setVisible(true);
     }
 
-    /**
-     * Show level invalid dialog.
-     *
-     * @param cause the cause
-     */
     @Override
-    public void showLevelInvalidDialog(String cause) {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
-                .setVisible(true);
-    }
-
-    /**
-     * Show IO error dialog.
-     */
-    @Override
-    public void showIOErrorDialog() {
+    public final void showClassNotFoundErrorDialog() {
         GuiComponentFactory.getDefaultInstance()
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
     }
 
-    /**
-     * Show class not found error dialog.
-     */
     @Override
-    public void showClassNotFoundErrorDialog() {
+    public final void showIOErrorDialog() {
         GuiComponentFactory.getDefaultInstance()
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
     }
@@ -141,6 +123,12 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
         return menuBar;
     }
 
+    /**
+     * This is the action listener for the "go back to initial view" menu item. It
+     * Goes back to initial view calling the appropriate {@link GameController} function.
+     *
+     * @return the action listener for the back button
+     */
     private ActionListener backToInitialView() {
         return e -> {
             Model.getInstance().setCurrentLevelSequence(Model.getInstance().getInitialState());
@@ -148,10 +136,22 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
         };
     }
 
+    /**
+     * This is the action listener for "restart current level" menu item. It
+     * restarts the current level calling the appropriate {@link GameController} function.
+     *
+     * @return the action listener
+     */
     private ActionListener restartCurrentLevel() {
         return e -> Controller.getInstance().getGameController().restartCurrentLevel();
     }
 
+    /**
+     * This is the action listener for the "save game" menu item. It saves the
+     * current game calling the appropriate {@link GameController} function.
+     *
+     * @return the action listener
+     */
     private ActionListener saveGame() {
         return e -> {
             try {
@@ -167,12 +167,11 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
     }
 
     /**
-     * Show save game file chooser.
+     * Shows the save game file chooser and returns the selected file.
      *
-     * @return the file
+     * @return the selected file
      */
-    @Override
-    public File showSaveGameFileChooser() {
+    private File showSaveGameFileChooser() {
         JFileChooser fc = GuiComponentFactory.getDefaultInstance().createFileChooser(
                 Controller.getInstance().getLevelSequenceController().getLevelSequenceFileDescription(),
                 Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension());
@@ -181,12 +180,12 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
     }
 
     /**
-     * Convert relative to absolute.
+     * Converts a relative position expressed in indexes to an absolute position expressed in pixels.
      *
-     * @param position the position
-     * @return the position
+     * @param position the relative position expressed in indexes 
+     * @return the absolute position expressed in pixels
      */
-    public Position convertRelativeToAbsolute(final Position position) {
+    Position convertRelativeToAbsolute(final Position position) {
         return new PositionImpl(position.getRowIndex() * Integer.divideUnsigned(this.canvas.getHeight(), Grid.N_ROWS),
                 position.getColumnIndex() * Integer.divideUnsigned(this.canvas.getWidth(), Grid.N_ROWS));
     }

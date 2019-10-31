@@ -103,10 +103,13 @@ public class LevelImpl implements Level {
         return "LevelImpl [name=" + name + ", grid=" + grid + "]";
     }
 
-    /*
+    /**
      * Checks if all positions are in a valid range. It finds the maximum and
      * minimum row and column position of all positions, and then checks they are in
      * the correct range, e.g. minimum >= 0 and maximum < number of rows
+     * 
+     * @param grid the grid containing the elements to be checked
+     * @return true, if all positions are valid
      */
     private boolean arePositionsValid(final Grid grid) {
         Optional<Integer> rowMax = grid.getAllElements().stream().map(e -> e.getPosition().getRowIndex())
@@ -125,8 +128,12 @@ public class LevelImpl implements Level {
         return false;
     }
 
-    /*
+    /**
      * Counts the elements of a given type in the given collection of elements.
+     * 
+     * @param type the type to be counted
+     * @param elements the collection of elements in which to count the given type
+     * @return the number of elements of the given type in the given collection
      */
     private long countElements(final Type type, final Collection<Element> elements) {
         return elements.stream().filter(e -> e.getType().equals(type)).count();

@@ -2,41 +2,53 @@ package view.game;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-
 import model.element.Type;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Enum TypeImage.
+ * An enumeration associating each {@link Type} with it's image.
  */
 public enum TypeImage {
 
     /** The user. */
     USER(Type.USER, "icons/user.png"),
+
     /** The target. */
     TARGET(Type.TARGET, "icons/target.png"),
+
     /** The box. */
     BOX(Type.BOX, "icons/box.png"),
-    
+
     /** The wall. */
     WALL(Type.WALL, "icons/wall.png");
 
-    /** The type. */
     private final Type type;
-
-    /** The image. */
     private final Image image;
 
     /**
      * Instantiates a new type image.
      *
      * @param type the type
-     * @param path the path
+     * @param path the path of the image on the file-system
      */
-    private TypeImage(Type type, String path) {
+    TypeImage(final Type type, final String path) {
         this.type = type;
         this.image = path.isEmpty() ? new ImageIcon().getImage()
                 : new ImageIcon(ClassLoader.getSystemResource(path)).getImage();
+    }
+
+    /**
+     * Gets the image associated with the given type.
+     *
+     * @param type the type
+     * @return the image associated with the given type
+     */
+    public static Image getImageByType(final Type type) {
+        for (TypeImage i : TypeImage.values()) {
+            if (type.equals(i.type)) {
+                return i.getImage();
+            }
+        }
+        throw new IllegalArgumentException();
     }
 
     /**
@@ -55,20 +67,5 @@ public enum TypeImage {
      */
     public Image getImage() {
         return this.image;
-    }
-
-    /**
-     * Gets the image by type.
-     *
-     * @param type the type
-     * @return the image by type
-     */
-    public static Image getImageByType(Type type) {
-        for (TypeImage i : TypeImage.values()) {
-            if (type.equals(i.type)) {
-                return i.getImage();
-            }
-        }
-        throw new IllegalArgumentException();
     }
 }

@@ -44,8 +44,8 @@ public final class NavigationControllerSingleton implements NavigationController
         View.getInstance().getGameWindow().show();
     }
 
-    /*
-     * Hide all windows.
+    /**
+     * Hides all windows.
      */
     private void hideAllWindows() {
         View.getInstance().getAllWindows().forEach(w -> w.hide());

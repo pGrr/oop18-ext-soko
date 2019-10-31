@@ -1,7 +1,5 @@
 package view.game;
 
-import static view.game.GameConstants.TIMER_DELAY_MS;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,10 +9,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -27,54 +23,47 @@ import model.element.Type;
 import model.grid.MovementDirection;
 import model.grid.Grid;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class GameCanvas.
+ * The Class responsible for the canvas where the game played is drawn. It is a
+ * JPanel with an override of {@link #paintComponents(Graphics)} method which
+ * takes care of the drawing.
  */
 public class GameCanvas extends JPanel {
 
-    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 8149893762262015513L;
+    private static final int TIMER_DELAY_MS = 50;
 
-    /** The owner. */
     private final GameWindowImpl owner;
-
-    /** The timer. */
     private final Timer timer;
-
-    /** The key pressed code. */
+    private final Image boxOnTargetImage;
+    private Map<Type, Image> standardImages;
+    private Graphics graphics;
     private Integer keyPressedCode;
 
-    /** The graphics. */
-    private Graphics graphics;
-
-    /** The images. */
-    private Map<Type, Image> images;
-
-    Image boxOnTargetImage;
-
     /**
-     * Instantiates a new game canvas.
+     * Instantiates a new game canvas object. Also, it creates and starts the timer.
      *
-     * @param owner the owner
+     * @param owner the {@link GameWindowImpl} object which creates and contains
+     *              this object
      */
     public GameCanvas(final GameWindowImpl owner) {
-        this.owner = owner;
-        this.timer = new Timer(TIMER_DELAY_MS, this.timerAction());
         this.keyPressedCode = null;
         this.graphics = null;
+        this.owner = owner;
+        this.standardImages = createResizedStandardImages();
+        this.boxOnTargetImage = boxOnTargetImage();
         this.setSize(this.getPreferredSize());
         this.setFocusable(true);
         this.addKeyListener(buttonPressed());
-        this.images = createResizedImages();
-        this.boxOnTargetImage = boxOnTargetImage();
+        this.timer = new Timer(TIMER_DELAY_MS, this.timerAction());
         this.timer.start();
     }
 
     /**
-     * Paint component.
+     * Takes care of the drawing of all the elements using the {@link Graphics}
+     * object of this component.
      *
-     * @param g the g
+     * @param g the {@link Graphics} object of this component.
      */
     @Override
     protected void paintComponent(final Graphics g) {
@@ -84,9 +73,11 @@ public class GameCanvas extends JPanel {
     }
 
     /**
-     * Gets the preferred size.
+     * Overrides the standard preferred size of the panel. It sets the preferred
+     * size to be a full-height square, considering the top insets of the frame,
+     * i.e. the top bar size.
      *
-     * @return the preferred size
+     * @return the new preferred size
      */
     @Override
     public Dimension getPreferredSize() {
@@ -96,42 +87,63 @@ public class GameCanvas extends JPanel {
     }
 
     /**
-     * Draw all elements.
+     * Draw all the elements into the canvas. It is used by the overridden
+     * {@link #paintComponent(Graphics)} method.
      *
-     * @param elements the elements
+     * @param elements the elements to be drawn
      */
     public void drawAllElements(final Collection<Element> elements) {
-        Collection<Position> boxesOnTargetPositions = Model.getInstance().getCurrentState().getCurrentLevel()
-                .getGrid().getBoxesOnTarget().stream().map(b -> b.getPosition()).collect(Collectors.toList());
+        Collection<Position> boxesOnTargetPositions = Model.getInstance().getCurrentState().getCurrentLevel().getGrid()
+                .getBoxesOnTarget().stream().map(b -> b.getPosition()).collect(Collectors.toList());
         for (Element element : elements) {
             Position pos = this.owner.convertRelativeToAbsolute(element.getPosition());
             if (boxesOnTargetPositions.contains(element.getPosition())) {
                 this.graphics.drawImage(boxOnTargetImage, pos.getColumnIndex(), pos.getRowIndex(),
                         this.owner.getFrame());
             } else {
-                this.graphics.drawImage(this.images.get(element.getType()), pos.getColumnIndex(), pos.getRowIndex(),
-                        this.owner.getFrame());
+                this.graphics.drawImage(this.standardImages.get(element.getType()), pos.getColumnIndex(),
+                        pos.getRowIndex(), this.owner.getFrame());
             }
         }
     }
 
+    /**
+     * Computes the width of a single element in pixels, considering the width of
+     * the panel and the {@link #Grid.N_ROWS} number of rows.
+     * 
+     * @return the single element absolute width in pixels
+     */
     public int getElementWidth() {
         return (int) Math.round(this.getPreferredSize().getWidth() / Grid.N_ROWS);
     }
 
+    /**
+     * Computes the height of a single element in pixels, considering the height of
+     * the panel and the {@link #Grid.N_ROWS} number of rows.
+     * 
+     * @return the single element absolute height in pixels
+     */
     public int getElementHeight() {
         return (int) Math.round(this.getPreferredSize().getHeight() / Grid.N_ROWS);
     }
 
+    /**
+     * Creates a scaled instant of the box on target image (i.e. a darker box).
+     * 
+     * @return a scaled instant of the box on target image
+     */
     private Image boxOnTargetImage() {
         return new ImageIcon(ClassLoader.getSystemResource("icons/box-on-target.png")).getImage()
                 .getScaledInstance(getElementWidth(), getElementHeight(), Image.SCALE_DEFAULT);
     }
 
     /**
-     * Button pressed.
+     * This is the key listener for when a user presses a button. It saves the
+     * button key code in the {@link #keyPressedCode} variable. When the timer will
+     * fire, it will take care of converting the code to movement, if appropriate,
+     * using the {@link #timerAction()} method.
      *
-     * @return the key listener
+     * @return the key listener for when a user presses a button
      */
     private KeyListener buttonPressed() {
         return new KeyAdapter() {
@@ -144,9 +156,11 @@ public class GameCanvas extends JPanel {
     }
 
     /**
-     * Timer action.
+     * This is the action listener for when the timer fires. It converts, if
+     * recognized, the saved key code into movement using the appropriate
+     * {@link GameController} function.
      *
-     * @return the action listener
+     * @return the action listener for when the timer fires
      */
     private ActionListener timerAction() {
         return e -> SwingUtilities.invokeLater(() -> {
@@ -167,11 +181,12 @@ public class GameCanvas extends JPanel {
     }
 
     /**
-     * Creates the resized images.
+     * Creates a map holding a resized image for each {@link Type}, in order to not
+     * having to create them each time they are needed, thus improving performance.
      *
-     * @return the map
+     * @return the map holding a resized image for each {@link Type}
      */
-    public Map<Type, Image> createResizedImages() {
+    public Map<Type, Image> createResizedStandardImages() {
         Map<Type, Image> imageMap = new HashMap<>();
         for (TypeImage t : TypeImage.values()) {
             imageMap.put(t.getType(),
@@ -180,5 +195,4 @@ public class GameCanvas extends JPanel {
         }
         return imageMap;
     }
-
 }

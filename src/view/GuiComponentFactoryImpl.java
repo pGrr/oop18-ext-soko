@@ -1,7 +1,5 @@
 package view;
 
-import static view.game.GameConstants.*;
-
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -107,7 +105,7 @@ public class GuiComponentFactoryImpl implements GuiComponentFactory {
         JLabel label = new JLabel(message);
         label.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING * 2));
         panel.add(label);
-        JButton b = createButton(ERROR_DIALOG_TITLE, "", actionListener);
+        JButton b = createButton("Ok", "", actionListener);
         panel.add(b);
         b.addActionListener(e -> dialog.dispose());
         dialog.add(panel);

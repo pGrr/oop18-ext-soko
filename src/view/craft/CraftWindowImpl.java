@@ -6,10 +6,6 @@ import view.GuiComponentFactory;
 import view.WindowAbstract;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
-import static view.craft.CraftConstants.DIALOG_ERROR_TITLE;
-import static view.craft.CraftConstants.DIALOG_IOERROR_TEXT;
-import static view.craft.CraftConstants.DIALOG_FILE_CORRUPTED_TEXT;
-import static view.craft.CraftConstants.DIALOG_LEVEL_NOT_CORRECT_TEXT;
 
 /**
  * An implementation for the {@link CraftWindow} interface. It is composed by a
@@ -18,9 +14,13 @@ import static view.craft.CraftConstants.DIALOG_LEVEL_NOT_CORRECT_TEXT;
  */
 public final class CraftWindowImpl extends WindowAbstract implements CraftWindow {
 
-    private static final String TITLE = "SOKOBAN - Craft your level";
     private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
     private static final double WIDTH_TO_HEIGHT_RATIO = 1;
+    private static final String TITLE = "SOKOBAN - Craft your level";
+    private static final String DIALOG_ERROR_TITLE = "ERROR";
+    private static final String DIALOG_IOERROR_TEXT = "An error occurred during input / output operation";
+    private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "An error occurred while trying to save the level.";
+    private static final String DIALOG_FILE_CORRUPTED_TEXT = "Loaded file is corrupted";
 
     private final CraftGrid grid;
     private final CraftSelection selection;
