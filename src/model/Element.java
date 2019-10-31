@@ -43,6 +43,14 @@ public interface Element extends Serializable {
     void move(Direction direction);
 
     /**
+     * The element hash code is computed on its position and type.
+     *
+     * @return the computed hashCode
+     */
+    @Override
+    int hashCode();
+
+    /**
      * Elements are compared basing upon their position and type.
      *
      * @param obj the object to be compared with the element
@@ -50,12 +58,4 @@ public interface Element extends Serializable {
      */
     @Override
     boolean equals(Object obj);
-
-    /**
-     * The element hash code is computed on its position and type.
-     *
-     * @return the computed hashCode
-     */
-    @Override
-    int hashCode();
 }

@@ -3,64 +3,42 @@ package model;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
-import model.LevelNotValidException;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class LevelImpl.
+ * An implementation class for the {@link Level} interface.
  */
 public class LevelImpl implements Level {
 
-    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 2437234480030228409L;
 
-    /** The name. */
     private final String name;
-
-    /** The grid. */
     private final Grid grid;
-
     private Element user;
 
     /**
-     * Instantiates a new level impl.
+     * Instantiates a new LevelImpl with the given name and grid.
      *
-     * @param name the name
-     * @param grid the grid
+     * @param name the name of the level
+     * @param grid the grid of the level
      */
-    public LevelImpl(String name, Grid grid) {
+    public LevelImpl(final String name, final Grid grid) {
         super();
         this.name = name;
         this.grid = grid;
     }
 
-    /**
-     * Gets the name.
-     *
-     * @return the name
-     */
     @Override
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    /**
-     * Gets the grid.
-     *
-     * @return the grid
-     */
     @Override
-    public Grid getGrid() {
+    public final Grid getGrid() {
         return grid;
     }
 
-    /**
-     * Gets the user.
-     *
-     * @return the user
-     */
     @Override
-    public Element getUser() {
+    public final Element getUser() {
         if (this.user == null) {
             this.user = this.grid.getAllElements().stream().filter(e -> e.getType().equals(Type.USER)).findFirst()
                     .orElseThrow(IllegalStateException::new);
@@ -68,13 +46,16 @@ public class LevelImpl implements Level {
         return this.user;
     }
 
-    /**
-     * Validate.
-     *
-     * @throws LevelNotValidException the level not valid exception
-     */
     @Override
-    public void validate() throws LevelNotValidException {
+    public final boolean isFinished() {
+        long uncoveredTargets = this.grid.getAllElements().stream()
+                .filter(e -> e.getType().equals(Type.BOX) || e.getType().equals(Type.TARGET)).map(Element::getPosition)
+                .distinct().count() - countElements(Type.TARGET, this.grid.getAllElements());
+        return uncoveredTargets == 0;
+    }
+
+    @Override
+    public final void validate() throws LevelNotValidException {
         if (!arePositionsValid(grid)) {
             throw new LevelNotValidException.UncorrectPositionException();
         } else {
@@ -93,64 +74,37 @@ public class LevelImpl implements Level {
         }
     }
 
-    /**
-     * Checks if is finished.
-     *
-     * @return true, if is finished
-     */
     @Override
-    public boolean isFinished() {
-        long uncoveredTargets = this.grid.getAllElements().stream()
-                .filter(e -> e.getType().equals(Type.BOX) || e.getType().equals(Type.TARGET)).map(Element::getPosition)
-                .distinct().count() - countElements(Type.TARGET, this.grid.getAllElements());
-        return uncoveredTargets == 0;
-    }
-
-    /**
-     * To string.
-     *
-     * @return the string
-     */
-    @Override
-    public String toString() {
-        return "LevelImpl [name=" + name + ", grid=" + grid + "]";
-    }
-
-    /**
-     * Hash code.
-     *
-     * @return the int
-     */
-    @Override
-    public int hashCode() {
+    public final int hashCode() {
         return Objects.hash(grid, name);
     }
 
-    /**
-     * Equals.
-     *
-     * @param obj the obj
-     * @return true, if successful
-     */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public final boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         LevelImpl other = (LevelImpl) obj;
         return Objects.equals(grid, other.grid) && Objects.equals(name, other.name);
     }
 
-    /**
-     * Are positions valid.
-     *
-     * @param grid the grid
-     * @return true, if successful
+    @Override
+    public final String toString() {
+        return "LevelImpl [name=" + name + ", grid=" + grid + "]";
+    }
+
+    /*
+     * Checks if all positions are in a valid range. It finds the maximum and
+     * minimum row and column position of all positions, and then checks they are in
+     * the correct range, e.g. minimum >= 0 and maximum < number of rows
      */
-    private boolean arePositionsValid(Grid grid) {
+    private boolean arePositionsValid(final Grid grid) {
         Optional<Integer> rowMax = grid.getAllElements().stream().map(e -> e.getPosition().getRowIndex())
                 .max(Integer::compare);
         Optional<Integer> colMax = grid.getAllElements().stream().map(e -> e.getPosition().getColumnIndex())
@@ -167,14 +121,10 @@ public class LevelImpl implements Level {
         return false;
     }
 
-    /**
-     * Count elements.
-     *
-     * @param type     the type
-     * @param elements the elements
-     * @return the long
+    /*
+     * Counts the elements of a given type in the given collection of elements.
      */
-    private long countElements(Type type, Collection<Element> elements) {
+    private long countElements(final Type type, final Collection<Element> elements) {
         return elements.stream().filter(e -> e.getType().equals(type)).count();
     }
 }
