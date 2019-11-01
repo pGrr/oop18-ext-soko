@@ -2,32 +2,30 @@ package view;
 
 import javax.swing.JFrame;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface Window.
+ * A generic Window.
  */
 public interface Window {
 
     /**
-     * Show.
+     * Shows the window, i.e sets the frame of the window visible.
      */
-    public void show();
+    void show();
 
     /**
-     * Hide.
+     * Hides the window, i.e. unsets the frame of the window visible.
      */
-    public void hide();
+    void hide();
 
     /**
-     * Close.
+     * Closes the window.
      */
-    public void close();
+    void close();
 
     /**
-     * Gets the frame.
+     * Gets the frame of the window.
      *
      * @return the frame
      */
-    public JFrame getFrame();
-
+    JFrame getFrame();
 }

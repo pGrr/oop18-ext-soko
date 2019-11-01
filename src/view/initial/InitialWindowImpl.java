@@ -35,7 +35,7 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
      */
     public InitialWindowImpl() {
         super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
-        this.choices = new InitialOptions(this);
+        this.choices = new InitialOptions();
         this.saveLoadSequence = new InitialSaveLoad(this);
         this.levelList = new InitialLevelList(this);
         this.getFrame().add(createMainPanel());
@@ -60,28 +60,28 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
 
     @Override
     public final void showLevelInvalidErrorDialog(final String cause) {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
                 .setVisible(true);
     }
 
     @Override
     public final void showLevelSequenceEmptyErrorDialog() {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT)
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT)
                 .setVisible(true);
     }
 
     @Override
     public final void showIOErrorDialog() {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
     }
 
     @Override
     public final void showClassNotFoundErrorDialog() {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
     }
 
     /**
@@ -114,7 +114,7 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
     @Override
     protected final JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
+        mainPanel.setBorder(GuiComponentFactory.getInstance().createEmptyPaddingBorder(DEFAULT_PADDING));
         mainPanel.add(welcomePanel(), BorderLayout.PAGE_START);
         mainPanel.add(levelSequencePanel(), BorderLayout.CENTER);
         mainPanel.add(this.choices.createPanel(), BorderLayout.PAGE_END);
@@ -128,7 +128,7 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
      */
     private JPanel welcomePanel() {
         JPanel p = new JPanel();
-        p.add(getComponentFactory().createLabel(LABEL_WELCOME_TEXT));
+        p.add(GuiComponentFactory.getInstance().createLabel(LABEL_WELCOME_TEXT));
         return p;
     }
 
@@ -140,7 +140,7 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
     private JPanel levelSequencePanel() {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
-        p.setBorder(getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
+        p.setBorder(GuiComponentFactory.getInstance().createEmptyPaddingBorder(DEFAULT_PADDING));
         p.add(this.levelList.getPanel());
         return p;
     }

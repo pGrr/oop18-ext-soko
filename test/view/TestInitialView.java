@@ -3,11 +3,10 @@ package view;
 import view.initial.InitialWindow;
 import view.initial.InitialWindowImpl;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestInitialView.
  */
-public class TestInitialView {
+public final class TestInitialView {
 
     /**
      * Instantiates a new test initial view.
@@ -20,7 +19,7 @@ public class TestInitialView {
      *
      * @param args the arguments
      */
-    public static void main(String... args) {
+    public static void main(final String... args) {
         InitialWindow initialView = new InitialWindowImpl();
         initialView.show();
     }

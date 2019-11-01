@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import model.element.Type;
+import view.GuiComponentFactory;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
@@ -25,17 +26,13 @@ public class CraftSelection {
     private static final String ICON_USER = "icons/user.png";
     private static final int TOGGLE_BUTTON_ICON_EDGE_SIZE_PX = 30;
 
-    private final CraftWindowImpl owner;
     private final Map<Type, JToggleButton> toggleButtons;
 
     /**
      * Instantiates a new craft selection object.
      *
-     * @param owner the {@link CraftWindowImpl} object which creates and contains
-     *              this object
      */
-    public CraftSelection(final CraftWindowImpl owner) {
-        this.owner = owner;
+    public CraftSelection() {
         this.toggleButtons = createToggleButtonSelectionList();
     }
 
@@ -48,7 +45,7 @@ public class CraftSelection {
     public JPanel createPanel() {
         JPanel upperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel welcomeLabel = new JLabel(LABEL_WELCOME_TEXT);
-        welcomeLabel.setBorder(owner.getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
+        welcomeLabel.setBorder(GuiComponentFactory.getInstance().createEmptyPaddingBorder(DEFAULT_PADDING));
         upperPanel.add(welcomeLabel);
         this.toggleButtons.values().stream().forEach(upperPanel::add);
         return upperPanel;
@@ -97,26 +94,26 @@ public class CraftSelection {
         Map<Type, JToggleButton> toggleButtons = new HashMap<>();
         toggleButtons
                 .put(Type.USER,
-                        owner.getComponentFactory().createToggleButton("",
-                                owner.getComponentFactory().createResizedIcon(ICON_USER,
+                        GuiComponentFactory.getInstance().createToggleButton("",
+                                GuiComponentFactory.getInstance().createResizedIcon(ICON_USER,
                                         TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX),
                                 toggleButtonActionListener()));
         toggleButtons
                 .put(Type.TARGET,
-                        owner.getComponentFactory().createToggleButton("",
-                                owner.getComponentFactory().createResizedIcon(ICON_TARGET,
+                        GuiComponentFactory.getInstance().createToggleButton("",
+                                GuiComponentFactory.getInstance().createResizedIcon(ICON_TARGET,
                                         TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX),
                                 toggleButtonActionListener()));
         toggleButtons
                 .put(Type.BOX,
-                        owner.getComponentFactory().createToggleButton(
-                                "", owner.getComponentFactory().createResizedIcon(ICON_BOX,
+                        GuiComponentFactory.getInstance().createToggleButton(
+                                "", GuiComponentFactory.getInstance().createResizedIcon(ICON_BOX,
                                         TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX),
                                 toggleButtonActionListener()));
         toggleButtons
                 .put(Type.WALL,
-                        owner.getComponentFactory().createToggleButton("",
-                                owner.getComponentFactory().createResizedIcon(ICON_WALL,
+                        GuiComponentFactory.getInstance().createToggleButton("",
+                                GuiComponentFactory.getInstance().createResizedIcon(ICON_WALL,
                                         TOGGLE_BUTTON_ICON_EDGE_SIZE_PX, TOGGLE_BUTTON_ICON_EDGE_SIZE_PX),
                                 toggleButtonActionListener()));
         return toggleButtons;

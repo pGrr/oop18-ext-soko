@@ -6,9 +6,9 @@ import view.craft.CraftWindow;
 import view.game.GameWindow;
 import view.initial.InitialWindow;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface View.
+ * The main view interface, it is the entry point to get the references to any
+ * view interface.
  */
 public interface View {
 
@@ -34,18 +34,11 @@ public interface View {
     GameWindow getGameWindow();
 
     /**
-     * Gets the all windows.
+     * Gets all windows.
      *
-     * @return the all windows
+     * @return a collection of all windows
      */
     Collection<Window> getAllWindows();
-
-    /**
-     * Gets the window on top.
-     *
-     * @return the window on top
-     */
-    Window getWindowOnTop();
 
     /**
      * Gets the single instance of View.
@@ -55,5 +48,4 @@ public interface View {
     static View getInstance() {
         return ViewSingleton.getInstance();
     }
-
 }

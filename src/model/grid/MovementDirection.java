@@ -9,13 +9,24 @@ import model.element.PositionImpl;
  */
 public enum MovementDirection {
 
-    /** The upwards movement direction. */
+    /**
+     * The upwards movement direction.
+     */
     UP(position -> new PositionImpl(position.getRowIndex() - 1, position.getColumnIndex())),
-    /** The downwards movement direction. */
+
+    /**
+     * The downwards movement direction.
+     */
     DOWN(position -> new PositionImpl(position.getRowIndex() + 1, position.getColumnIndex())),
-    /** The leftwards movement direction. */
+
+    /**
+     * The leftwards movement direction.
+     */
     LEFT(position -> new PositionImpl(position.getRowIndex(), position.getColumnIndex() - 1)),
-    /** The rightwards movement direction. */
+
+    /**
+     * The rightwards movement direction.
+     */
     RIGHT(position -> new PositionImpl(position.getRowIndex(), position.getColumnIndex() + 1));
 
     /** The compute target position. */

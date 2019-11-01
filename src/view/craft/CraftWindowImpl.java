@@ -32,7 +32,7 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
     public CraftWindowImpl() {
         super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
         this.grid = new CraftGrid(this);
-        this.selection = new CraftSelection(this);
+        this.selection = new CraftSelection();
         this.options = new CraftOptions(this);
         this.getFrame().add(createMainPanel());
     }
@@ -40,7 +40,7 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
     @Override
     protected JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
+        mainPanel.setBorder(GuiComponentFactory.getInstance().createEmptyPaddingBorder(DEFAULT_PADDING));
         mainPanel.add(this.selection.createPanel(), BorderLayout.PAGE_START);
         mainPanel.add(grid.createPanel(), BorderLayout.CENTER);
         mainPanel.add(this.options.createPanel(), BorderLayout.PAGE_END);
@@ -55,20 +55,20 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
 
     @Override
     public void showIOErrorDialog() {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
     }
 
     @Override
     public void showClassNotFoundErrorDialog() {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_FILE_CORRUPTED_TEXT).setVisible(true);
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_FILE_CORRUPTED_TEXT).setVisible(true);
     }
 
     @Override
     public void showLevelInvalidDialog(final String cause) {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + " " + cause)
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + " " + cause)
                 .setVisible(true);
     }
 

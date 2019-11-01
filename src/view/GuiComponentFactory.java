@@ -1,9 +1,7 @@
 package view;
 
-import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.util.List;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -14,34 +12,17 @@ import javax.swing.JList;
 import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 
-// TODO: Auto-generated Javadoc
 /**
- * A factory for creating GuiComponent objects.
+ * A factory for creating GUI components.
  */
 public interface GuiComponentFactory {
 
     /**
-     * Compute absolute dimension.
+     * Creates a new empty frame with the given height-to-screen-size ratio and
+     * width-to-height ratio. This is made to make the frame size relative to the
+     * machine-specific screen size.
      *
-     * @param heightToScreenSizeRatio the height to screen size ratio
-     * @param widthToHeightRatio      the width to height ratio
-     * @return the dimension
-     */
-    Dimension computeAbsoluteDimension(double heightToScreenSizeRatio, double widthToHeightRatio);
-
-    /**
-     * Creates a new GuiComponent object.
-     *
-     * @param heightToScreenSizeRatio the height to screen size ratio
-     * @param widthToHeightRatio      the width to height ratio
-     * @return the j frame
-     */
-    JFrame createFrame(double heightToScreenSizeRatio, double widthToHeightRatio);
-
-    /**
-     * Creates a new GuiComponent object.
-     *
-     * @param title                   the title
+     * @param title                   the title of the frame
      * @param heightToScreenSizeRatio the height to screen size ratio
      * @param widthToHeightRatio      the width to height ratio
      * @return the j frame
@@ -49,47 +30,38 @@ public interface GuiComponentFactory {
     JFrame createFrame(String title, double heightToScreenSizeRatio, double widthToHeightRatio);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a new dialog with the given title and a message.
      *
-     * @param owner   the owner
-     * @param title   the title
-     * @param message the message
+     * @param owner   the frame owner of the dialog
+     * @param title   the title of the dialog
+     * @param message the message of the dialog
      * @return the j dialog
      */
     JDialog createDialog(JFrame owner, String title, String message);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a new dialog with a title, a message and an "OK" button to which it
+     * attaches the given action listener.
      *
-     * @param owner   the owner
-     * @param title   the title
-     * @param message the message
-     * @return the j dialog
-     */
-    JDialog createNotifyDialog(JFrame owner, String title, String message);
-
-    /**
-     * Creates a new GuiComponent object.
-     *
-     * @param owner          the owner
-     * @param title          the title
-     * @param message        the message
-     * @param actionListener the action listener
+     * @param owner          the frame owner of the dialog
+     * @param title          the title of the dialog
+     * @param message        the message of the dialog
+     * @param actionListener the action listener to be attached to the ok button
      * @return the j dialog
      */
     JDialog createNotifyDialog(JFrame owner, String title, String message, ActionListener actionListener);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a file chooser with the given file description and file extension.
      *
-     * @param description   the description
-     * @param fileExtension the file extension
+     * @param fileDescription the file description
+     * @param fileExtension   the file extension
      * @return the j file chooser
      */
-    JFileChooser createFileChooser(String description, String fileExtension);
+    JFileChooser createFileChooser(String fileDescription, String fileExtension);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a button with the given text.
      *
      * @param text the text
      * @return the j button
@@ -97,7 +69,7 @@ public interface GuiComponentFactory {
     JButton createButton(String text);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a button with the given text and icon.
      *
      * @param text the text
      * @param icon the icon
@@ -106,7 +78,8 @@ public interface GuiComponentFactory {
     JButton createButton(String text, ImageIcon icon);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a button with the given text, the icon (to be loaded from the
+     * file-system with the given icon path) and the given action listener.
      *
      * @param text           the text
      * @param iconPath       the icon path
@@ -116,8 +89,8 @@ public interface GuiComponentFactory {
     JButton createButton(String text, String iconPath, ActionListener actionListener);
 
     /**
-     * Creates a new GuiComponent object.
-     *
+     * Creates a button with the given text, the icon and the given action listener.
+     * 
      * @param text           the text
      * @param icon           the icon
      * @param actionListener the action listener
@@ -126,7 +99,7 @@ public interface GuiComponentFactory {
     JButton createButton(String text, ImageIcon icon, ActionListener actionListener);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a new toggle button with the given text, icon and action listener.
      *
      * @param text           the text
      * @param icon           the icon
@@ -136,7 +109,7 @@ public interface GuiComponentFactory {
     JToggleButton createToggleButton(String text, ImageIcon icon, ActionListener actionListener);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a new label with the given text.
      *
      * @param text the text
      * @return the j label
@@ -144,16 +117,17 @@ public interface GuiComponentFactory {
     JLabel createLabel(String text);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a new JList of strings with the given list of string and padding
+     * (expressed in pixels).
      *
      * @param list    the list
      * @param padding the padding
-     * @return the j list< string>
+     * @return the j list containing the strings of the list
      */
     JList<String> createStringList(List<String> list, int padding);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a new ImageIcon loading the icon from the given path.
      *
      * @param path the path
      * @return the image icon
@@ -171,38 +145,39 @@ public interface GuiComponentFactory {
     ImageIcon createResizedIcon(String path, int w, int h);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a resized version of a given ImageIcon object, with the given width
+     * and height.
      *
-     * @param i the i
-     * @param w the w
-     * @param h the h
-     * @return the image icon
+     * @param i the image icon object
+     * @param w the width
+     * @param h the height
+     * @return the resized image icon
      */
     ImageIcon createResizedIcon(ImageIcon i, int w, int h);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a new empty padding border of the given size.
      *
-     * @param defaultPadding the default padding
+     * @param defaultPadding the default padding, i.e. the empty padding border size
      * @return the border
      */
     Border createEmptyPaddingBorder(int defaultPadding);
 
     /**
-     * Creates a new GuiComponent object.
+     * Creates a new titled padding border with the given title and size (i.e. padding).
      *
-     * @param title          the title
-     * @param defaultPadding the default padding
+     * @param title          the title of the border
+     * @param defaultPadding the default padding, i.e. the border size
      * @return the border
      */
     Border createTitledPaddingBorder(String title, int defaultPadding);
 
     /**
-     * Gets the default instance.
+     * Gets the single instance of the {@link GuiComponentFactory} class.
      *
-     * @return the default instance
+     * @return the single instance of the {@link GuiComponentFactory} class.
      */
-    static GuiComponentFactory getDefaultInstance() {
+    static GuiComponentFactory getInstance() {
         return GuiComponentFactoryImpl.getInstance();
     }
 }

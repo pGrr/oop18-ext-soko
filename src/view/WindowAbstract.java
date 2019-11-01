@@ -3,32 +3,37 @@ package view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class WindowAbstract.
+ * An abstract class for the {@link Window} interface which implements the
+ * Template-method design pattern. It implements the behavior and the
+ * initialization steps which are common to all windows and leaves abstract the
+ * {@link #createMainPanel()} method which is responsible for the creation of
+ * the main panel and all of its components.
  */
 public abstract class WindowAbstract implements Window {
 
-    /** The component factory. */
     private final GuiComponentFactory componentFactory;
-
-    /** The frame. */
     private final JFrame frame;
 
     /**
-     * Instantiates a new window abstract.
+     * Initializes the window providing the {@link GuiComponentFactoryImpl}
+     * component factory and creates the main frame with the given
+     * height-to-screen-size ratio and width-to-height ratio. This is meant to be a
+     * basic template-initialization to be continued by the constructors of
+     * sub-classes (using super function).
      *
-     * @param title                   the title
+     * @param title                   the title of the frame
      * @param heightToScreenSizeRatio the height to screen size ratio
      * @param widthToHeightRatio      the width to height ratio
      */
-    public WindowAbstract(String title, double heightToScreenSizeRatio, double widthToHeightRatio) {
-        this.componentFactory = GuiComponentFactory.getDefaultInstance();
+    public WindowAbstract(final String title, final double heightToScreenSizeRatio, final double widthToHeightRatio) {
+        this.componentFactory = GuiComponentFactory.getInstance();
         this.frame = this.componentFactory.createFrame(title, heightToScreenSizeRatio, widthToHeightRatio);
     }
 
     /**
-     * Show.
+     * {@inheritDoc} Can be overridden to add specific behavior before or after the
+     * showing action.
      */
     @Override
     public void show() {
@@ -36,7 +41,8 @@ public abstract class WindowAbstract implements Window {
     }
 
     /**
-     * Hide.
+     * {@inheritDoc} Can be overridden to add specific behavior before or after the
+     * hiding action.
      */
     @Override
     public void hide() {
@@ -44,37 +50,23 @@ public abstract class WindowAbstract implements Window {
     }
 
     /**
-     * Close.
+     * {@inheritDoc} Can be overridden to add specific behavior before or after the
+     * closing action.
      */
     @Override
     public void close() {
         this.getFrame().dispose();
     }
 
-    /**
-     * Gets the component factory.
-     *
-     * @return the component factory
-     */
-    public GuiComponentFactory getComponentFactory() {
-        return this.componentFactory;
-    }
-
-    /**
-     * Gets the frame.
-     *
-     * @return the frame
-     */
     @Override
-    public JFrame getFrame() {
+    public final JFrame getFrame() {
         return this.frame;
     }
 
     /**
-     * Creates the main panel.
+     * Creates and populates the main panel.
      *
      * @return the j panel
      */
     protected abstract JPanel createMainPanel();
-
 }

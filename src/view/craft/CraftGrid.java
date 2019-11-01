@@ -21,6 +21,7 @@ import model.element.PositionImpl;
 import model.element.Type;
 import model.grid.Grid;
 import model.level.Level;
+import view.GuiComponentFactory;
 import view.game.TypeImage;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
@@ -81,7 +82,7 @@ public class CraftGrid {
      */
     public final JPanel createPanel() {
         JPanel panel = new JPanel(new GridLayout(Grid.N_ROWS, Grid.N_ROWS));
-        panel.setBorder(owner.getComponentFactory().createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
+        panel.setBorder(GuiComponentFactory.getInstance().createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
         this.buttonGrid.stream().flatMap(List::stream).forEach(button -> {
             button.addActionListener(gridButtonActionListener());
             panel.add(button);

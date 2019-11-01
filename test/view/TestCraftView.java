@@ -3,11 +3,10 @@ package view;
 import view.craft.CraftWindow;
 import view.craft.CraftWindowImpl;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestCraftView.
  */
-public class TestCraftView {
+public final class TestCraftView {
 
     /**
      * Instantiates a new test craft view.
@@ -20,7 +19,7 @@ public class TestCraftView {
      *
      * @param args the arguments
      */
-    public static void main(String... args) {
+    public static void main(final String... args) {
         CraftWindow craftView = new CraftWindowImpl();
         craftView.show();
     }

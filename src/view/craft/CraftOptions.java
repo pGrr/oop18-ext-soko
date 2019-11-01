@@ -10,6 +10,7 @@ import controller.Controller;
 import model.level.Level;
 import model.level.LevelImpl;
 import model.level.LevelNotValidException;
+import view.GuiComponentFactory;
 import view.View;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
@@ -50,15 +51,15 @@ public class CraftOptions {
     public JPanel createPanel() {
         JPanel choicesPanel = new JPanel(new GridLayout(1, 4, DEFAULT_PADDING, DEFAULT_PADDING));
         choicesPanel
-                .setBorder(owner.getComponentFactory().createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
+                .setBorder(GuiComponentFactory.getInstance().createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
         choicesPanel
-                .add(owner.getComponentFactory().createButton(BUTTON_SAVE_TEXT, ICON_SAVE, saveButtonActionListener()));
+                .add(GuiComponentFactory.getInstance().createButton(BUTTON_SAVE_TEXT, ICON_SAVE, saveButtonActionListener()));
         choicesPanel
-                .add(owner.getComponentFactory().createButton(BUTTON_LOAD_TEXT, ICON_LOAD, loadButtonActionListener()));
-        choicesPanel.add(owner.getComponentFactory().createButton(BUTTON_RESET_TEXT, ICON_CANCEL,
+                .add(GuiComponentFactory.getInstance().createButton(BUTTON_LOAD_TEXT, ICON_LOAD, loadButtonActionListener()));
+        choicesPanel.add(GuiComponentFactory.getInstance().createButton(BUTTON_RESET_TEXT, ICON_CANCEL,
                 this.owner.getGrid().resetButtonActionListener()));
         choicesPanel
-                .add(owner.getComponentFactory().createButton(BUTTON_BACK_TEXT, ICON_BACK, backButtonActionListener()));
+                .add(GuiComponentFactory.getInstance().createButton(BUTTON_BACK_TEXT, ICON_BACK, backButtonActionListener()));
         return choicesPanel;
     }
 
@@ -71,7 +72,7 @@ public class CraftOptions {
      */
     private ActionListener saveButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = owner.getComponentFactory().createFileChooser(
+            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
                     Controller.getInstance().getLevelController().getLevelFileDescription(),
                     Controller.getInstance().getLevelController().getLevelFileExtension());
             fc.showSaveDialog(this.owner.getFrame());
@@ -105,7 +106,7 @@ public class CraftOptions {
      */
     private ActionListener loadButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = owner.getComponentFactory().createFileChooser(
+            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
                     Controller.getInstance().getLevelController().getLevelFileDescription(),
                     Controller.getInstance().getLevelController().getLevelFileExtension());
             fc.showOpenDialog(this.owner.getFrame());

@@ -69,14 +69,14 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
 
     @Override
     public final void showLevelInvalidDialog(final String cause) {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
                 .setVisible(true);
     }
 
     @Override
     public final void showLevelFinishedDialog() {
-        GuiComponentFactory.getDefaultInstance()
+        GuiComponentFactory.getInstance()
                 .createNotifyDialog(this.getFrame(), LEVEL_FINISHED_TITLE, LEVEL_FINISHED_MESSAGE, e -> {
                     Controller.getInstance().getGameController().levelFinishedAccepted();
                 }).setVisible(true);
@@ -84,7 +84,7 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
 
     @Override
     public final void showGameFinishedDialog() {
-        GuiComponentFactory.getDefaultInstance()
+        GuiComponentFactory.getInstance()
                 .createNotifyDialog(this.getFrame(), LEVEL_FINISHED_TITLE, GAME_FINISHED_MESSAGE, e -> {
                     Controller.getInstance().getGameController().gameFinishedAccepted();
                 }).setVisible(true);
@@ -92,14 +92,14 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
 
     @Override
     public final void showClassNotFoundErrorDialog() {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
     }
 
     @Override
     public final void showIOErrorDialog() {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+        GuiComponentFactory.getInstance()
+                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
     }
 
     /**
@@ -172,7 +172,7 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
      * @return the selected file
      */
     private File showSaveGameFileChooser() {
-        JFileChooser fc = GuiComponentFactory.getDefaultInstance().createFileChooser(
+        JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
                 Controller.getInstance().getLevelSequenceController().getLevelSequenceFileDescription(),
                 Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension());
         fc.showOpenDialog(this.getFrame());

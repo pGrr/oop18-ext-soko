@@ -103,7 +103,7 @@ public class InitialLevelList {
         JPanel p = new JPanel(new BorderLayout());
         // level list panel
         JPanel levelListPanel = new JPanel(new BorderLayout());
-        levelListPanel.setBorder(GuiComponentFactory.getDefaultInstance()
+        levelListPanel.setBorder(GuiComponentFactory.getInstance()
                 .createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
         JScrollPane scrollPane = new JScrollPane(this.levelList);
         levelListPanel.add(scrollPane);
@@ -111,18 +111,18 @@ public class InitialLevelList {
         // edit list panel
         JPanel p2 = new JPanel(new GridLayout(2, 1));
         JPanel editListPanel = new JPanel();
-        JButton addLevelButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_PLUS, addLevel());
+        JButton addLevelButton = GuiComponentFactory.getInstance().createButton("", ICON_PLUS, addLevel());
         editListPanel.add(addLevelButton);
-        JButton removeLevelButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_MINUS,
+        JButton removeLevelButton = GuiComponentFactory.getInstance().createButton("", ICON_MINUS,
                 removeSelected());
         editListPanel.add(removeLevelButton);
-        editListPanel.setBorder(GuiComponentFactory.getDefaultInstance()
+        editListPanel.setBorder(GuiComponentFactory.getInstance()
                 .createTitledPaddingBorder(PANEL_EDIT_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
-        JButton upButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_UP, move(i -> i - 1));
+        JButton upButton = GuiComponentFactory.getInstance().createButton("", ICON_UP, move(i -> i - 1));
         editListPanel.add(upButton);
-        JButton downButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_DOWN, move(i -> i + 1));
+        JButton downButton = GuiComponentFactory.getInstance().createButton("", ICON_DOWN, move(i -> i + 1));
         editListPanel.add(downButton);
-        JButton cancelButton = GuiComponentFactory.getDefaultInstance().createButton("", ICON_RESET, removeAll());
+        JButton cancelButton = GuiComponentFactory.getInstance().createButton("", ICON_RESET, removeAll());
         editListPanel.add(cancelButton);
         p2.add(editListPanel);
         // save or load panel
@@ -140,7 +140,7 @@ public class InitialLevelList {
      */
     private ActionListener addLevel() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = GuiComponentFactory.getDefaultInstance().createFileChooser(
+            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
                     Controller.getInstance().getLevelController().getLevelFileDescription(),
                     Controller.getInstance().getLevelController().getLevelFileExtension());
             fc.showOpenDialog(this.owner.getFrame());

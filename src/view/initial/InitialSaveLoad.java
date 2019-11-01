@@ -16,6 +16,7 @@ import model.Model;
 import model.level.Level;
 import model.sequence.LevelSequence;
 import model.sequence.LevelSequenceImpl;
+import view.GuiComponentFactory;
 
 /**
  * The class responsible for the "save or load a sequence" panel in the
@@ -46,11 +47,11 @@ public class InitialSaveLoad {
      */
     public JPanel createPanel() {
         JPanel panel = new JPanel();
-        panel.setBorder(owner.getComponentFactory().createTitledPaddingBorder(PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE,
+        panel.setBorder(GuiComponentFactory.getInstance().createTitledPaddingBorder(PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE,
                 DEFAULT_PADDING));
-        JButton saveButton = owner.getComponentFactory().createButton("", ICON_DOWNLOAD, saveSequence());
+        JButton saveButton = GuiComponentFactory.getInstance().createButton("", ICON_DOWNLOAD, saveSequence());
         panel.add(saveButton);
-        JButton loadButton = owner.getComponentFactory().createButton("", ICON_UPLOAD, loadSequence());
+        JButton loadButton = GuiComponentFactory.getInstance().createButton("", ICON_UPLOAD, loadSequence());
         panel.add(loadButton);
         return panel;
     }
@@ -67,7 +68,7 @@ public class InitialSaveLoad {
                     .getLevelSequenceFileExtension();
             String fileDescription = Controller.getInstance().getLevelSequenceController()
                     .getLevelSequenceFileDescription();
-            JFileChooser fc = owner.getComponentFactory().createFileChooser(fileDescription, fileExtension);
+            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(fileDescription, fileExtension);
             fc.showSaveDialog(this.owner.getFrame());
             File selectedFile = fc.getSelectedFile();
             if (selectedFile != null) {
@@ -95,7 +96,7 @@ public class InitialSaveLoad {
      */
     private ActionListener loadSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = owner.getComponentFactory().createFileChooser(
+            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
                     Controller.getInstance().getLevelSequenceController().getLevelSequenceFileDescription(),
                     Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension());
             fc.showOpenDialog(this.owner.getFrame());
