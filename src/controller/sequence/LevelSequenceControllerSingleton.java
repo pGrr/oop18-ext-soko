@@ -10,12 +10,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import model.Model;
 import model.sequence.LevelSequence;
-import view.GuiComponentFactory;
+import view.View;
 import controller.Controller;
 
 import static controller.ControllerConstants.LEVEL_SEQUENCE_FILE_EXTENSION;
-import static view.initial.InitialConstants.DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT;
-import static view.initial.InitialConstants.DIALOG_ERROR_TITLE;
 import static controller.ControllerConstants.LEVEL_SEQUENCE_FILE_DESCRIPTION;
 
 /**
@@ -75,9 +73,7 @@ public final class LevelSequenceControllerSingleton implements LevelSequenceCont
             Controller.getInstance().getNavigationController()
                     .toGameLevelView(Model.getInstance().getCurrentState().getCurrentLevel());
         } else {
-            GuiComponentFactory.getDefaultInstance()
-                    .createNotifyDialog(null, DIALOG_ERROR_TITLE, DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT)
-                    .setVisible(true);
+            View.getInstance().getInitialWindow().showLevelSequenceEmptyErrorDialog();
         }
     }
 }

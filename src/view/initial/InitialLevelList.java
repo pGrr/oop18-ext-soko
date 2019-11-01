@@ -3,21 +3,13 @@
  */
 package view.initial;
 
-import static view.GuiComponentFactoryImpl.*;
-import static view.initial.InitialConstants.*;
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -25,37 +17,38 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-
 import controller.Controller;
 import model.Model;
 import model.level.Level;
 import model.level.LevelNotValidException;
-import model.sequence.LevelSequence;
-import model.sequence.LevelSequenceImpl;
 import view.GuiComponentFactory;
 
-// TODO: Auto-generated Javadoc
+import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
+
 /**
- * The Class InitialLevelList.
+ * The class responsible for the level list in the {@link InitialWindowImpl}
+ * window.
  */
 public class InitialLevelList {
 
-    /** The owner. */
+    private static final String PANEL_LEVEL_SEQUENCE_TITLE = "Level sequence";
+    private static final String PANEL_EDIT_LEVEL_SEQUENCE_TITLE = "Load levels, remove them or change their orders into the sequence";
+    private static final String ICON_UP = "icons/arrow-up.png";
+    private static final String ICON_DOWN = "icons/arrow-down.png";
+    private static final String ICON_PLUS = "icons/plus-30px.png";
+    private static final String ICON_MINUS = "icons/minus-30px.png";
+    private static final String ICON_RESET = "icons/cross.png";
+
     private final InitialWindowImpl owner;
-
-    /** The panel. */
     private final JPanel panel;
-
-    /** The level list. */
     private final JList<String> levelList;
-
-    /** The list model. */
     private final DefaultListModel<String> listModel;
 
     /**
-     * Instantiates a new initial level list.
+     * Instantiates a new initial level list object.
      *
-     * @param owner the owner
+     * @param owner the {@link InitialWindowImpl} object which creates and contains
+     *              this object
      */
     public InitialLevelList(final InitialWindowImpl owner) {
         this.owner = owner;
@@ -93,11 +86,20 @@ public class InitialLevelList {
     }
 
     /**
+     * Syncs the list-model with the model data.
+     */
+    public void syncListModel() {
+        this.listModel.removeAllElements();
+        Model.getInstance().getCurrentState().getAllLevels().stream().map(Level::getName)
+                .forEach(listModel::addElement);
+    }
+
+    /**
      * Creates the panel.
      *
      * @return the j panel
      */
-    protected JPanel createPanel() {
+    private JPanel createPanel() {
         JPanel p = new JPanel(new BorderLayout());
         // level list panel
         JPanel levelListPanel = new JPanel(new BorderLayout());
@@ -131,18 +133,10 @@ public class InitialLevelList {
     }
 
     /**
-     * Update list model.
-     */
-    public void updateListModel() {
-        this.listModel.removeAllElements();
-        Model.getInstance().getCurrentState().getAllLevels().stream().map(Level::getName)
-                .forEach(listModel::addElement);
-    }
-
-    /**
-     * Adds the level.
+     * This is the action listener for the "add a level" button. It adds a level to
+     * the model and then syncs the list.
      *
-     * @return the action listener
+     * @return the action listener for the "add a level" button
      */
     private ActionListener addLevel() {
         return e -> SwingUtilities.invokeLater(() -> {
@@ -152,25 +146,29 @@ public class InitialLevelList {
             fc.showOpenDialog(this.owner.getFrame());
             String path = fc.getSelectedFile().getAbsolutePath();
             try {
-                Model.getInstance().getCurrentState().add(Controller.getInstance().getLevelController().loadLevel(path));
+                Model.getInstance().getCurrentState()
+                        .add(Controller.getInstance().getLevelController().loadLevel(path));
             } catch (ClassNotFoundException e1) {
                 this.owner.showClassNotFoundErrorDialog();
                 e1.printStackTrace();
             } catch (LevelNotValidException e1) {
-                this.owner.showLevelInvalidDialog(e1.toString());
+                this.owner.showLevelInvalidErrorDialog(e1.toString());
                 e1.printStackTrace();
             } catch (IOException e1) {
                 this.owner.showIOErrorDialog();
                 e1.printStackTrace();
             }
-            updateListModel();
+            syncListModel();
         });
     }
 
     /**
-     * Move down.
+     * This is the action listener for the "move level up" and "move level down"
+     * buttons. It changes the order of the elements accordingly in the model and
+     * then it syncs the list.
      *
-     * @return the action listener
+     * @return the action listener for the "move level up" and "move level down"
+     *         buttons
      */
     private ActionListener move(final Function<Integer, Integer> computeNewIndex) {
         return e -> SwingUtilities.invokeLater(() -> {
@@ -178,34 +176,35 @@ public class InitialLevelList {
             int newIndex = computeNewIndex.apply(selectedIndex);
             if (newIndex >= 0 && newIndex < this.listModel.getSize()) {
                 Model.getInstance().getCurrentState().swap(selectedIndex, newIndex);
-                updateListModel();
+                syncListModel();
                 levelList.setSelectedIndex(newIndex);
             }
         });
     }
 
     /**
-     * Removes the selected.
+     * This is the action listener for the "remove level" button. It removes the level from the
+     * sequence in the model and then syncs the list.
      *
-     * @return the action listener
+     * @return the action listener for the "remove level" button
      */
     private ActionListener removeSelected() {
         return e -> SwingUtilities.invokeLater(() -> {
             Model.getInstance().getCurrentState().remove(this.levelList.getSelectedIndex());
-            updateListModel();
+            syncListModel();
         });
     }
 
     /**
-     * Removes the all.
+     * This is the action listener for the "reset list" button. It clears the
+     * sequence in the model and then syncs the list.
      *
-     * @return the action listener
+     * @return the action listener for the "reset list" button
      */
     private ActionListener removeAll() {
         return e -> SwingUtilities.invokeLater(() -> {
             Model.getInstance().getCurrentState().clear();
-            updateListModel();
+            syncListModel();
         });
     }
-
 }

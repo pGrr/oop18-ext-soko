@@ -3,33 +3,35 @@ package view.initial;
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-
-import model.Model;
-import model.level.Level;
-import model.sequence.LevelSequence;
 import view.GuiComponentFactory;
 import view.WindowAbstract;
 
-import static view.GuiComponentFactoryImpl.*;
-import static view.initial.InitialConstants.*;
+import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class InitialWindowImpl.
+ * An implementation for the {@link InitialWindow} interface. It is composed by
+ * a {@link InitialLevelList}, a {@link InitialOptions} and a
+ * {@link InitialSaveLoad} object which are responsible for specific
+ * responsibilities.
  */
 public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
 
-    /** The level list. */
+    private static final double HEIGHT_TO_SCREENSIZE_RATIO = 0.9;
+    private static final double WIDTH_TO_HEIGHT_RATIO = 1;
+    private static final String TITLE = "SOKOBAN - InitialView";
+    private static final String LABEL_WELCOME_TEXT = "Welcome to Sokoban! What would you like to do?";
+    private static final String DIALOG_ERROR_TITLE = "ERROR";
+    private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
+    private static final String DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT = "Level sequence is empty";
+    private static final String DIALOG_IOERROR_TEXT = "An error occurred during an input/output operation";
+    private static final String DIALOG_CLASS_NOT_FOUND_TEXT = "Loaded file is corrupted.";
+
     private final InitialLevelList levelList;
-
-    /** The choices. */
     private final InitialOptions choices;
-
-    /** The save load sequence. */
     private final InitialSaveLoad saveLoadSequence;
 
     /**
-     * Instantiates a new initial window impl.
+     * Instantiates a new initial window object.
      */
     public InitialWindowImpl() {
         super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
@@ -40,21 +42,77 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
     }
 
     /**
-     * Show.
+     * {@inheritDoc} Then, it syncs the level list with the model.
      */
     @Override
-    public void show() {
+    public final void show() {
         super.show();
-        this.levelList.updateListModel();
+        this.levelList.syncListModel();
     }
-    
+
     /**
-     * Creates the main panel.
-     *
-     * @return the j panel
+     * Syncs the level list content with the model data.
      */
     @Override
-    protected JPanel createMainPanel() {
+    public final void syncWithModel() {
+        this.levelList.syncListModel();
+    }
+
+    @Override
+    public final void showLevelInvalidErrorDialog(final String cause) {
+        GuiComponentFactory.getDefaultInstance()
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
+                .setVisible(true);
+    }
+
+    @Override
+    public final void showLevelSequenceEmptyErrorDialog() {
+        GuiComponentFactory.getDefaultInstance()
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT)
+                .setVisible(true);
+    }
+
+    @Override
+    public final void showIOErrorDialog() {
+        GuiComponentFactory.getDefaultInstance()
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+    }
+
+    @Override
+    public final void showClassNotFoundErrorDialog() {
+        GuiComponentFactory.getDefaultInstance()
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
+    }
+
+    /**
+     * Gets the {@link InitialLevelList} object.
+     *
+     * @return the {@link InitialLevelList} object
+     */
+    protected final InitialLevelList getLevelList() {
+        return this.levelList;
+    }
+
+    /**
+     * Gets the {@link InitialSaveLoad} object.
+     *
+     * @return the save load sequence
+     */
+    protected final InitialSaveLoad getSaveLoadSequence() {
+        return this.saveLoadSequence;
+    }
+
+    /**
+     * Gets the {@link InitialOptions} object.
+     *
+     * @return the choices
+     */
+    protected final InitialOptions getChoices() {
+        return this.choices;
+    }
+
+    @Override
+    protected final JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
         mainPanel.add(welcomePanel(), BorderLayout.PAGE_START);
@@ -64,44 +122,9 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
     }
 
     /**
-     * Gets the level list.
+     * Creates the welcome panel.
      *
-     * @return the level list
-     */
-    protected InitialLevelList getLevelList() {
-        return this.levelList;
-    }
-
-    /**
-     * Update list model.
-     */
-    @Override
-    public void updateListModel() {
-        this.levelList.updateListModel();
-    }
-    
-    /**
-     * Gets the choices.
-     *
-     * @return the choices
-     */
-    protected InitialOptions getChoices() {
-        return this.choices;
-    }
-
-    /**
-     * Gets the save load sequence.
-     *
-     * @return the save load sequence
-     */
-    protected InitialSaveLoad getSaveLoadSequence() {
-        return this.saveLoadSequence;
-    }
-
-    /**
-     * Welcome panel.
-     *
-     * @return the j panel
+     * @return the welcome panel
      */
     private JPanel welcomePanel() {
         JPanel p = new JPanel();
@@ -110,9 +133,9 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
     }
 
     /**
-     * Level sequence panel.
+     * Creates the level sequence panel.
      *
-     * @return the j panel
+     * @return the level sequence panel
      */
     private JPanel levelSequencePanel() {
         JPanel p = new JPanel();
@@ -120,35 +143,5 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
         p.setBorder(getComponentFactory().createEmptyPaddingBorder(DEFAULT_PADDING));
         p.add(this.levelList.getPanel());
         return p;
-    }
-
-    /**
-     * Show IO error dialog.
-     */
-    @Override
-    public void showIOErrorDialog() {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
-    }
-
-    /**
-     * Show class not found error dialog.
-     */
-    @Override
-    public void showClassNotFoundErrorDialog() {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
-    }
-
-    /**
-     * Show level invalid dialog.
-     *
-     * @param cause the cause
-     */
-    @Override
-    public void showLevelInvalidDialog(String cause) {
-        GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
-                .setVisible(true);
     }
 }

@@ -2,29 +2,35 @@ package view.initial;
 
 import view.Window;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface InitialWindow.
+ * The initial window.
  */
 public interface InitialWindow extends Window {
 
     /**
-     * Show IO error dialog.
+     * Syncs the windows (e.g. the level list) with the model.
+     */
+    void syncWithModel();
+
+    /**
+     * Shows a level invalid dialog.
+     *
+     * @param cause the cause
+     */
+    void showLevelInvalidErrorDialog(String cause);
+
+    /**
+     * Show level sequence empty error dialog.
+     */
+    void showLevelSequenceEmptyErrorDialog();
+
+    /**
+     * Shows an input output error dialog.
      */
     void showIOErrorDialog();
 
     /**
-     * Show class not found error dialog.
+     * Shows a class not found error dialog.
      */
     void showClassNotFoundErrorDialog();
-
-    /**
-     * Show level invalid dialog.
-     *
-     * @param cause the cause
-     */
-    void showLevelInvalidDialog(String cause);
-
-    void updateListModel();
-
 }

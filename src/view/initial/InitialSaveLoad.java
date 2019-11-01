@@ -1,40 +1,41 @@
 package view.initial;
 
-import static view.GuiComponentFactoryImpl.*;
-import static view.initial.InitialConstants.*;
+import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 import controller.Controller;
 import model.Model;
 import model.level.Level;
 import model.sequence.LevelSequence;
 import model.sequence.LevelSequenceImpl;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class InitialSaveLoad.
+ * The class responsible for the "save or load a sequence" panel in the
+ * {@link InitialWindowImpl} window.
  */
 public class InitialSaveLoad {
 
-    /** The owner. */
+    private static final String PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE = "Save current sequence or load one";
+    private static final String ICON_UPLOAD = "icons/upload.png";
+    private static final String ICON_DOWNLOAD = "icons/download.png";
+
     private final InitialWindowImpl owner;
 
     /**
-     * Instantiates a new initial save load.
+     * Instantiates a new initial save load object.
      *
-     * @param owner the owner
+     * @param owner the {@link InitialWindowImpl} object which creates and contains
+     *              this object
      */
-    public InitialSaveLoad(InitialWindowImpl owner) {
+    public InitialSaveLoad(final InitialWindowImpl owner) {
         this.owner = owner;
     }
 
@@ -47,22 +48,25 @@ public class InitialSaveLoad {
         JPanel panel = new JPanel();
         panel.setBorder(owner.getComponentFactory().createTitledPaddingBorder(PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE,
                 DEFAULT_PADDING));
-        JButton saveButton = owner.getComponentFactory().createButton("", ICON_DOWNLOAD, saveSequenceAction());
+        JButton saveButton = owner.getComponentFactory().createButton("", ICON_DOWNLOAD, saveSequence());
         panel.add(saveButton);
-        JButton loadButton = owner.getComponentFactory().createButton("", ICON_UPLOAD, loadSequenceAction());
+        JButton loadButton = owner.getComponentFactory().createButton("", ICON_UPLOAD, loadSequence());
         panel.add(loadButton);
         return panel;
     }
 
     /**
-     * Save sequence action.
+     * This is the action listener for the "save sequence" button. It shows the save
+     * file dialog and saves the selected file to the file-system.
      *
-     * @return the action listener
+     * @return the action listener for the "save sequence" button
      */
-    private ActionListener saveSequenceAction() {
+    private ActionListener saveSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
-            String fileExtension = Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension();
-            String fileDescription = Controller.getInstance().getLevelSequenceController().getLevelSequenceFileDescription();
+            String fileExtension = Controller.getInstance().getLevelSequenceController()
+                    .getLevelSequenceFileExtension();
+            String fileDescription = Controller.getInstance().getLevelSequenceController()
+                    .getLevelSequenceFileDescription();
             JFileChooser fc = owner.getComponentFactory().createFileChooser(fileDescription, fileExtension);
             fc.showSaveDialog(this.owner.getFrame());
             File selectedFile = fc.getSelectedFile();
@@ -84,11 +88,12 @@ public class InitialSaveLoad {
     }
 
     /**
-     * Load sequence action.
+     * This is the action listener for the "load sequence" button. It shows the load
+     * file dialog and loads the selected file from the file-system.
      *
-     * @return the action listener
+     * @return the action listener for the "load sequence" button
      */
-    private ActionListener loadSequenceAction() {
+    private ActionListener loadSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
             JFileChooser fc = owner.getComponentFactory().createFileChooser(
                     Controller.getInstance().getLevelSequenceController().getLevelSequenceFileDescription(),

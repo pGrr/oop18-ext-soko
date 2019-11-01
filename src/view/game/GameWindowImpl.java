@@ -17,9 +17,6 @@ import model.grid.Grid;
 import view.GuiComponentFactory;
 import view.WindowAbstract;
 
-import static view.initial.InitialConstants.DIALOG_IOERROR_TEXT;
-import static view.initial.InitialConstants.DIALOG_LEVEL_NOT_CORRECT_TEXT;
-
 /**
  * An implementation for the {@link GameWindow} interface. It creates uses a
  * {@link GameCanvas} object to manage the canvas drawings.
@@ -29,6 +26,9 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
     private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
     private static final double WIDTH_TO_HEIGHT_RATIO = 1;
     private static final String DIALOG_ERROR_TITLE = "ERROR";
+    private static final String DIALOG_IOERROR_TEXT = "An error occurred during an input/output operation";
+    private static final String DIALOG_CLASS_NOT_FOUND_TEXT = "Loaded file is corrupted.";
+    private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
     private static final String MENU_TITLE = "Menu";
     private static final String LEVEL_FINISHED_MESSAGE = "You made it!! Congratulations!";
     private static final String GAME_FINISHED_MESSAGE = "...and that was the last one!! You won!! Congratulations!";
@@ -93,7 +93,7 @@ public class GameWindowImpl extends WindowAbstract implements GameWindow {
     @Override
     public final void showClassNotFoundErrorDialog() {
         GuiComponentFactory.getDefaultInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
     }
 
     @Override

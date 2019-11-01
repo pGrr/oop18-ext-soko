@@ -47,7 +47,7 @@ public final class ControllerSingleton implements Controller {
         Optional<LevelSequence> ls = LevelSequences.createDefault();
         if (ls.isPresent()) {
             Model.getInstance().setCurrentLevelSequence(ls.get());
-            View.getInstance().getInitialWindow().updateListModel();
+            View.getInstance().getInitialWindow().syncWithModel();
         }
     }
 
