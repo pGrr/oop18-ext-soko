@@ -1,5 +1,8 @@
 package view.initial;
 
+import java.util.List;
+
+import controller.initial.InitialWindowController;
 import view.Window;
 
 /**
@@ -8,9 +11,18 @@ import view.Window;
 public interface InitialWindow extends Window {
 
     /**
-     * Syncs the windows (e.g. the level list) with the model.
+     * Sets the controller.
+     *
+     * @param controller the new controller
      */
-    void syncWithModel();
+    void setController(InitialWindowController controller);
+
+    /**
+     * Syncs the windows (e.g. the level list) with the model.
+     * 
+     * @param levelNames the names of the current levels in the level sequence
+     */
+    void updateList(List<String> levelNames);
 
     /**
      * Shows a level invalid dialog.
@@ -18,6 +30,11 @@ public interface InitialWindow extends Window {
      * @param cause the cause
      */
     void showLevelInvalidErrorDialog(String cause);
+
+    /**
+     * Show level sequence load-error dialog.
+     */
+    void showDefaultLevelSequenceLoadErrorDialog();
 
     /**
      * Show level sequence empty error dialog.

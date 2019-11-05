@@ -1,12 +1,20 @@
 package view.game;
 
-import model.element.Element;
+import controller.game.GameWindowController;
+import model.level.grid.element.Element;
 import view.Window;
 
 /**
  * The "play a level" window.
  */
 public interface GameWindow extends Window {
+
+    /**
+     * Sets the controller.
+     *
+     * @param controller the new controller
+     */
+    void setController(GameWindowController controller);
 
     /**
      * Draws an element in the game canvas.

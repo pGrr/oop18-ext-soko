@@ -1,4 +1,4 @@
-package model.element;
+package model.level.grid.element;
 
 /**
  * The Type of the elements.

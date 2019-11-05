@@ -2,6 +2,9 @@ package view.craft;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
+
+import controller.craft.CraftWindowController;
+import model.level.grid.Grid;
 import view.GuiComponentFactory;
 import view.WindowAbstract;
 
@@ -38,6 +41,16 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
     }
 
     @Override
+    public void setController(final CraftWindowController controller) {
+        this.grid.setController(controller);
+    }
+
+    @Override
+    public void updateGrid(final Grid grid) {
+        this.grid.setGrid(grid);
+    }
+
+    @Override
     protected JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(GuiComponentFactory.getInstance().createEmptyPaddingBorder(DEFAULT_PADDING));
@@ -55,20 +68,20 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
 
     @Override
     public void showIOErrorDialog() {
-        GuiComponentFactory.getInstance()
-                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+        GuiComponentFactory.getInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT)
+                .setVisible(true);
     }
 
     @Override
     public void showClassNotFoundErrorDialog() {
         GuiComponentFactory.getInstance()
-                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_FILE_CORRUPTED_TEXT).setVisible(true);
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_FILE_CORRUPTED_TEXT).setVisible(true);
     }
 
     @Override
     public void showLevelInvalidDialog(final String cause) {
         GuiComponentFactory.getInstance()
-                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + " " + cause)
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + " " + cause)
                 .setVisible(true);
     }
 
@@ -84,9 +97,10 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
     }
 
     /**
-     * Gets the reference to the {@link CraftSelection} object. It has package-private
-     * visibility as it is used by the other objects of the {@link view.craft}
-     * package.     *
+     * Gets the reference to the {@link CraftSelection} object. It has
+     * package-private visibility as it is used by the other objects of the
+     * {@link view.craft} package. *
+     * 
      * @return the {@link CraftSelection} object
      */
     CraftSelection getSelection() {

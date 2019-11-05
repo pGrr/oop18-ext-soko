@@ -1,11 +1,27 @@
 package view.craft;
 
+import controller.craft.CraftWindowController;
+import model.level.grid.Grid;
 import view.Window;
 
 /**
  * The "Craft a level" window.
  */
 public interface CraftWindow extends Window {
+
+    /**
+     * Sets the controller.
+     *
+     * @param controller the new controller
+     */
+    void setController(CraftWindowController controller);
+
+    /**
+     * Updates the craft window grid with the given list of elements.
+     *
+     * @param grid the new grid
+     */
+    void updateGrid(Grid grid);
 
     /**
      * Show IO error dialog.

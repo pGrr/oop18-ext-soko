@@ -1,8 +1,8 @@
 package controller.sequence;
 
-import java.io.IOException;
+import java.util.List;
 
-import model.sequence.LevelSequence;
+import model.LevelSequence;
 
 /**
  * The level sequence controller, which is responsible for the main operations
@@ -11,38 +11,32 @@ import model.sequence.LevelSequence;
 public interface LevelSequenceController {
 
     /**
-     * Gets the level sequence file description.
+     * Sets the current level sequence.
      *
-     * @return the level sequence file description
+     * @param levelSequence the new current level sequence
      */
-    String getLevelSequenceFileDescription();
+    void setCurrentLevelSequence(LevelSequence levelSequence);
 
     /**
-     * Gets the level sequence file extension.
-     *
-     * @return the level sequence file extension
-     */
-    String getLevelSequenceFileExtension();
-
-    /**
-     * Saves the given level sequence to the given path in the file-system.
-     *
-     * @param levelSequence the level sequence
-     * @param path          the absolute path to which save the file
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    void saveLevelSequence(LevelSequence levelSequence, String path) throws IOException;
-
-    /**
-     * Loads a level sequence from the given path in the file-system and, if
-     * successful, it returns it.
+     * Returns the names of the levels of the current level sequence.
      * 
-     * @param path the absolute path of the file to be loaded in the file-system
-     * @return the loaded level sequence
-     * @throws IOException            Signals that an I/O exception has occurred.
-     * @throws ClassNotFoundException the class not found exception
+     * @return the level names list
      */
-    LevelSequence loadLevelSequence(String path) throws IOException, ClassNotFoundException;
+    List<String> getLevelNames();
+
+    /**
+     * Gets the current level sequence in its current state.
+     *
+     * @return the current level sequence
+     */
+    LevelSequence getCurrentLevelSequenceCurrentState();
+
+    /**
+     * Gets the current level sequence in its initial state.
+     *
+     * @return the current level sequence in its initial state
+     */
+    LevelSequence getCurrentLevelSequenceInitialState();
 
     /**
      * Starts a given level sequence. In more detail: 1) it sets the given level
@@ -54,14 +48,4 @@ public interface LevelSequenceController {
      * @param levelSequence the level sequence to be started
      */
     void startLevelSequence(LevelSequence levelSequence);
-
-    /**
-     * Gets the default level sequence object.
-     *
-     * @return the single object of the default implementing class, which is
-     *         {@link LevelSequenceControllerSingleton}
-     */
-    static LevelSequenceController getDefaultInstance() {
-        return LevelSequenceControllerSingleton.getInstance();
-    }
 }

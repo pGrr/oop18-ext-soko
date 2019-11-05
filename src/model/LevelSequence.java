@@ -1,8 +1,7 @@
-package model.sequence;
+package model;
 
 import java.io.Serializable;
 import java.util.List;
-
 import model.level.Level;
 
 /**
@@ -64,13 +63,6 @@ public interface LevelSequence extends Serializable {
     void setNextLevelAsCurrent();
 
     /**
-     * Checks if a current level is set, i.e. if an iteration is active.
-     *
-     * @return true, if a current level is set
-     */
-    boolean hasCurrentLevel();
-
-    /**
      * Gets the current level in its current state.
      *
      * @return the current level
@@ -81,4 +73,11 @@ public interface LevelSequence extends Serializable {
      * Restarts the current level bringing back its initial state.
      */
     void restartCurrentLevel();
+
+    /**
+     * Creates the copy of the level sequence object.
+     *
+     * @return the level sequence copy
+     */
+    LevelSequence createCopy();
 }

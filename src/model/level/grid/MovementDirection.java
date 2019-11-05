@@ -1,8 +1,9 @@
-package model.grid;
+package model.level.grid;
 
 import java.util.function.Function;
-import model.element.Position;
-import model.element.PositionImpl;
+
+import model.level.grid.element.Position;
+import model.level.grid.element.PositionImpl;
 
 /**
  * The directions of movement.
@@ -30,7 +31,7 @@ public enum MovementDirection {
     RIGHT(position -> new PositionImpl(position.getRowIndex(), position.getColumnIndex() + 1));
 
     /** The compute target position. */
-    private final Function<Position, Position> computeTargetPosition;
+    private final transient Function<Position, Position> computeTargetPosition;
 
     /**
      * Instantiates a new direction constant object.

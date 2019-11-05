@@ -30,26 +30,28 @@ public interface GuiComponentFactory {
     JFrame createFrame(String title, double heightToScreenSizeRatio, double widthToHeightRatio);
 
     /**
-     * Creates a new dialog with the given title and a message.
+     * Creates a new dialog with a title, a message and an "OK" button which, when
+     * pressed, it closes the dialog.
      *
      * @param owner   the frame owner of the dialog
      * @param title   the title of the dialog
      * @param message the message of the dialog
      * @return the j dialog
      */
-    JDialog createDialog(JFrame owner, String title, String message);
+    JDialog createNotifyDialog(JFrame owner, String title, String message);
 
     /**
-     * Creates a new dialog with a title, a message and an "OK" button to which it
-     * attaches the given action listener.
+     * Creates a new dialog with a title, a message and an "OK" button which, when
+     * pressed, it closes the dialog. Also, it attaches to the button the given
+     * action listener.
      *
      * @param owner          the frame owner of the dialog
      * @param title          the title of the dialog
      * @param message        the message of the dialog
-     * @param actionListener the action listener to be attached to the ok button
+     * @param actionListener the action listener to be attached to the "ok" button
      * @return the j dialog
      */
-    JDialog createNotifyDialog(JFrame owner, String title, String message, ActionListener actionListener);
+    JDialog createActionDialog(JFrame owner, String title, String message, ActionListener actionListener);
 
     /**
      * Creates a file chooser with the given file description and file extension.
@@ -164,7 +166,8 @@ public interface GuiComponentFactory {
     Border createEmptyPaddingBorder(int defaultPadding);
 
     /**
-     * Creates a new titled padding border with the given title and size (i.e. padding).
+     * Creates a new titled padding border with the given title and size (i.e.
+     * padding).
      *
      * @param title          the title of the border
      * @param defaultPadding the default padding, i.e. the border size

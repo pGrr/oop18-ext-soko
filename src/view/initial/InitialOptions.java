@@ -5,8 +5,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import controller.Controller;
-import model.Model;
+import controller.initial.InitialWindowController;
 import view.GuiComponentFactory;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
@@ -16,12 +15,29 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
  * {@link InitialWindowImpl} window, e.g. "save", "craft a level", "play"
  * buttons.
  */
-public class InitialOptions {
+public final class InitialOptions {
 
     private static final String BUTTON_CRAFT_TEXT = "CRAFT A LEVEL";
     private static final String BUTTON_PLAY_TEXT = "PLAY";
     private static final String ICON_CRAFT = "icons/craft.png";
     private static final String ICON_PLAY = "icons/ok.png";
+
+    private InitialWindowController controller;
+
+    /**
+     * Initializes a new initial options object.
+     */
+    public InitialOptions() {
+    }
+
+    /**
+     * Sets the controller.
+     *
+     * @param controller the new controller
+     */
+    public void setController(final InitialWindowController controller) {
+        this.controller = controller;
+    }
 
     /**
      * Creates the panel.
@@ -47,7 +63,7 @@ public class InitialOptions {
      */
     public ActionListener craft() {
         return e -> SwingUtilities.invokeLater(() -> {
-            Controller.getInstance().getNavigationController().toCraftLevelView();
+            this.controller.toCraftLevelView();
         });
     }
 
@@ -59,8 +75,7 @@ public class InitialOptions {
      */
     public ActionListener play() {
         return e -> SwingUtilities.invokeLater(() -> {
-            Controller.getInstance().getLevelSequenceController()
-                    .startLevelSequence(Model.getInstance().getCurrentState());
+            this.controller.play();
         });
     }
 }

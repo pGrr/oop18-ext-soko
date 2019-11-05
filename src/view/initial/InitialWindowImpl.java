@@ -1,8 +1,10 @@
 package view.initial;
 
 import java.awt.BorderLayout;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import controller.initial.InitialWindowController;
 import view.GuiComponentFactory;
 import view.WindowAbstract;
 
@@ -14,7 +16,7 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
  * {@link InitialSaveLoad} object which are responsible for specific
  * responsibilities.
  */
-public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
+public final class InitialWindowImpl extends WindowAbstract implements InitialWindow {
 
     private static final double HEIGHT_TO_SCREENSIZE_RATIO = 0.9;
     private static final double WIDTH_TO_HEIGHT_RATIO = 1;
@@ -22,13 +24,15 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
     private static final String LABEL_WELCOME_TEXT = "Welcome to Sokoban! What would you like to do?";
     private static final String DIALOG_ERROR_TITLE = "ERROR";
     private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
+    private static final String DIALOG_DEFAULT_LEVEL_SEQUENCE_LOAD_ERROR_TEXT = "Oops! An error occurred while loading the default level sequence... Don't worry, you can still create your own levels, organize them in a sequence and play!";
     private static final String DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT = "Level sequence is empty";
     private static final String DIALOG_IOERROR_TEXT = "An error occurred during an input/output operation";
-    private static final String DIALOG_CLASS_NOT_FOUND_TEXT = "Loaded file is corrupted.";
+    private static final String DIALOG_CLASS_NOT_FOUND_TEXT = "The file is corrupted.";
 
     private final InitialLevelList levelList;
     private final InitialOptions choices;
     private final InitialSaveLoad saveLoadSequence;
+    private InitialWindowController controller;
 
     /**
      * Instantiates a new initial window object.
@@ -45,43 +49,55 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
      * {@inheritDoc} Then, it syncs the level list with the model.
      */
     @Override
-    public final void show() {
+    public void show() {
         super.show();
-        this.levelList.syncListModel();
-    }
-
-    /**
-     * Syncs the level list content with the model data.
-     */
-    @Override
-    public final void syncWithModel() {
-        this.levelList.syncListModel();
+        this.controller.updateLevelList();
     }
 
     @Override
-    public final void showLevelInvalidErrorDialog(final String cause) {
+    public void setController(final InitialWindowController controller) {
+        this.controller = controller;
+        this.levelList.setController(controller);
+        this.saveLoadSequence.setController(controller);
+        this.choices.setController(controller);
+    }
+
+    @Override
+    public void updateList(final List<String> levelNames) {
+        this.levelList.updateList(levelNames);
+    }
+
+    @Override
+    public void showLevelInvalidErrorDialog(final String cause) {
         GuiComponentFactory.getInstance()
-                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
                 .setVisible(true);
     }
 
     @Override
-    public final void showLevelSequenceEmptyErrorDialog() {
+    public void showDefaultLevelSequenceLoadErrorDialog() {
         GuiComponentFactory.getInstance()
-                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT)
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_DEFAULT_LEVEL_SEQUENCE_LOAD_ERROR_TEXT)
                 .setVisible(true);
     }
 
     @Override
-    public final void showIOErrorDialog() {
+    public void showLevelSequenceEmptyErrorDialog() {
         GuiComponentFactory.getInstance()
-                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT).setVisible(true);
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT)
+                .setVisible(true);
     }
 
     @Override
-    public final void showClassNotFoundErrorDialog() {
+    public void showIOErrorDialog() {
+        GuiComponentFactory.getInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT)
+                .setVisible(true);
+    }
+
+    @Override
+    public void showClassNotFoundErrorDialog() {
         GuiComponentFactory.getInstance()
-                .createDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
+                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
     }
 
     /**
@@ -89,7 +105,7 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
      *
      * @return the {@link InitialLevelList} object
      */
-    protected final InitialLevelList getLevelList() {
+    protected InitialLevelList getLevelList() {
         return this.levelList;
     }
 
@@ -98,7 +114,7 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
      *
      * @return the save load sequence
      */
-    protected final InitialSaveLoad getSaveLoadSequence() {
+    protected InitialSaveLoad getSaveLoadSequence() {
         return this.saveLoadSequence;
     }
 
@@ -107,12 +123,12 @@ public class InitialWindowImpl extends WindowAbstract implements InitialWindow {
      *
      * @return the choices
      */
-    protected final InitialOptions getChoices() {
+    protected InitialOptions getChoices() {
         return this.choices;
     }
 
     @Override
-    protected final JPanel createMainPanel() {
+    protected JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(GuiComponentFactory.getInstance().createEmptyPaddingBorder(DEFAULT_PADDING));
         mainPanel.add(welcomePanel(), BorderLayout.PAGE_START);

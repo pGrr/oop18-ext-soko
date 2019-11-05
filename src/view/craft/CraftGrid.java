@@ -4,7 +4,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,13 +13,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import model.element.Element;
-import model.element.ElementImpl;
-import model.element.Position;
-import model.element.PositionImpl;
-import model.element.Type;
-import model.grid.Grid;
-import model.level.Level;
+import controller.craft.CraftWindowController;
+import model.level.grid.Grid;
+import model.level.grid.element.Position;
+import model.level.grid.element.PositionImpl;
+import model.level.grid.element.Type;
 import view.GuiComponentFactory;
 import view.game.TypeImage;
 
@@ -39,13 +36,14 @@ public class CraftGrid {
     private final CraftWindowImpl owner;
     private final Map<Type, Icon> resizedIcons;
     private final List<List<JButton>> buttonGrid;
+    private CraftWindowController controller;
     private Grid levelGrid;
 
     /**
      * Instantiates a new craft grid object.
      *
-     * @param owner the {@link CraftWindowImpl} object which creates and contains
-     *              this object
+     * @param owner      the {@link CraftWindowImpl} object which creates and
+     *                   contains this object
      */
     public CraftGrid(final CraftWindowImpl owner) {
         this.owner = owner;
@@ -55,8 +53,16 @@ public class CraftGrid {
     }
 
     /**
-     * Gets the {@link Grid} object representing the button grid in its current
-     * state as it has been edited by the user.
+     * Sets the controller.
+     *
+     * @param controller the new controller
+     */
+    public void setController(final CraftWindowController controller) {
+        this.controller = controller;
+    }
+
+    /**
+     * Gets the grid.
      *
      * @return the {@link Grid} object
      */
@@ -65,13 +71,12 @@ public class CraftGrid {
     }
 
     /**
-     * Sets the current state of this object to represent the given level's
-     * {@link Grid}. It is used when a level is loaded by the user.
-     *
-     * @param level the level to be loaded
+     * Sets the grid.
+     * 
+     * @param grid the grid
      */
-    public void setLevel(final Level level) {
-        this.levelGrid = level.getGrid();
+    public void setGrid(final Grid grid) {
+        this.levelGrid = grid;
         updateButtonGrid();
     }
 
@@ -118,8 +123,7 @@ public class CraftGrid {
      */
     public ActionListener resetButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            this.levelGrid.clear();
-            updateButtonGrid();
+            this.controller.clearGrid();
         });
     }
 
@@ -138,18 +142,7 @@ public class CraftGrid {
         return e -> SwingUtilities.invokeLater(() -> {
             JButton clickedButton = (JButton) e.getSource();
             Position position = findButtonPosition(clickedButton);
-            Collection<Element> elementsInPosition = this.levelGrid.getElementsAt(position);
-            Element newElement = new ElementImpl(this.owner.getSelection().getSelectedType(), position, this.levelGrid);
-            if (elementsInPosition.isEmpty()) {
-                this.levelGrid.add(newElement);
-            }
-            elementsInPosition.forEach(oldElement -> {
-                this.levelGrid.remove(oldElement);
-                if (!oldElement.getType().equals(owner.getSelection().getSelectedType())) {
-                    this.levelGrid.add(newElement);
-                }
-            });
-            updateButtonGrid();
+            this.controller.insert(this.owner.getSelection().getSelectedType(), position);
         });
     }
 

@@ -1,14 +1,14 @@
 package controller.game;
 
 import java.io.IOException;
-
-import model.grid.MovementDirection;
+import model.level.Level;
+import model.level.grid.MovementDirection;
 
 /**
  * The Game controller, which is responsible for the operations necessary when
  * playing a level.
  */
-public interface GameController {
+public interface GameWindowController {
 
     /**
      * Performs the action of the user trying to move in a specified direction. It
@@ -19,6 +19,14 @@ public interface GameController {
      * @param direction the direction of the movement
      */
     void move(MovementDirection direction);
+
+    /**
+     * Retrieves from the model the current level in order to draw it in
+     * the game canvas.
+     * 
+     * @return the element list
+     */
+    Level getCurrentLevel();
 
     /**
      * Restarts the current level. Every movement performed since the beginning of
@@ -53,12 +61,7 @@ public interface GameController {
     void saveGame(String path) throws IOException;
 
     /**
-     * Gets the default game controller object.
-     *
-     * @return the single instance of the default implementing class, which is
-     *         {@link GameControllerSingleton}.
+     * Resets the current level sequence and goes back to initial view.
      */
-    static GameController getDefaultInstance() {
-        return GameControllerSingleton.getInstance();
-    }
+    void backToInitialView();
 }

@@ -7,11 +7,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.Controller;
-import model.level.Level;
-import model.level.LevelImpl;
+import controller.craft.CraftWindowController;
 import model.level.LevelNotValidException;
 import view.GuiComponentFactory;
-import view.View;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
@@ -32,6 +30,7 @@ public class CraftOptions {
     private static final String ICON_BACK = "icons/back.png";
 
     private final CraftWindowImpl owner;
+    private CraftWindowController controller;
 
     /**
      * Instantiates a new craft options object.
@@ -44,22 +43,31 @@ public class CraftOptions {
     }
 
     /**
+     * Sets the controller.
+     *
+     * @param controller the new controller
+     */
+    public void setController(final CraftWindowController controller) {
+        this.controller = controller;
+    }
+
+    /**
      * Creates the panel containing the options buttons.
      *
      * @return the created JPanel
      */
     public JPanel createPanel() {
         JPanel choicesPanel = new JPanel(new GridLayout(1, 4, DEFAULT_PADDING, DEFAULT_PADDING));
-        choicesPanel
-                .setBorder(GuiComponentFactory.getInstance().createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
-        choicesPanel
-                .add(GuiComponentFactory.getInstance().createButton(BUTTON_SAVE_TEXT, ICON_SAVE, saveButtonActionListener()));
-        choicesPanel
-                .add(GuiComponentFactory.getInstance().createButton(BUTTON_LOAD_TEXT, ICON_LOAD, loadButtonActionListener()));
+        choicesPanel.setBorder(
+                GuiComponentFactory.getInstance().createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
+        choicesPanel.add(GuiComponentFactory.getInstance().createButton(BUTTON_SAVE_TEXT, ICON_SAVE,
+                saveButtonActionListener()));
+        choicesPanel.add(GuiComponentFactory.getInstance().createButton(BUTTON_LOAD_TEXT, ICON_LOAD,
+                loadButtonActionListener()));
         choicesPanel.add(GuiComponentFactory.getInstance().createButton(BUTTON_RESET_TEXT, ICON_CANCEL,
                 this.owner.getGrid().resetButtonActionListener()));
-        choicesPanel
-                .add(GuiComponentFactory.getInstance().createButton(BUTTON_BACK_TEXT, ICON_BACK, backButtonActionListener()));
+        choicesPanel.add(GuiComponentFactory.getInstance().createButton(BUTTON_BACK_TEXT, ICON_BACK,
+                backButtonActionListener()));
         return choicesPanel;
     }
 
@@ -73,21 +81,16 @@ public class CraftOptions {
     private ActionListener saveButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
             JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controller.getInstance().getLevelController().getLevelFileDescription(),
-                    Controller.getInstance().getLevelController().getLevelFileExtension());
+                    Controller.getInstance().getLevelFileDescription(),
+                    Controller.getInstance().getLevelFileExtension());
             fc.showSaveDialog(this.owner.getFrame());
-            String path = fc.getSelectedFile().getAbsolutePath()
-                    + Controller.getInstance().getLevelController().getLevelFileExtension();
+            String path = fc.getSelectedFile().getAbsolutePath() + Controller.getInstance().getLevelFileExtension();
             String name = fc.getSelectedFile().getName();
-            Level level = new LevelImpl(name, this.owner.getGrid().getGrid());
             try {
-                level.validate();
-            } catch (LevelNotValidException exc) {
-                View.getInstance().getCraftWindow().showLevelInvalidDialog(exc.toString());
-                exc.printStackTrace();
-            }
-            try {
-                Controller.getInstance().getLevelController().saveLevel(path, level);
+                this.controller.saveLevel(name, this.owner.getGrid().getGrid(), path);
+            } catch (LevelNotValidException e1) {
+                this.owner.showLevelInvalidDialog(e1.toString());
+                e1.printStackTrace();
             } catch (IOException e1) {
                 this.owner.showIOErrorDialog();
                 e1.printStackTrace();
@@ -107,13 +110,11 @@ public class CraftOptions {
     private ActionListener loadButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
             JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controller.getInstance().getLevelController().getLevelFileDescription(),
-                    Controller.getInstance().getLevelController().getLevelFileExtension());
+                    Controller.getInstance().getLevelFileDescription(),
+                    Controller.getInstance().getLevelFileExtension());
             fc.showOpenDialog(this.owner.getFrame());
-            Level level;
             try {
-                level = Controller.getInstance().getLevelController().loadLevel(fc.getSelectedFile().getAbsolutePath());
-                this.owner.getGrid().setLevel(level);
+                this.controller.loadLevel(fc.getSelectedFile().getAbsolutePath());
             } catch (ClassNotFoundException e1) {
                 this.owner.showClassNotFoundErrorDialog();
                 e1.printStackTrace();
@@ -135,7 +136,7 @@ public class CraftOptions {
      */
     private ActionListener backButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            Controller.getInstance().getNavigationController().toInitialView();
+            this.controller.backToInitialView();
         });
     }
 }

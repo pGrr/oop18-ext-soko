@@ -1,10 +1,10 @@
-package model.element;
+package model.level.grid.element;
 
 import java.util.Objects;
 
-import model.grid.MovementDirection;
-import model.grid.Grid;
-import view.View;
+import controller.Controller;
+import model.level.grid.Grid;
+import model.level.grid.MovementDirection;
 
 /**
  * An implementation class for the {@link Element} interface.
@@ -56,7 +56,7 @@ public class ElementImpl implements Element {
         if (isTypeMovable()) {
             boolean hasMoved = this.grid.moveAttempt(this, direction);
             if (hasMoved) {
-                View.getInstance().getGameWindow().draw(this);
+                Controller.getInstance().getNavigationController().getGameWindow().draw(this);
             }
         }
     }

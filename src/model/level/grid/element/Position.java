@@ -1,4 +1,4 @@
-package model.element;
+package model.level.grid.element;
 
 import java.io.Serializable;
 

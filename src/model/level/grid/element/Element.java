@@ -1,8 +1,8 @@
-package model.element;
+package model.level.grid.element;
 
 import java.io.Serializable;
 
-import model.grid.MovementDirection;
+import model.level.grid.MovementDirection;
 
 /**
  * An element of the game, which has a type and a position.

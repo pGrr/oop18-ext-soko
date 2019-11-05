@@ -17,7 +17,7 @@ public final class SokobanApp {
      * @param args the arguments
      */
     public static void main(final String[] args) {
-        Controller.getInstance().startApplication();
+        Controller controller = Controller.getInstance();
+        controller.getNavigationController().toInitialView();
     }
-
 }

@@ -1,10 +1,9 @@
 package view;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestPlayView.
  */
-public class TestPlayView {
+public final class TestPlayView {
 
     /**
      * Instantiates a new test play view.
@@ -17,7 +16,7 @@ public class TestPlayView {
      *
      * @param args the arguments
      */
-    public static void main(String... args) {
+    public static void main(final String... args) {
         // new GameWindowImpl("").show();
     }
 

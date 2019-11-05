@@ -1,10 +1,9 @@
 package controller;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class TestController.
  */
-public class TestController {
+public final class TestController {
 
     /**
      * Instantiates a new test controller.
@@ -17,8 +16,7 @@ public class TestController {
      *
      * @param args the arguments
      */
-    public static void main(String... args) {
-        Controller c = ControllerSingleton.getInstance();
-        c.startApplication();
+    public static void main(final String... args) {
+        //SokobanApp app = new SokoBanAppImpl();
     }
 }

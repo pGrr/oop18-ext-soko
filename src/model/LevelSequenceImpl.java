@@ -1,4 +1,4 @@
-package model.sequence;
+package model;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,11 +8,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-
-import model.grid.Grid;
-import model.grid.GridImpl;
 import model.level.Level;
 import model.level.LevelImpl;
+import model.level.grid.Grid;
+import model.level.grid.GridImpl;
 
 /**
  * An implementation of the {@link LevelSequence} interface.
@@ -24,8 +23,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
     private final String name;
     private final List<Level> levels;
     private transient Iterator<Level> iterator;
-    private transient Level currentLevelCurrentState;
-    private transient Level currentLevelInitialState;
+    private transient Level currentLevel;
 
     /**
      * Instantiates an empty level sequence with a name.
@@ -36,8 +34,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
         this.name = name;
         this.levels = new ArrayList<>();
         this.iterator = this.levels.iterator();
-        this.currentLevelCurrentState = new LevelImpl("", Grid.createEmpty());
-        this.currentLevelInitialState = new LevelImpl("", Grid.createEmpty());
+        this.currentLevel = new LevelImpl("", Grid.createEmpty());
     }
 
     /**
@@ -50,8 +47,15 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
         this.name = name;
         this.levels = levels;
         this.iterator = levels.iterator();
-        this.currentLevelCurrentState = null;
-        this.currentLevelInitialState = null;
+        this.currentLevel = null;
+    }
+
+    @Override
+    public final LevelSequence createCopy() {
+        List<Level> levelsCopy = new ArrayList<>();
+        this.getAllLevels()
+                .forEach(l -> levelsCopy.add(new LevelImpl(new String(l.getName()), new GridImpl(l.getCurrentGrid()))));
+        return new LevelSequenceImpl(new String(this.getName()), levelsCopy);
     }
 
     @Override
@@ -95,20 +99,13 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
 
     @Override
     public final void setNextLevelAsCurrent() {
-        this.currentLevelCurrentState = iterator.next();
-        this.currentLevelInitialState = new LevelImpl(this.currentLevelCurrentState.getName(),
-                new GridImpl(this.currentLevelCurrentState.getGrid()));
-    }
-
-    @Override
-    public final boolean hasCurrentLevel() {
-        return this.currentLevelCurrentState != null;
+        this.currentLevel = iterator.next();
     }
 
     @Override
     public final Level getCurrentLevel() {
-        if (this.currentLevelCurrentState != null) {
-            return this.currentLevelCurrentState;
+        if (this.currentLevel != null) {
+            return this.currentLevel;
         } else {
             throw new IllegalStateException();
         }
@@ -116,8 +113,8 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
 
     @Override
     public final void restartCurrentLevel() {
-        if (this.currentLevelInitialState != null) {
-            this.currentLevelCurrentState = currentLevelInitialState;
+        if (this.currentLevel != null) {
+            this.currentLevel = new LevelImpl(this.currentLevel.getName(), this.currentLevel.getInitialGrid());
         } else {
             throw new IllegalStateException();
         }

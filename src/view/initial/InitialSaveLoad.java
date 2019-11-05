@@ -5,17 +5,12 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.Controller;
-import model.Model;
-import model.level.Level;
-import model.sequence.LevelSequence;
-import model.sequence.LevelSequenceImpl;
+import controller.initial.InitialWindowController;
 import view.GuiComponentFactory;
 
 /**
@@ -29,6 +24,7 @@ public class InitialSaveLoad {
     private static final String ICON_DOWNLOAD = "icons/download.png";
 
     private final InitialWindowImpl owner;
+    private InitialWindowController controller;
 
     /**
      * Instantiates a new initial save load object.
@@ -38,6 +34,15 @@ public class InitialSaveLoad {
      */
     public InitialSaveLoad(final InitialWindowImpl owner) {
         this.owner = owner;
+    }
+
+    /**
+     * Sets the controller.
+     *
+     * @param controller the new controller
+     */
+    public void setController(final InitialWindowController controller) {
+        this.controller = controller;
     }
 
     /**
@@ -64,21 +69,16 @@ public class InitialSaveLoad {
      */
     private ActionListener saveSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
-            String fileExtension = Controller.getInstance().getLevelSequenceController()
-                    .getLevelSequenceFileExtension();
-            String fileDescription = Controller.getInstance().getLevelSequenceController()
-                    .getLevelSequenceFileDescription();
+            String fileExtension = Controller.getInstance().getLevelSequenceFileExtension();
+            String fileDescription = Controller.getInstance().getLevelSequenceFileDescription();
             JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(fileDescription, fileExtension);
             fc.showSaveDialog(this.owner.getFrame());
             File selectedFile = fc.getSelectedFile();
             if (selectedFile != null) {
                 String name = fc.getSelectedFile().getName();
                 if (name != null && !name.isEmpty()) {
-                    LevelSequence levelSequence = new LevelSequenceImpl(name,
-                            Model.getInstance().getCurrentState().getAllLevels());
                     try {
-                        Controller.getInstance().getLevelSequenceController().saveLevelSequence(levelSequence,
-                                fc.getSelectedFile().getAbsolutePath() + fileExtension);
+                        this.controller.saveLevelSequence(name, fc.getSelectedFile().getAbsolutePath() + fileExtension);
                     } catch (IOException e1) {
                         this.owner.showIOErrorDialog();
                         e1.printStackTrace();
@@ -97,8 +97,8 @@ public class InitialSaveLoad {
     private ActionListener loadSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
             JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controller.getInstance().getLevelSequenceController().getLevelSequenceFileDescription(),
-                    Controller.getInstance().getLevelSequenceController().getLevelSequenceFileExtension());
+                    Controller.getInstance().getLevelSequenceFileDescription(),
+                    Controller.getInstance().getLevelSequenceFileExtension());
             fc.showOpenDialog(this.owner.getFrame());
             File file = fc.getSelectedFile();
             String path = new String();
@@ -106,12 +106,7 @@ public class InitialSaveLoad {
                 path = file.getPath();
             }
             try {
-                LevelSequence levelSequence;
-                levelSequence = Controller.getInstance().getLevelSequenceController().loadLevelSequence(path);
-                Model.getInstance().setCurrentLevelSequence(levelSequence);
-                List<String> names = levelSequence.getAllLevels().stream().map(Level::getName)
-                        .collect(Collectors.toList());
-                names.stream().forEach(this.owner.getLevelList().getListModel()::addElement);
+                this.controller.loadLevelSequence(path);
             } catch (ClassNotFoundException e1) {
                 this.owner.showClassNotFoundErrorDialog();
                 e1.printStackTrace();

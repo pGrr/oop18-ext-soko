@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
-import model.element.Element;
-import model.element.Type;
-import model.grid.Grid;
+import model.level.grid.Grid;
+import model.level.grid.element.Element;
+import model.level.grid.element.Type;
 
 /**
  * An implementation class for the {@link Level} interface.
@@ -16,7 +16,8 @@ public class LevelImpl implements Level {
     private static final long serialVersionUID = 2437234480030228409L;
 
     private final String name;
-    private final Grid grid;
+    private final Grid initialGrid;
+    private final Grid currentGrid;
     private Element user;
 
     /**
@@ -28,7 +29,8 @@ public class LevelImpl implements Level {
     public LevelImpl(final String name, final Grid grid) {
         super();
         this.name = name;
-        this.grid = grid;
+        this.initialGrid = Grid.createCopyOf(grid);
+        this.currentGrid = Grid.createCopyOf(grid);
     }
 
     @Override
@@ -37,35 +39,40 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public final Grid getGrid() {
-        return grid;
+    public final Grid getInitialGrid() {
+        return initialGrid;
+    }
+
+    @Override
+    public final Grid getCurrentGrid() {
+        return currentGrid;
     }
 
     @Override
     public final Element getUser() {
         if (this.user == null) {
-            this.user = this.grid.getAllElements().stream().filter(e -> e.getType().equals(Type.USER)).findFirst()
-                    .orElseThrow(IllegalStateException::new);
+            this.user = this.currentGrid.getAllElements().stream().filter(e -> e.getType().equals(Type.USER))
+                    .findFirst().orElseThrow(IllegalStateException::new);
         }
         return this.user;
     }
 
     @Override
     public final boolean isFinished() {
-        long uncoveredTargets = this.grid.getAllElements().stream()
+        long uncoveredTargets = this.currentGrid.getAllElements().stream()
                 .filter(e -> e.getType().equals(Type.BOX) || e.getType().equals(Type.TARGET)).map(Element::getPosition)
-                .distinct().count() - countElements(Type.TARGET, this.grid.getAllElements());
+                .distinct().count() - countElements(Type.TARGET, this.currentGrid.getAllElements());
         return uncoveredTargets == 0;
     }
 
     @Override
     public final void validate() throws LevelNotValidException {
-        if (!arePositionsValid(grid)) {
+        if (!arePositionsValid(currentGrid)) {
             throw new LevelNotValidException.UncorrectPositionException();
         } else {
-            long nUsers = countElements(Type.USER, grid.getAllElements());
-            long nBoxes = countElements(Type.BOX, grid.getAllElements());
-            long nTargets = countElements(Type.TARGET, grid.getAllElements());
+            long nUsers = countElements(Type.USER, currentGrid.getAllElements());
+            long nBoxes = countElements(Type.BOX, currentGrid.getAllElements());
+            long nTargets = countElements(Type.TARGET, currentGrid.getAllElements());
             if (nUsers <= 0) {
                 throw new LevelNotValidException.NoInitialPointException();
             } else if (nUsers > 1) {
@@ -80,7 +87,7 @@ public class LevelImpl implements Level {
 
     @Override
     public final int hashCode() {
-        return Objects.hash(grid, name);
+        return Objects.hash(currentGrid, name);
     }
 
     @Override
@@ -95,12 +102,12 @@ public class LevelImpl implements Level {
             return false;
         }
         LevelImpl other = (LevelImpl) obj;
-        return Objects.equals(grid, other.grid) && Objects.equals(name, other.name);
+        return Objects.equals(currentGrid, other.currentGrid) && Objects.equals(name, other.name);
     }
 
     @Override
     public final String toString() {
-        return "LevelImpl [name=" + name + ", grid=" + grid + "]";
+        return "LevelImpl [name=" + name + ", grid=" + currentGrid + "]";
     }
 
     /**
@@ -131,7 +138,7 @@ public class LevelImpl implements Level {
     /**
      * Counts the elements of a given type in the given collection of elements.
      * 
-     * @param type the type to be counted
+     * @param type     the type to be counted
      * @param elements the collection of elements in which to count the given type
      * @return the number of elements of the given type in the given collection
      */

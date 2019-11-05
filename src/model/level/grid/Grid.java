@@ -1,10 +1,10 @@
-package model.grid;
+package model.level.grid;
 
-import java.io.Serializable; 
+import java.io.Serializable;
 import java.util.Collection;
 
-import model.element.Element;
-import model.element.Position;
+import model.level.grid.element.Element;
+import model.level.grid.element.Position;
 
 /**
  * The squared-grid-world in which the elements are.
@@ -95,5 +95,15 @@ public interface Grid extends Serializable {
      */
     static Grid createEmpty() {
         return new GridImpl();
+    }
+
+    /**
+     * Creates a copy of the given grid.
+     * 
+     * @param grid the grid to be copied
+     * @return the copied grid
+     */
+    static Grid createCopyOf(Grid grid) {
+        return new GridImpl(grid);
     }
 }

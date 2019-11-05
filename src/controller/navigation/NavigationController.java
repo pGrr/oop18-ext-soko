@@ -1,12 +1,36 @@
 package controller.navigation;
 
 import model.level.Level;
+import view.craft.CraftWindow;
+import view.game.GameWindow;
+import view.initial.InitialWindow;
 
 /**
  * The navigation controller, which is responsible for showing and hiding
  * Windows.
  */
 public interface NavigationController {
+
+    /**
+     * Gets the initial window.
+     * 
+     * @return the initialWindow
+     */
+    InitialWindow getInitialWindow();
+
+    /**
+     * Gets the craft window.
+     * 
+     * @return the craftWindow
+     */
+    CraftWindow getCraftWindow();
+
+    /**
+     * gets the game window.
+     * 
+     * @return the gameWindow
+     */
+    GameWindow getGameWindow();
 
     /**
      * Shows the initial view, which contains the level sequence editor and the main
@@ -25,14 +49,4 @@ public interface NavigationController {
      * @param level the level to be played
      */
     void toGameLevelView(Level level);
-
-    /**
-     * Gets the default navigation controller object.
-     *
-     * @return the single instance of the default implementing class, which is
-     *         {@link NavigationControllerSingleton}
-     */
-    static NavigationController getDefaultInstance() {
-        return NavigationControllerSingleton.getInstance();
-    }
 }

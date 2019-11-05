@@ -50,12 +50,14 @@ public final class GuiComponentFactoryImpl implements GuiComponentFactory {
     }
 
     @Override
-    public JDialog createDialog(final JFrame owner, final String title, final String message) {
+    public JDialog createNotifyDialog(final JFrame owner, final String title, final String message) {
         JDialog dialog = new JDialog(owner, title);
         JPanel panel = new JPanel(new GridLayout(2, 1));
         JLabel label = new JLabel(message);
-        label.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING * 2));
+        label.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
         panel.add(label);
+        JButton b = createButton("Ok", "", e -> dialog.dispose());
+        panel.add(b);
         dialog.add(panel);
         dialog.setLocationByPlatform(true);
         dialog.setSize(dialog.getPreferredSize());
@@ -63,16 +65,16 @@ public final class GuiComponentFactoryImpl implements GuiComponentFactory {
     }
 
     @Override
-    public JDialog createNotifyDialog(final JFrame owner, final String title, final String message,
+    public JDialog createActionDialog(final JFrame owner, final String title, final String message,
             final ActionListener actionListener) {
         JDialog dialog = new JDialog(owner, title);
         JPanel panel = new JPanel(new GridLayout(2, 1));
         JLabel label = new JLabel(message);
-        label.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING * 2));
+        label.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
         panel.add(label);
         JButton b = createButton("Ok", "", actionListener);
-        panel.add(b);
         b.addActionListener(e -> dialog.dispose());
+        panel.add(b);
         dialog.add(panel);
         dialog.setLocationByPlatform(true);
         dialog.setSize(dialog.getPreferredSize());

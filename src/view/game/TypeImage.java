@@ -2,7 +2,8 @@ package view.game;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import model.element.Type;
+
+import model.level.grid.element.Type;
 
 /**
  * An enumeration associating each {@link Type} with it's image.

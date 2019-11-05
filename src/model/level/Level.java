@@ -2,8 +2,8 @@ package model.level;
 
 import java.io.Serializable;
 
-import model.element.Element;
-import model.grid.Grid;
+import model.level.grid.Grid;
+import model.level.grid.element.Element;
 
 /**
  * A Level of the game. Has a name and a grid, it can be validated and played.
@@ -18,11 +18,18 @@ public interface Level extends Serializable {
     String getName();
 
     /**
-     * Gets the grid of the level.
-     *
-     * @return the grid of the level
+     * Gets the grid of the level in its initial state.
+     * 
+     * @return the grid of the level in its initial state
      */
-    Grid getGrid();
+    Grid getInitialGrid();
+
+    /**
+     * Gets the grid of the level in its current state.
+     *
+     * @return the current grid of the level
+     */
+    Grid getCurrentGrid();
 
     /**
      * Gets the user element.

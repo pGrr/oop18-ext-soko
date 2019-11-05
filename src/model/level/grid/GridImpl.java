@@ -1,4 +1,4 @@
-package model.grid;
+package model.level.grid;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,11 +8,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import model.element.Element;
-import model.element.ElementImpl;
-import model.element.Position;
-import model.element.PositionImpl;
-import model.element.Type;
+import model.level.grid.element.Element;
+import model.level.grid.element.ElementImpl;
+import model.level.grid.element.Position;
+import model.level.grid.element.PositionImpl;
+import model.level.grid.element.Type;
 
 /**
  * An implementation class for the {@link Grid} interface.
@@ -31,8 +31,8 @@ public class GridImpl implements Grid {
     }
 
     /**
-     * Instantiates a GridImpl object creating a new grid and copying in it all of
-     * the elements of the given grid.
+     * Instantiates a GridImpl object creating a new grid which is a copy of the
+     * given grid.
      * 
      * @param grid the grid
      */

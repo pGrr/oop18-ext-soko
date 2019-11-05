@@ -8,7 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
-import model.element.Type;
+
+import model.level.grid.element.Type;
 import view.GuiComponentFactory;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
