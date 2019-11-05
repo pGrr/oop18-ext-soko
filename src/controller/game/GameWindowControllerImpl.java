@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import controller.Controller;
+import controller.Controllers;
 import controller.navigation.NavigationController;
 import controller.sequence.LevelSequenceController;
 import model.LevelSequence;
@@ -52,8 +53,8 @@ public final class GameWindowControllerImpl implements GameWindowController {
         IntStream.range(currentLevelIndex, levelSequence.getAllLevels().size())
                 .mapToObj(i -> levelSequence.getAllLevels().get(i)).map(o -> (Level) o).forEachOrdered(levels::add);
         LevelSequence newLs = new LevelSequenceImpl(levelSequence.getName(), levels);
-        Controller.getInstance().saveLevelSequence(newLs,
-                path + Controller.getInstance().getLevelSequenceFileExtension());
+        Controllers.saveLevelSequence(newLs,
+                path + Controllers.getLevelSequenceFileExtension());
     }
 
     @Override

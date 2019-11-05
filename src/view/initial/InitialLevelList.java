@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import controller.Controller;
+import controller.Controllers;
 import controller.initial.InitialWindowController;
 import model.level.Level;
 import model.level.LevelNotValidException;
@@ -151,8 +152,8 @@ public class InitialLevelList {
     private ActionListener addLevel() {
         return e -> SwingUtilities.invokeLater(() -> {
             JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controller.getInstance().getLevelFileDescription(),
-                    Controller.getInstance().getLevelFileExtension());
+                    Controllers.getLevelFileDescription(),
+                    Controllers.getLevelFileExtension());
             fc.showOpenDialog(this.owner.getFrame());
             String path = fc.getSelectedFile().getAbsolutePath();
             try {

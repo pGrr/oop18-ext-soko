@@ -1,7 +1,5 @@
 package view.initial;
 
-import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
-
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
@@ -9,9 +7,11 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import controller.Controller;
+import controller.Controllers;
 import controller.initial.InitialWindowController;
 import view.GuiComponentFactory;
+
+import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
 /**
  * The class responsible for the "save or load a sequence" panel in the
@@ -69,8 +69,8 @@ public class InitialSaveLoad {
      */
     private ActionListener saveSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
-            String fileExtension = Controller.getInstance().getLevelSequenceFileExtension();
-            String fileDescription = Controller.getInstance().getLevelSequenceFileDescription();
+            String fileExtension = Controllers.getLevelSequenceFileExtension();
+            String fileDescription = Controllers.getLevelSequenceFileDescription();
             JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(fileDescription, fileExtension);
             fc.showSaveDialog(this.owner.getFrame());
             File selectedFile = fc.getSelectedFile();
@@ -97,8 +97,8 @@ public class InitialSaveLoad {
     private ActionListener loadSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
             JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controller.getInstance().getLevelSequenceFileDescription(),
-                    Controller.getInstance().getLevelSequenceFileExtension());
+                    Controllers.getLevelSequenceFileDescription(),
+                    Controllers.getLevelSequenceFileExtension());
             fc.showOpenDialog(this.owner.getFrame());
             File file = fc.getSelectedFile();
             String path = new String();

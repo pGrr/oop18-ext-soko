@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import controller.Controller;
+import controller.Controllers;
 import model.level.Level;
 import model.level.LevelImpl;
 import model.level.LevelNotValidException;
@@ -69,7 +70,7 @@ public final class CraftWindowControllerImpl implements CraftWindowController {
 
     @Override
     public void loadLevel(final String path) throws ClassNotFoundException, LevelNotValidException, IOException {
-        Grid grid = Controller.getInstance().loadLevel(path).getCurrentGrid();
+        Grid grid = Controllers.loadLevel(path).getCurrentGrid();
         this.view.updateGrid(grid);
     }
 
@@ -77,6 +78,6 @@ public final class CraftWindowControllerImpl implements CraftWindowController {
     public void saveLevel(final String name, final Grid grid, final String path) throws LevelNotValidException, IOException {
         Level level = new LevelImpl(name, grid);
         level.validate();
-        Controller.getInstance().saveLevel(path, level);
+        Controllers.saveLevel(path, level);
     }
 }

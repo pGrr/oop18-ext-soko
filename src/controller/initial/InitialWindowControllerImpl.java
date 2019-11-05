@@ -2,6 +2,7 @@ package controller.initial;
 
 import java.io.IOException;
 import controller.Controller;
+import controller.Controllers;
 import model.LevelSequenceImpl;
 import model.level.LevelNotValidException;
 import view.initial.InitialWindow;
@@ -28,7 +29,7 @@ public final class InitialWindowControllerImpl implements InitialWindowControlle
 
     @Override
     public void addLevel(final String path) throws ClassNotFoundException, LevelNotValidException, IOException {
-        this.owner.getLevelSequenceController().getCurrentLevelSequenceCurrentState().add(this.owner.loadLevel(path));
+        this.owner.getLevelSequenceController().getCurrentLevelSequenceCurrentState().add(Controllers.loadLevel(path));
         updateLevelList();
     }
 
@@ -63,7 +64,7 @@ public final class InitialWindowControllerImpl implements InitialWindowControlle
 
     @Override
     public void saveLevelSequence(final String name, final String path) throws IOException {
-        this.owner.saveLevelSequence(
+        Controllers.saveLevelSequence(
                 new LevelSequenceImpl(name,
                         this.owner.getLevelSequenceController().getCurrentLevelSequenceCurrentState().getAllLevels()),
                 path);
@@ -71,7 +72,7 @@ public final class InitialWindowControllerImpl implements InitialWindowControlle
 
     @Override
     public void loadLevelSequence(final String path) throws ClassNotFoundException, IOException {
-        this.owner.getLevelSequenceController().setCurrentLevelSequence(this.owner.loadLevelSequence(path));
+        this.owner.getLevelSequenceController().setCurrentLevelSequence(Controllers.loadLevelSequence(path));
         updateLevelList();
     }
 

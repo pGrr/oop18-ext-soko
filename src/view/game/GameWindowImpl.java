@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import controller.Controller;
+import controller.Controllers;
 import controller.game.GameWindowController;
 import model.level.grid.Grid;
 import model.level.grid.element.Element;
@@ -134,8 +135,8 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
 
     /**
      * This is the action listener for the "go back to initial view" menu item. It
-     * Goes back to initial view calling the appropriate {@link GameWindowController}
-     * function.
+     * Goes back to initial view calling the appropriate
+     * {@link GameWindowController} function.
      *
      * @return the action listener for the back button
      */
@@ -145,8 +146,8 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
 
     /**
      * This is the action listener for "restart current level" menu item. It
-     * restarts the current level calling the appropriate {@link GameWindowController}
-     * function.
+     * restarts the current level calling the appropriate
+     * {@link GameWindowController} function.
      *
      * @return the action listener
      */
@@ -181,8 +182,7 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
      */
     private File showSaveGameFileChooser() {
         JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                Controller.getInstance().getLevelSequenceFileDescription(),
-                Controller.getInstance().getLevelSequenceFileExtension());
+                Controllers.getLevelSequenceFileDescription(), Controllers.getLevelSequenceFileExtension());
         fc.showOpenDialog(this.getFrame());
         return fc.getSelectedFile();
     }

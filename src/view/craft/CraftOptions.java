@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import controller.Controller;
+import controller.Controllers;
 import controller.craft.CraftWindowController;
 import model.level.LevelNotValidException;
 import view.GuiComponentFactory;
@@ -81,10 +81,10 @@ public class CraftOptions {
     private ActionListener saveButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
             JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controller.getInstance().getLevelFileDescription(),
-                    Controller.getInstance().getLevelFileExtension());
+                    Controllers.getLevelFileDescription(),
+                    Controllers.getLevelFileExtension());
             fc.showSaveDialog(this.owner.getFrame());
-            String path = fc.getSelectedFile().getAbsolutePath() + Controller.getInstance().getLevelFileExtension();
+            String path = fc.getSelectedFile().getAbsolutePath() + Controllers.getLevelFileExtension();
             String name = fc.getSelectedFile().getName();
             try {
                 this.controller.saveLevel(name, this.owner.getGrid().getGrid(), path);
@@ -110,8 +110,8 @@ public class CraftOptions {
     private ActionListener loadButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
             JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controller.getInstance().getLevelFileDescription(),
-                    Controller.getInstance().getLevelFileExtension());
+                    Controllers.getLevelFileDescription(),
+                    Controllers.getLevelFileExtension());
             fc.showOpenDialog(this.owner.getFrame());
             try {
                 this.controller.loadLevel(fc.getSelectedFile().getAbsolutePath());
