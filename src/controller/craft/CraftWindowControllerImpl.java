@@ -2,7 +2,7 @@ package controller.craft;
 
 import java.io.IOException;
 import java.util.Collection;
-import controller.Controllers;
+import controller.Controller;
 import model.Model;
 import model.levelsequence.level.Level;
 import model.levelsequence.level.LevelImpl;
@@ -19,16 +19,19 @@ import view.craft.CraftWindow;
  */
 public final class CraftWindowControllerImpl implements CraftWindowController {
 
+    private final Controller owner;
     private final CraftWindow view;
     private final Model model;
 
     /**
      * Instantiates a new craft window controller impl.
      *
+     * @param owner the {@link Controller} object which created this object
      * @param view  the view
      * @param model the model
      */
-    public CraftWindowControllerImpl(final Model model, final CraftWindow view) {
+    public CraftWindowControllerImpl(final Controller owner, final Model model, final CraftWindow view) {
+        this.owner = owner;
         this.view = view;
         this.model = model;
     }
@@ -63,7 +66,7 @@ public final class CraftWindowControllerImpl implements CraftWindowController {
 
     @Override
     public void loadLevel(final String path) throws ClassNotFoundException, LevelNotValidException, IOException {
-        Grid grid = Controllers.loadLevel(path).getCurrentGrid();
+        Grid grid = this.owner.loadLevel(path).getCurrentGrid();
         this.view.updateGrid(grid);
     }
 
@@ -72,6 +75,6 @@ public final class CraftWindowControllerImpl implements CraftWindowController {
             throws LevelNotValidException, IOException {
         Level level = new LevelImpl(name, grid);
         level.validate();
-        Controllers.saveLevel(path, level);
+        this.owner.saveLevel(path, level);
     }
 }

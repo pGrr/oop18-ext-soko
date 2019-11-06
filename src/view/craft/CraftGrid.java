@@ -19,6 +19,7 @@ import model.levelsequence.level.grid.element.Position;
 import model.levelsequence.level.grid.element.PositionImpl;
 import model.levelsequence.level.grid.element.Type;
 import view.GuiComponentFactory;
+import view.GuiComponentFactoryImpl;
 import view.game.TypeImage;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
@@ -33,6 +34,7 @@ public class CraftGrid {
     private static final double GRIDBUTTON_RELATIVE_ICON_WIDTH = 0.5;
     private static final double GRIDBUTTON_RELATIVE_ICON_HEIGHT = 0.7;
 
+    private final GuiComponentFactory guiComponentFactory;
     private final CraftWindowImpl owner;
     private final Map<Type, Icon> resizedIcons;
     private final List<List<JButton>> buttonGrid;
@@ -46,6 +48,7 @@ public class CraftGrid {
      *                   contains this object
      */
     public CraftGrid(final CraftWindowImpl owner) {
+        this.guiComponentFactory = new GuiComponentFactoryImpl();
         this.owner = owner;
         this.levelGrid = Grid.createEmpty();
         this.buttonGrid = createButtonGrid();
@@ -87,7 +90,7 @@ public class CraftGrid {
      */
     public final JPanel createPanel() {
         JPanel panel = new JPanel(new GridLayout(Grid.N_ROWS, Grid.N_ROWS));
-        panel.setBorder(GuiComponentFactory.getInstance().createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
+        panel.setBorder(this.guiComponentFactory.createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
         this.buttonGrid.stream().flatMap(List::stream).forEach(button -> {
             button.addActionListener(gridButtonActionListener());
             panel.add(button);

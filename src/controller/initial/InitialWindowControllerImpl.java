@@ -1,7 +1,7 @@
 package controller.initial;
 
 import java.io.IOException;
-import controller.Controllers;
+import controller.Controller;
 import model.Model;
 import model.levelsequence.LevelSequenceImpl;
 import model.levelsequence.level.LevelNotValidException;
@@ -12,23 +12,26 @@ import view.initial.InitialWindow;
  */
 public final class InitialWindowControllerImpl implements InitialWindowController {
 
+    private final Controller owner;
     private final Model model;
     private final InitialWindow view;
 
     /**
      * Initializes a new initial view controller for the given initial window.
      * 
+     * @param owner         the {@link Controller} object which created this object
      * @param initialWindow the initial window
      * @param model         the model
      */
-    public InitialWindowControllerImpl(final Model model, final InitialWindow initialWindow) {
+    public InitialWindowControllerImpl(final Controller owner, final Model model, final InitialWindow initialWindow) {
+        this.owner = owner;
         this.view = initialWindow;
         this.model = model;
     }
 
     @Override
     public void addLevel(final String path) throws ClassNotFoundException, LevelNotValidException, IOException {
-        this.model.getCurrentLevelSequenceCurrentState().add(Controllers.loadLevel(path));
+        this.model.getCurrentLevelSequenceCurrentState().add(this.owner.loadLevel(path));
         updateLevelList();
     }
 
@@ -67,13 +70,13 @@ public final class InitialWindowControllerImpl implements InitialWindowControlle
 
     @Override
     public void saveLevelSequence(final String name, final String path) throws IOException {
-        Controllers.saveLevelSequence(
+        this.owner.saveLevelSequence(
                 new LevelSequenceImpl(name, this.model.getCurrentLevelSequenceCurrentState().getAllLevels()), path);
     }
 
     @Override
     public void loadLevelSequence(final String path) throws ClassNotFoundException, IOException {
-        this.model.setCurrentLevelSequence(Controllers.loadLevelSequence(path));
+        this.model.setCurrentLevelSequence(this.owner.loadLevelSequence(path));
         updateLevelList();
     }
 

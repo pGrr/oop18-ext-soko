@@ -24,29 +24,17 @@ import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
 /**
- * An implementation for the {@link GuiComponentFactory} interface. Implements
- * the Singleton design pattern.
+ * An implementation for the {@link GuiComponentFactory} interface.
  */
 public final class GuiComponentFactoryImpl implements GuiComponentFactory {
 
     /** The default padding size in pixels. */
     public static final int DEFAULT_PADDING = 20;
 
-    private static GuiComponentFactory singleton;
-
-    private GuiComponentFactoryImpl() {
-    }
-
     /**
-     * Gets the single instance of GuiComponentFactoryImpl.
-     *
-     * @return single instance of GuiComponentFactoryImpl
+     * Instantiates a new GUI component factory object.
      */
-    public static GuiComponentFactory getInstance() {
-        if (singleton == null) {
-            singleton = new GuiComponentFactoryImpl();
-        }
-        return singleton;
+    public GuiComponentFactoryImpl() {
     }
 
     @Override

@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.initial.InitialWindowController;
 import view.GuiComponentFactory;
+import view.GuiComponentFactoryImpl;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
@@ -22,12 +23,14 @@ public final class InitialOptions {
     private static final String ICON_CRAFT = "icons/craft.png";
     private static final String ICON_PLAY = "icons/ok.png";
 
+    private final GuiComponentFactory guiComponentFactory;
     private InitialWindowController controller;
 
     /**
      * Initializes a new initial options object.
      */
     public InitialOptions() {
+        this.guiComponentFactory = new GuiComponentFactoryImpl();
     }
 
     /**
@@ -47,10 +50,10 @@ public final class InitialOptions {
     public JPanel createPanel() {
         int littlePadding = Math.round(DEFAULT_PADDING / 2);
         JPanel p = new JPanel(new BorderLayout(littlePadding, littlePadding));
-        p.setBorder(GuiComponentFactory.getInstance().createEmptyPaddingBorder(DEFAULT_PADDING));
-        JButton craftButton = GuiComponentFactory.getInstance().createButton(BUTTON_CRAFT_TEXT, ICON_CRAFT, craft());
+        p.setBorder(this.guiComponentFactory.createEmptyPaddingBorder(DEFAULT_PADDING));
+        JButton craftButton = this.guiComponentFactory.createButton(BUTTON_CRAFT_TEXT, ICON_CRAFT, craft());
         p.add(craftButton, BorderLayout.PAGE_START);
-        JButton playButton = GuiComponentFactory.getInstance().createButton(BUTTON_PLAY_TEXT, ICON_PLAY, play());
+        JButton playButton = this.guiComponentFactory.createButton(BUTTON_PLAY_TEXT, ICON_PLAY, play());
         p.add(playButton, BorderLayout.PAGE_END);
         return p;
     }

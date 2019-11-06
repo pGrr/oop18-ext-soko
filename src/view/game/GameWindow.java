@@ -24,6 +24,11 @@ public interface GameWindow extends Window {
     void draw(Element element);
 
     /**
+     * Hides game window and shows initial window.
+     */
+    void toInitialView();
+
+    /**
      * Shows the level invalid dialog.
      *
      * @param cause the message of the {@link LevelNotValidException}

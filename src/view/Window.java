@@ -1,7 +1,5 @@
 package view;
 
-import javax.swing.JFrame;
-
 /**
  * A generic Window.
  */
@@ -21,11 +19,4 @@ public interface Window {
      * Closes the window.
      */
     void close();
-
-    /**
-     * Gets the frame of the window.
-     *
-     * @return the frame
-     */
-    JFrame getFrame();
 }

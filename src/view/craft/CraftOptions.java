@@ -6,10 +6,11 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import controller.Controllers;
+import controller.Controller;
 import controller.craft.CraftWindowController;
 import model.levelsequence.level.LevelNotValidException;
 import view.GuiComponentFactory;
+import view.GuiComponentFactoryImpl;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
@@ -29,6 +30,7 @@ public class CraftOptions {
     private static final String ICON_CANCEL = "icons/cross.png";
     private static final String ICON_BACK = "icons/back.png";
 
+    private final GuiComponentFactory guiComponentFactory;
     private final CraftWindowImpl owner;
     private CraftWindowController controller;
 
@@ -39,6 +41,7 @@ public class CraftOptions {
      *              this object
      */
     public CraftOptions(final CraftWindowImpl owner) {
+        this.guiComponentFactory = new GuiComponentFactoryImpl();
         this.owner = owner;
     }
 
@@ -59,14 +62,14 @@ public class CraftOptions {
     public JPanel createPanel() {
         JPanel choicesPanel = new JPanel(new GridLayout(1, 4, DEFAULT_PADDING, DEFAULT_PADDING));
         choicesPanel.setBorder(
-                GuiComponentFactory.getInstance().createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
-        choicesPanel.add(GuiComponentFactory.getInstance().createButton(BUTTON_SAVE_TEXT, ICON_SAVE,
+                this.guiComponentFactory.createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
+        choicesPanel.add(this.guiComponentFactory.createButton(BUTTON_SAVE_TEXT, ICON_SAVE,
                 saveButtonActionListener()));
-        choicesPanel.add(GuiComponentFactory.getInstance().createButton(BUTTON_LOAD_TEXT, ICON_LOAD,
+        choicesPanel.add(this.guiComponentFactory.createButton(BUTTON_LOAD_TEXT, ICON_LOAD,
                 loadButtonActionListener()));
-        choicesPanel.add(GuiComponentFactory.getInstance().createButton(BUTTON_RESET_TEXT, ICON_CANCEL,
+        choicesPanel.add(this.guiComponentFactory.createButton(BUTTON_RESET_TEXT, ICON_CANCEL,
                 this.owner.getGrid().resetButtonActionListener()));
-        choicesPanel.add(GuiComponentFactory.getInstance().createButton(BUTTON_BACK_TEXT, ICON_BACK,
+        choicesPanel.add(this.guiComponentFactory.createButton(BUTTON_BACK_TEXT, ICON_BACK,
                 backButtonActionListener()));
         return choicesPanel;
     }
@@ -80,11 +83,11 @@ public class CraftOptions {
      */
     private ActionListener saveButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controllers.getLevelFileDescription(),
-                    Controllers.getLevelFileExtension());
+            JFileChooser fc = this.guiComponentFactory.createFileChooser(
+                    Controller.LEVEL_FILE_DESCRIPTION,
+                    Controller.LEVEL_FILE_EXTENSION);
             fc.showSaveDialog(this.owner.getFrame());
-            String path = fc.getSelectedFile().getAbsolutePath() + Controllers.getLevelFileExtension();
+            String path = fc.getSelectedFile().getAbsolutePath() + Controller.LEVEL_FILE_EXTENSION;
             String name = fc.getSelectedFile().getName();
             try {
                 this.controller.saveLevel(name, this.owner.getGrid().getGrid(), path);
@@ -109,9 +112,9 @@ public class CraftOptions {
      */
     private ActionListener loadButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controllers.getLevelFileDescription(),
-                    Controllers.getLevelFileExtension());
+            JFileChooser fc = this.guiComponentFactory.createFileChooser(
+                    Controller.LEVEL_FILE_DESCRIPTION,
+                    Controller.LEVEL_FILE_EXTENSION);
             fc.showOpenDialog(this.owner.getFrame());
             try {
                 this.controller.loadLevel(fc.getSelectedFile().getAbsolutePath());
@@ -136,7 +139,7 @@ public class CraftOptions {
      */
     private ActionListener backButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            this.owner.getOwner().toInitialView();
+            this.owner.toInitialView();
         });
     }
 }

@@ -3,7 +3,6 @@ package app;
 import java.util.Optional;
 import controller.Controller;
 import controller.ControllerImpl;
-import controller.Controllers;
 import model.Model;
 import model.ModelImpl;
 import model.levelsequence.LevelSequence;
@@ -32,7 +31,7 @@ public final class SokobanApp {
         view.setController(controller);
         // if possible, it loads the default level sequence and updates it in the
         // initial view
-        Optional<LevelSequence> defaultLevelSequence = Controllers.loadDefaultLevelSequence();
+        Optional<LevelSequence> defaultLevelSequence = controller.loadDefaultLevelSequence();
         if (defaultLevelSequence.isPresent()) {
             model.setCurrentLevelSequence(defaultLevelSequence.get());
             view.getInitialWindow().updateList(model.getLevelNames());

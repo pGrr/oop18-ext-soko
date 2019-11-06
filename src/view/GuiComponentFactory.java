@@ -174,13 +174,4 @@ public interface GuiComponentFactory {
      * @return the border
      */
     Border createTitledPaddingBorder(String title, int defaultPadding);
-
-    /**
-     * Gets the single instance of the {@link GuiComponentFactory} class.
-     *
-     * @return the single instance of the {@link GuiComponentFactory} class.
-     */
-    static GuiComponentFactory getInstance() {
-        return GuiComponentFactoryImpl.getInstance();
-    }
 }

@@ -27,7 +27,7 @@ public abstract class WindowAbstract implements Window {
      * @param widthToHeightRatio      the width to height ratio
      */
     public WindowAbstract(final String title, final double heightToScreenSizeRatio, final double widthToHeightRatio) {
-        this.componentFactory = GuiComponentFactory.getInstance();
+        this.componentFactory = new GuiComponentFactoryImpl();
         this.frame = this.componentFactory.createFrame(title, heightToScreenSizeRatio, widthToHeightRatio);
     }
 
@@ -58,7 +58,11 @@ public abstract class WindowAbstract implements Window {
         this.getFrame().dispose();
     }
 
-    @Override
+    /**
+     * Gets the JFrame of this Window.
+     * 
+     * @return the j frame of this window
+     */
     public final JFrame getFrame() {
         return this.frame;
     }

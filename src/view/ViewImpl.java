@@ -29,7 +29,7 @@ public final class ViewImpl implements View {
     public ViewImpl() {
         this.initialWindow = new InitialWindowImpl(this);
         this.craftWindow = new CraftWindowImpl(this);
-        this.gameWindow = new GameWindowImpl();
+        this.gameWindow = new GameWindowImpl(this);
     }
 
     @Override

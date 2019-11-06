@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import controller.initial.InitialWindowController;
 import model.levelsequence.level.Level;
 import view.GuiComponentFactory;
+import view.GuiComponentFactoryImpl;
 import view.View;
 import view.WindowAbstract;
 
@@ -31,6 +32,7 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
     private static final String DIALOG_IOERROR_TEXT = "An error occurred during an input/output operation";
     private static final String DIALOG_CLASS_NOT_FOUND_TEXT = "The file is corrupted.";
 
+    private final GuiComponentFactory guiComponentFactory;
     private final InitialLevelList levelList;
     private final InitialOptions choices;
     private final InitialSaveLoad saveLoadSequence;
@@ -44,6 +46,7 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
      */
     public InitialWindowImpl(final View owner) {
         super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
+        this.guiComponentFactory = new GuiComponentFactoryImpl();
         this.owner = owner;
         this.choices = new InitialOptions();
         this.saveLoadSequence = new InitialSaveLoad(this);
@@ -85,35 +88,35 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
 
     @Override
     public void showLevelInvalidErrorDialog(final String cause) {
-        GuiComponentFactory.getInstance()
+        this.guiComponentFactory
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
                 .setVisible(true);
     }
 
     @Override
     public void showDefaultLevelSequenceLoadErrorDialog() {
-        GuiComponentFactory.getInstance()
+        this.guiComponentFactory
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_DEFAULT_LEVEL_SEQUENCE_LOAD_ERROR_TEXT)
                 .setVisible(true);
     }
 
     @Override
     public void showLevelSequenceEmptyErrorDialog() {
-        GuiComponentFactory.getInstance()
+        this.guiComponentFactory
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_ERROR_LEVEL_SEQUENCE_EMPTY_TEXT)
                 .setVisible(true);
     }
 
     @Override
     public void showIOErrorDialog() {
-        GuiComponentFactory.getInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT)
+        this.guiComponentFactory.createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT)
                 .setVisible(true);
     }
 
     @Override
     public void showClassNotFoundErrorDialog() {
-        GuiComponentFactory.getInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
+        this.guiComponentFactory.createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT)
+                .setVisible(true);
     }
 
     /**
@@ -146,7 +149,7 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
     @Override
     protected JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(GuiComponentFactory.getInstance().createEmptyPaddingBorder(DEFAULT_PADDING));
+        mainPanel.setBorder(this.guiComponentFactory.createEmptyPaddingBorder(DEFAULT_PADDING));
         mainPanel.add(welcomePanel(), BorderLayout.PAGE_START);
         mainPanel.add(levelSequencePanel(), BorderLayout.CENTER);
         mainPanel.add(this.choices.createPanel(), BorderLayout.PAGE_END);
@@ -160,7 +163,7 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
      */
     private JPanel welcomePanel() {
         JPanel p = new JPanel();
-        p.add(GuiComponentFactory.getInstance().createLabel(LABEL_WELCOME_TEXT));
+        p.add(this.guiComponentFactory.createLabel(LABEL_WELCOME_TEXT));
         return p;
     }
 
@@ -172,7 +175,7 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
     private JPanel levelSequencePanel() {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
-        p.setBorder(GuiComponentFactory.getInstance().createEmptyPaddingBorder(DEFAULT_PADDING));
+        p.setBorder(this.guiComponentFactory.createEmptyPaddingBorder(DEFAULT_PADDING));
         p.add(this.levelList.getPanel());
         return p;
     }

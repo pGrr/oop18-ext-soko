@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-import controller.Controllers;
+import controller.Controller;
 import model.Model;
 import model.levelsequence.LevelSequence;
 import model.levelsequence.LevelSequenceImpl;
@@ -18,6 +18,7 @@ import view.View;
  */
 public final class GameWindowControllerImpl implements GameWindowController {
 
+    private final Controller owner;
     private final View view;
     private final Model model;
 
@@ -25,11 +26,13 @@ public final class GameWindowControllerImpl implements GameWindowController {
      * Creates a new instance of game window controller using the given navigation
      * controller and level sequence controller.
      * 
-     * @param navigationController .
-     * @param model                .
+     * @param owner the {@link Controller} object wich created this object
+     * @param view the vie
+     * @param model the model          .
      */
-    public GameWindowControllerImpl(final View navigationController, final Model model) {
-        this.view = navigationController;
+    public GameWindowControllerImpl(final Controller owner, final View view, final Model model) {
+        this.owner = owner;
+        this.view = view;
         this.model = model;
     }
 
@@ -50,7 +53,7 @@ public final class GameWindowControllerImpl implements GameWindowController {
         IntStream.range(currentLevelIndex, levelSequence.getAllLevels().size())
                 .mapToObj(i -> levelSequence.getAllLevels().get(i)).map(o -> (Level) o).forEachOrdered(levels::add);
         LevelSequence newLs = new LevelSequenceImpl(levelSequence.getName(), levels);
-        Controllers.saveLevelSequence(newLs, path + Controllers.getLevelSequenceFileExtension());
+        this.owner.saveLevelSequence(newLs, path + Controller.LEVEL_SEQUENCE_FILE_EXTENSION);
     }
 
     @Override

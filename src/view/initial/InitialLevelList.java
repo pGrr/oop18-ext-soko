@@ -16,10 +16,11 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import controller.Controllers;
+import controller.Controller;
 import controller.initial.InitialWindowController;
 import model.levelsequence.level.LevelNotValidException;
 import view.GuiComponentFactory;
+import view.GuiComponentFactoryImpl;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
@@ -37,6 +38,7 @@ public class InitialLevelList {
     private static final String ICON_MINUS = "icons/minus-30px.png";
     private static final String ICON_RESET = "icons/cross.png";
 
+    private final GuiComponentFactory guiComponentFactory;
     private final InitialWindowImpl owner;
     private final JPanel panel;
     private final JList<String> levelList;
@@ -50,6 +52,7 @@ public class InitialLevelList {
      *              this object
      */
     public InitialLevelList(final InitialWindowImpl owner) {
+        this.guiComponentFactory = new GuiComponentFactoryImpl();
         this.owner = owner;
         this.listModel = new DefaultListModel<>();
         this.levelList = new JList<>(this.listModel);
@@ -93,7 +96,7 @@ public class InitialLevelList {
         JPanel p = new JPanel(new BorderLayout());
         // level list panel
         JPanel levelListPanel = new JPanel(new BorderLayout());
-        levelListPanel.setBorder(GuiComponentFactory.getInstance().createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE,
+        levelListPanel.setBorder(this.guiComponentFactory.createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE,
                 DEFAULT_PADDING));
         JScrollPane scrollPane = new JScrollPane(this.levelList);
         levelListPanel.add(scrollPane);
@@ -101,17 +104,17 @@ public class InitialLevelList {
         // edit list panel
         JPanel p2 = new JPanel(new GridLayout(2, 1));
         JPanel editListPanel = new JPanel();
-        JButton addLevelButton = GuiComponentFactory.getInstance().createButton("", ICON_PLUS, addLevel());
+        JButton addLevelButton = this.guiComponentFactory.createButton("", ICON_PLUS, addLevel());
         editListPanel.add(addLevelButton);
-        JButton removeLevelButton = GuiComponentFactory.getInstance().createButton("", ICON_MINUS, removeSelected());
+        JButton removeLevelButton = this.guiComponentFactory.createButton("", ICON_MINUS, removeSelected());
         editListPanel.add(removeLevelButton);
-        editListPanel.setBorder(GuiComponentFactory.getInstance()
+        editListPanel.setBorder(this.guiComponentFactory
                 .createTitledPaddingBorder(PANEL_EDIT_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
-        JButton upButton = GuiComponentFactory.getInstance().createButton("", ICON_UP, move(i -> i - 1));
+        JButton upButton = this.guiComponentFactory.createButton("", ICON_UP, move(i -> i - 1));
         editListPanel.add(upButton);
-        JButton downButton = GuiComponentFactory.getInstance().createButton("", ICON_DOWN, move(i -> i + 1));
+        JButton downButton = this.guiComponentFactory.createButton("", ICON_DOWN, move(i -> i + 1));
         editListPanel.add(downButton);
-        JButton cancelButton = GuiComponentFactory.getInstance().createButton("", ICON_RESET, removeAll());
+        JButton cancelButton = this.guiComponentFactory.createButton("", ICON_RESET, removeAll());
         editListPanel.add(cancelButton);
         p2.add(editListPanel);
         // save or load panel
@@ -129,9 +132,9 @@ public class InitialLevelList {
      */
     private ActionListener addLevel() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controllers.getLevelFileDescription(),
-                    Controllers.getLevelFileExtension());
+            JFileChooser fc = this.guiComponentFactory.createFileChooser(
+                    Controller.LEVEL_FILE_DESCRIPTION,
+                    Controller.LEVEL_FILE_EXTENSION);
             fc.showOpenDialog(this.owner.getFrame());
             String path = fc.getSelectedFile().getAbsolutePath();
             try {

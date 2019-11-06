@@ -7,9 +7,10 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import controller.Controllers;
+import controller.Controller;
 import controller.initial.InitialWindowController;
 import view.GuiComponentFactory;
+import view.GuiComponentFactoryImpl;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
@@ -23,6 +24,7 @@ public class InitialSaveLoad {
     private static final String ICON_UPLOAD = "icons/upload.png";
     private static final String ICON_DOWNLOAD = "icons/download.png";
 
+    private final GuiComponentFactory guiComponentFactory;
     private final InitialWindowImpl owner;
     private InitialWindowController controller;
 
@@ -33,6 +35,7 @@ public class InitialSaveLoad {
      *              this object
      */
     public InitialSaveLoad(final InitialWindowImpl owner) {
+        this.guiComponentFactory = new GuiComponentFactoryImpl();
         this.owner = owner;
     }
 
@@ -52,11 +55,11 @@ public class InitialSaveLoad {
      */
     public JPanel createPanel() {
         JPanel panel = new JPanel();
-        panel.setBorder(GuiComponentFactory.getInstance().createTitledPaddingBorder(PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE,
-                DEFAULT_PADDING));
-        JButton saveButton = GuiComponentFactory.getInstance().createButton("", ICON_DOWNLOAD, saveSequence());
+        panel.setBorder(
+                this.guiComponentFactory.createTitledPaddingBorder(PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE, DEFAULT_PADDING));
+        JButton saveButton = this.guiComponentFactory.createButton("", ICON_DOWNLOAD, saveSequence());
         panel.add(saveButton);
-        JButton loadButton = GuiComponentFactory.getInstance().createButton("", ICON_UPLOAD, loadSequence());
+        JButton loadButton = this.guiComponentFactory.createButton("", ICON_UPLOAD, loadSequence());
         panel.add(loadButton);
         return panel;
     }
@@ -69,9 +72,9 @@ public class InitialSaveLoad {
      */
     private ActionListener saveSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
-            String fileExtension = Controllers.getLevelSequenceFileExtension();
-            String fileDescription = Controllers.getLevelSequenceFileDescription();
-            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(fileDescription, fileExtension);
+            String fileExtension = Controller.LEVEL_SEQUENCE_FILE_DESCRIPTION;
+            String fileDescription = Controller.LEVEL_SEQUENCE_FILE_EXTENSION;
+            JFileChooser fc = this.guiComponentFactory.createFileChooser(fileDescription, fileExtension);
             fc.showSaveDialog(this.owner.getFrame());
             File selectedFile = fc.getSelectedFile();
             if (selectedFile != null) {
@@ -96,9 +99,8 @@ public class InitialSaveLoad {
      */
     private ActionListener loadSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                    Controllers.getLevelSequenceFileDescription(),
-                    Controllers.getLevelSequenceFileExtension());
+            JFileChooser fc = this.guiComponentFactory.createFileChooser(Controller.LEVEL_SEQUENCE_FILE_DESCRIPTION,
+                    Controller.LEVEL_SEQUENCE_FILE_EXTENSION);
             fc.showOpenDialog(this.owner.getFrame());
             File file = fc.getSelectedFile();
             String path = new String();

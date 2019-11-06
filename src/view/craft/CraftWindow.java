@@ -24,6 +24,11 @@ public interface CraftWindow extends Window {
     void updateGrid(Grid grid);
 
     /**
+     * Hides game window and shows initial window.
+     */
+    void toInitialView();
+
+    /**
      * Show IO error dialog.
      */
     void showIOErrorDialog();

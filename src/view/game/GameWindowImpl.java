@@ -9,13 +9,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import controller.Controllers;
+import controller.Controller;
 import controller.game.GameWindowController;
 import model.levelsequence.level.grid.Grid;
 import model.levelsequence.level.grid.element.Element;
 import model.levelsequence.level.grid.element.Position;
 import model.levelsequence.level.grid.element.PositionImpl;
 import view.GuiComponentFactory;
+import view.GuiComponentFactoryImpl;
+import view.View;
 import view.WindowAbstract;
 
 /**
@@ -38,15 +40,20 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
     private static final String LEVEL_FINISHED_TITLE = "LEVEL COMPLETE";
     private static final String MENU_SAVE_LEVEL_TEXT = "Save game";
 
+    private final GuiComponentFactory guiComponentFactory;
+    private final View owner;
     private final GameCanvas canvas;
     private GameWindowController controller;
 
     /**
      * Instantiates a new game window.
      * 
+     * @param owner the {@link View} object which created this object
      */
-    public GameWindowImpl() {
+    public GameWindowImpl(final View owner) {
         super("", HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
+        this.owner = owner;
+        this.guiComponentFactory = new GuiComponentFactoryImpl();
         this.getFrame().setJMenuBar(createMenuBar());
         this.canvas = new GameCanvas(this);
         this.getFrame().add(createMainPanel());
@@ -76,15 +83,20 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
     }
 
     @Override
+    public void toInitialView() {
+        this.owner.toInitialView();
+    }
+
+    @Override
     public void showLevelInvalidDialog(final String cause) {
-        GuiComponentFactory.getInstance()
+        this.guiComponentFactory
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + cause)
                 .setVisible(true);
     }
 
     @Override
     public void showLevelFinishedDialog() {
-        GuiComponentFactory.getInstance()
+        this.guiComponentFactory
                 .createActionDialog(this.getFrame(), LEVEL_FINISHED_TITLE, LEVEL_FINISHED_MESSAGE, e -> {
                     controller.levelFinishedAccepted();
                 }).setVisible(true);
@@ -92,21 +104,20 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
 
     @Override
     public void showGameFinishedDialog() {
-        GuiComponentFactory.getInstance()
-                .createActionDialog(this.getFrame(), LEVEL_FINISHED_TITLE, GAME_FINISHED_MESSAGE, e -> {
-                    controller.gameFinishedAccepted();
-                }).setVisible(true);
+        this.guiComponentFactory.createActionDialog(this.getFrame(), LEVEL_FINISHED_TITLE, GAME_FINISHED_MESSAGE, e -> {
+            controller.gameFinishedAccepted();
+        }).setVisible(true);
     }
 
     @Override
     public void showClassNotFoundErrorDialog() {
-        GuiComponentFactory.getInstance()
-                .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT).setVisible(true);
+        this.guiComponentFactory.createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_CLASS_NOT_FOUND_TEXT)
+                .setVisible(true);
     }
 
     @Override
     public void showIOErrorDialog() {
-        GuiComponentFactory.getInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT)
+        this.guiComponentFactory.createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT)
                 .setVisible(true);
     }
 
@@ -179,8 +190,8 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
      * @return the selected file
      */
     private File showSaveGameFileChooser() {
-        JFileChooser fc = GuiComponentFactory.getInstance().createFileChooser(
-                Controllers.getLevelSequenceFileDescription(), Controllers.getLevelSequenceFileExtension());
+        JFileChooser fc = this.guiComponentFactory.createFileChooser(Controller.LEVEL_SEQUENCE_FILE_DESCRIPTION,
+                Controller.LEVEL_SEQUENCE_FILE_EXTENSION);
         fc.showOpenDialog(this.getFrame());
         return fc.getSelectedFile();
     }
