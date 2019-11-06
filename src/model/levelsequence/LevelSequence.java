@@ -1,8 +1,9 @@
-package model;
+package model.levelsequence;
 
 import java.io.Serializable;
 import java.util.List;
-import model.level.Level;
+
+import model.levelsequence.level.Level;
 
 /**
  * An editable, ordered and iterable sequence of levels, with a name.

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import model.level.grid.element.Type;
+import model.levelsequence.level.grid.element.Type;
 import view.GuiComponentFactory;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;

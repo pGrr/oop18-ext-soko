@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.Controllers;
 import controller.craft.CraftWindowController;
-import model.level.LevelNotValidException;
+import model.levelsequence.level.LevelNotValidException;
 import view.GuiComponentFactory;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
@@ -136,7 +136,7 @@ public class CraftOptions {
      */
     private ActionListener backButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            this.controller.backToInitialView();
+            this.owner.getOwner().toInitialView();
         });
     }
 }

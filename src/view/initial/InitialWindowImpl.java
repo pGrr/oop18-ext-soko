@@ -5,7 +5,9 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import controller.initial.InitialWindowController;
+import model.levelsequence.level.Level;
 import view.GuiComponentFactory;
+import view.View;
 import view.WindowAbstract;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
@@ -32,13 +34,17 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
     private final InitialLevelList levelList;
     private final InitialOptions choices;
     private final InitialSaveLoad saveLoadSequence;
+    private final View owner;
     private InitialWindowController controller;
 
     /**
      * Instantiates a new initial window object.
+     * 
+     * @param owner the {@link View} which created this object.
      */
-    public InitialWindowImpl() {
+    public InitialWindowImpl(final View owner) {
         super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
+        this.owner = owner;
         this.choices = new InitialOptions();
         this.saveLoadSequence = new InitialSaveLoad(this);
         this.levelList = new InitialLevelList(this);
@@ -65,6 +71,16 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
     @Override
     public void updateList(final List<String> levelNames) {
         this.levelList.updateList(levelNames);
+    }
+
+    @Override
+    public void toCraftLevelView() {
+        this.owner.toCraftLevelView();
+    }
+
+    @Override
+    public void toGameView(final Level level) {
+        this.owner.toGameLevelView(level);
     }
 
     @Override

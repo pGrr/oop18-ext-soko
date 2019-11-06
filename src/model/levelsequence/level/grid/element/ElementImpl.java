@@ -1,10 +1,8 @@
-package model.level.grid.element;
+package model.levelsequence.level.grid.element;
 
 import java.util.Objects;
-
-import controller.Controller;
-import model.level.grid.Grid;
-import model.level.grid.MovementDirection;
+import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.MovementDirection;
 
 /**
  * An implementation class for the {@link Element} interface.
@@ -54,10 +52,7 @@ public class ElementImpl implements Element {
     @Override
     public final void move(final MovementDirection direction) {
         if (isTypeMovable()) {
-            boolean hasMoved = this.grid.moveAttempt(this, direction);
-            if (hasMoved) {
-                Controller.getInstance().getNavigationController().getGameWindow().draw(this);
-            }
+            this.grid.moveAttempt(this, direction);
         }
     }
 

@@ -14,10 +14,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.craft.CraftWindowController;
-import model.level.grid.Grid;
-import model.level.grid.element.Position;
-import model.level.grid.element.PositionImpl;
-import model.level.grid.element.Type;
+import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.element.Position;
+import model.levelsequence.level.grid.element.PositionImpl;
+import model.levelsequence.level.grid.element.Type;
 import view.GuiComponentFactory;
 import view.game.TypeImage;
 

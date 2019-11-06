@@ -9,12 +9,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Optional;
-import model.LevelSequence;
-import model.level.Level;
-import model.level.LevelNotValidException;
+
+import model.levelsequence.LevelSequence;
+import model.levelsequence.level.Level;
+import model.levelsequence.level.LevelNotValidException;
 
 /**
- * An helper static class for all controllers.
+ * An helper static class for the controller package classes.
  */
 public final class Controllers {
 
@@ -148,7 +149,7 @@ public final class Controllers {
     public static Optional<LevelSequence> loadDefaultLevelSequence() {
         Optional<LevelSequence> ls = Optional.empty();
         try {
-             ls = Optional.of(Controllers.loadLevelSequence(
+            ls = Optional.of(Controllers.loadLevelSequence(
                     ClassLoader.getSystemResource(Controllers.getDefaultLevelSequenceName()).getPath()));
 
         } catch (Exception e) {

@@ -9,14 +9,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import controller.Controller;
 import controller.Controllers;
 import controller.game.GameWindowController;
-import model.level.grid.Grid;
-import model.level.grid.element.Element;
-import model.level.grid.element.Position;
-import model.level.grid.element.PositionImpl;
+import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.element.Element;
+import model.levelsequence.level.grid.element.Position;
+import model.levelsequence.level.grid.element.PositionImpl;
 import view.GuiComponentFactory;
 import view.WindowAbstract;
 
@@ -88,7 +86,7 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
     public void showLevelFinishedDialog() {
         GuiComponentFactory.getInstance()
                 .createActionDialog(this.getFrame(), LEVEL_FINISHED_TITLE, LEVEL_FINISHED_MESSAGE, e -> {
-                    Controller.getInstance().getGameWindowController().levelFinishedAccepted();
+                    controller.levelFinishedAccepted();
                 }).setVisible(true);
     }
 
@@ -96,7 +94,7 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
     public void showGameFinishedDialog() {
         GuiComponentFactory.getInstance()
                 .createActionDialog(this.getFrame(), LEVEL_FINISHED_TITLE, GAME_FINISHED_MESSAGE, e -> {
-                    Controller.getInstance().getGameWindowController().gameFinishedAccepted();
+                    controller.gameFinishedAccepted();
                 }).setVisible(true);
     }
 

@@ -3,6 +3,7 @@ package view.initial;
 import java.util.List;
 
 import controller.initial.InitialWindowController;
+import model.levelsequence.level.Level;
 import view.Window;
 
 /**
@@ -23,6 +24,18 @@ public interface InitialWindow extends Window {
      * @param levelNames the names of the current levels in the level sequence
      */
     void updateList(List<String> levelNames);
+
+    /**
+     * Hides initial window and shows craft level window.
+     */
+    void toCraftLevelView();
+
+    /**
+     * Hides initial window and shows game window.
+     * 
+     * @param level the level to be played
+     */
+    void toGameView(Level level);
 
     /**
      * Shows a level invalid dialog.

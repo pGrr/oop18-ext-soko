@@ -16,11 +16,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import controller.game.GameWindowController;
-import model.level.grid.Grid;
-import model.level.grid.MovementDirection;
-import model.level.grid.element.Element;
-import model.level.grid.element.Position;
-import model.level.grid.element.Type;
+import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.MovementDirection;
+import model.levelsequence.level.grid.element.Element;
+import model.levelsequence.level.grid.element.Position;
+import model.levelsequence.level.grid.element.Type;
 
 /**
  * The Class responsible for the canvas where the game played is drawn. It is a

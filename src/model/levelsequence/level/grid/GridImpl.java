@@ -1,4 +1,4 @@
-package model.level.grid;
+package model.levelsequence.level.grid;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,11 +8,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import model.level.grid.element.Element;
-import model.level.grid.element.ElementImpl;
-import model.level.grid.element.Position;
-import model.level.grid.element.PositionImpl;
-import model.level.grid.element.Type;
+import model.levelsequence.level.grid.element.Element;
+import model.levelsequence.level.grid.element.ElementImpl;
+import model.levelsequence.level.grid.element.Position;
+import model.levelsequence.level.grid.element.PositionImpl;
+import model.levelsequence.level.grid.element.Type;
 
 /**
  * An implementation class for the {@link Grid} interface.

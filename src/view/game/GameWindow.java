@@ -1,7 +1,7 @@
 package view.game;
 
 import controller.game.GameWindowController;
-import model.level.grid.element.Element;
+import model.levelsequence.level.grid.element.Element;
 import view.Window;
 
 /**

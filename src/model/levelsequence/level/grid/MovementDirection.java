@@ -1,9 +1,9 @@
-package model.level.grid;
+package model.levelsequence.level.grid;
 
 import java.util.function.Function;
 
-import model.level.grid.element.Position;
-import model.level.grid.element.PositionImpl;
+import model.levelsequence.level.grid.element.Position;
+import model.levelsequence.level.grid.element.PositionImpl;
 
 /**
  * The directions of movement.

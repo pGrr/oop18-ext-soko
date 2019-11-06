@@ -1,12 +1,12 @@
-package model.level;
+package model.levelsequence.level;
 
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
-import model.level.grid.Grid;
-import model.level.grid.element.Element;
-import model.level.grid.element.Type;
+import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.element.Element;
+import model.levelsequence.level.grid.element.Type;
 
 /**
  * An implementation class for the {@link Level} interface.

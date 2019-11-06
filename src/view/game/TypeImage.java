@@ -3,7 +3,7 @@ package view.game;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
-import model.level.grid.element.Type;
+import model.levelsequence.level.grid.element.Type;
 
 /**
  * An enumeration associating each {@link Type} with it's image.

@@ -1,4 +1,4 @@
-package model.level;
+package model.levelsequence.level;
 
 /**
  * The exception meaning a level is not valid. It's thrown when a level is

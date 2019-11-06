@@ -1,7 +1,7 @@
 package view.craft;
 
 import controller.craft.CraftWindowController;
-import model.level.grid.Grid;
+import model.levelsequence.level.grid.Grid;
 import view.Window;
 
 /**

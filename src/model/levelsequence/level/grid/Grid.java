@@ -1,10 +1,10 @@
-package model.level.grid;
+package model.levelsequence.level.grid;
 
 import java.io.Serializable;
 import java.util.Collection;
 
-import model.level.grid.element.Element;
-import model.level.grid.element.Position;
+import model.levelsequence.level.grid.element.Element;
+import model.levelsequence.level.grid.element.Position;
 
 /**
  * The squared-grid-world in which the elements are.

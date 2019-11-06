@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,11 +16,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import controller.Controller;
 import controller.Controllers;
 import controller.initial.InitialWindowController;
-import model.level.Level;
-import model.level.LevelNotValidException;
+import model.levelsequence.level.LevelNotValidException;
 import view.GuiComponentFactory;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
@@ -75,25 +72,6 @@ public class InitialLevelList {
      */
     public JPanel getPanel() {
         return this.panel;
-    }
-
-    /**
-     * Gets the list model.
-     *
-     * @return the list model
-     */
-    public DefaultListModel<String> getListModel() {
-        return this.listModel;
-    }
-
-    /**
-     * Gets the level names.
-     *
-     * @return the level names
-     */
-    public final List<String> getLevelNames() {
-        return Controller.getInstance().getLevelSequenceController().getCurrentLevelSequenceCurrentState()
-                .getAllLevels().stream().map(Level::getName).collect(Collectors.toList());
     }
 
     /**

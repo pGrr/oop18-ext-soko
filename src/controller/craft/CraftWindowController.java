@@ -2,10 +2,10 @@ package controller.craft;
 
 import java.io.IOException;
 
-import model.level.LevelNotValidException;
-import model.level.grid.Grid;
-import model.level.grid.element.Position;
-import model.level.grid.element.Type;
+import model.levelsequence.level.LevelNotValidException;
+import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.element.Position;
+import model.levelsequence.level.grid.element.Type;
 
 /**
  * The craft window controller.
@@ -33,11 +33,6 @@ public interface CraftWindowController {
      * @param position the position in which to insert the given type
      */
     void insert(Type type, Position position);
-
-    /**
-     * Exits craft level view and goes back to initial view.
-     */
-    void backToInitialView();
 
     /**
      * Loads a level from the file-system and updates the craft view with it's grid.

@@ -1,9 +1,9 @@
-package model.level;
+package model.levelsequence.level;
 
 import java.io.Serializable;
 
-import model.level.grid.Grid;
-import model.level.grid.element.Element;
+import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.element.Element;
 
 /**
  * A Level of the game. Has a name and a grid, it can be validated and played.

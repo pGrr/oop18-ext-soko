@@ -1,7 +1,7 @@
 package controller.initial;
 
 import java.io.IOException;
-import model.level.LevelNotValidException;
+import model.levelsequence.level.LevelNotValidException;
 
 /**
  * The initial window controller which controls the behavior subsequently to

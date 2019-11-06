@@ -20,7 +20,7 @@ public final class TestCraftView {
      * @param args the arguments
      */
     public static void main(final String... args) {
-        CraftWindow craftView = new CraftWindowImpl();
+        CraftWindow craftView = new CraftWindowImpl(new ViewImpl());
         craftView.show();
     }
 

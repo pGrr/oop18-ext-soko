@@ -1,8 +1,8 @@
 package controller.game;
 
 import java.io.IOException;
-import model.level.Level;
-import model.level.grid.MovementDirection;
+import model.levelsequence.level.Level;
+import model.levelsequence.level.grid.MovementDirection;
 
 /**
  * The Game controller, which is responsible for the operations necessary when

@@ -4,8 +4,9 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 import controller.craft.CraftWindowController;
-import model.level.grid.Grid;
+import model.levelsequence.level.grid.Grid;
 import view.GuiComponentFactory;
+import view.View;
 import view.WindowAbstract;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
@@ -25,31 +26,50 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
     private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "An error occurred while trying to save the level.";
     private static final String DIALOG_FILE_CORRUPTED_TEXT = "Loaded file is corrupted";
 
+    private final View owner;
     private final CraftGrid grid;
     private final CraftSelection selection;
     private final CraftOptions options;
 
     /**
      * Instantiates a new CraftWindowImpl object with an initially empty grid.
+     *
+     * @param owner the {@link View} which created this object
      */
-    public CraftWindowImpl() {
+    public CraftWindowImpl(final View owner) {
         super(TITLE, HEIGHT_TO_SCREENSIZE_RATIO, WIDTH_TO_HEIGHT_RATIO);
+        this.owner = owner;
         this.grid = new CraftGrid(this);
         this.selection = new CraftSelection();
         this.options = new CraftOptions(this);
         this.getFrame().add(createMainPanel());
     }
 
+    /**
+     * Sets the controller.
+     *
+     * @param controller the new controller
+     */
     @Override
     public void setController(final CraftWindowController controller) {
         this.grid.setController(controller);
     }
 
+    /**
+     * Update grid.
+     *
+     * @param grid the grid
+     */
     @Override
     public void updateGrid(final Grid grid) {
         this.grid.setGrid(grid);
     }
 
+    /**
+     * Creates the main panel.
+     *
+     * @return the j panel
+     */
     @Override
     protected JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -60,29 +80,52 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
         return mainPanel;
     }
 
+    /**
+     * Show.
+     */
     @Override
     public void show() {
         this.getFrame().setVisible(true);
         this.grid.createResizedIcons();
     }
 
+    /**
+     * Show IO error dialog.
+     */
     @Override
     public void showIOErrorDialog() {
         GuiComponentFactory.getInstance().createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT)
                 .setVisible(true);
     }
 
+    /**
+     * Show class not found error dialog.
+     */
     @Override
     public void showClassNotFoundErrorDialog() {
         GuiComponentFactory.getInstance()
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_FILE_CORRUPTED_TEXT).setVisible(true);
     }
 
+    /**
+     * Show level invalid dialog.
+     *
+     * @param cause the cause
+     */
     @Override
     public void showLevelInvalidDialog(final String cause) {
         GuiComponentFactory.getInstance()
                 .createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_LEVEL_NOT_CORRECT_TEXT + " " + cause)
                 .setVisible(true);
+    }
+
+    /**
+     * Gets the {@link View} which created this object.
+     *
+     * @return the {@link View} which created this object
+     */
+    protected View getOwner() {
+        return this.owner;
     }
 
     /**

@@ -3,8 +3,6 @@ package controller;
 import controller.initial.InitialWindowController;
 import controller.craft.CraftWindowController;
 import controller.game.GameWindowController;
-import controller.navigation.NavigationController;
-import controller.sequence.LevelSequenceController;
 
 /**
  * The main controller interface, it is the entry point to get any controller
@@ -14,48 +12,29 @@ import controller.sequence.LevelSequenceController;
 public interface Controller {
 
     /**
-     * Gets the navigation controller, which is responsible for showing and hiding
-     * Windows.
-     *
-     * @return the navigation controller
-     */
-    NavigationController getNavigationController();
-
-    /**
-     * Gets the sequence controller, which is responsible for the main operations
-     * concerning level sequences.
-     *
-     * @return the sequence controller
-     */
-    LevelSequenceController getLevelSequenceController();
-
-    /**
      * Gets the initial window controller.
      *
      * @return the initial window controller
+     * @throws IllegalStateException if the model and view have not been set for this
+     *                               controller prior to this call
      */
-    InitialWindowController getInitialWindowObserver();
+    InitialWindowController getInitialWindowController() throws IllegalStateException;
 
     /**
      * Gets the craft window controller.
      *
      * @return the game controller
+     * @throws IllegalStateException if the model and view have not been set for this
+     *                               controller prior to this call
      */
-    CraftWindowController getCraftWindowController();
+    CraftWindowController getCraftWindowController() throws IllegalStateException;
 
     /**
      * Gets the game window controller.
      *
      * @return the game window controller
+     * @throws IllegalStateException if the model and view have not been set for this
+     *                               controller prior to this call
      */
-    GameWindowController getGameWindowController();
-
-    /**
-     * Gets the single instance of Controller.
-     *
-     * @return single instance of Controller
-     */
-    static Controller getInstance() {
-        return ControllerSingleton.getInstance();
-    }
+    GameWindowController getGameWindowController() throws IllegalStateException;
 }

@@ -1,27 +1,23 @@
-package controller.sequence;
-
-import model.LevelSequence;
-import model.LevelSequenceImpl;
-import model.level.Level;
+package model;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import controller.Controller;
+import model.levelsequence.LevelSequence;
+import model.levelsequence.LevelSequenceImpl;
+import model.levelsequence.level.Level;
 
 /**
- * The default implementation of the {@link LevelSequenceController} interface.
- * Implements the singleton design pattern.
+ * The default implementation of the {@link Model} interface.
  */
-public final class LevelSequenceControllerImpl implements LevelSequenceController {
+public final class ModelImpl implements Model {
 
     private LevelSequence lsCurrentState;
     private LevelSequence lsInitialState;
 
     /**
-     * Initializes a new level sequence controller with the given level sequence.
+     * Initializes a new model object with an empty level sequence.
      */
-    public LevelSequenceControllerImpl() {
+    public ModelImpl() {
         this.lsCurrentState = new LevelSequenceImpl("");
         this.lsInitialState = this.lsCurrentState.createCopy();
     }
@@ -52,18 +48,6 @@ public final class LevelSequenceControllerImpl implements LevelSequenceControlle
             return lsInitialState;
         } else {
             throw new IllegalArgumentException();
-        }
-    }
-
-    @Override
-    public void startLevelSequence(final LevelSequence levelSequence) {
-        setCurrentLevelSequence(levelSequence);
-        if (getCurrentLevelSequenceCurrentState().hasNextLevel()) {
-            getCurrentLevelSequenceCurrentState().setNextLevelAsCurrent();
-            Controller.getInstance().getNavigationController()
-                    .toGameLevelView(getCurrentLevelSequenceCurrentState().getCurrentLevel());
-        } else {
-            Controller.getInstance().getNavigationController().getInitialWindow().showLevelSequenceEmptyErrorDialog();
         }
     }
 }

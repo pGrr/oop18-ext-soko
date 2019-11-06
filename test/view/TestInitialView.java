@@ -20,7 +20,7 @@ public final class TestInitialView {
      * @param args the arguments
      */
     public static void main(final String... args) {
-        InitialWindow initialView = new InitialWindowImpl();
+        InitialWindow initialView = new InitialWindowImpl(new ViewImpl());
         initialView.show();
     }
 }

@@ -1,4 +1,4 @@
-package model.level.grid.element;
+package model.levelsequence.level.grid.element;
 
 import java.util.Objects;
 

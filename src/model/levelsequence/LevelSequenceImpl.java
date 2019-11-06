@@ -1,4 +1,4 @@
-package model;
+package model.levelsequence;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,15 +8,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import model.level.Level;
-import model.level.LevelImpl;
-import model.level.grid.Grid;
-import model.level.grid.GridImpl;
+import model.levelsequence.level.Level;
+import model.levelsequence.level.LevelImpl;
+import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.GridImpl;
 
 /**
  * An implementation of the {@link LevelSequence} interface.
  */
-public class LevelSequenceImpl implements LevelSequence, Serializable {
+public final class LevelSequenceImpl implements LevelSequence, Serializable {
 
     private static final long serialVersionUID = 7771870185440080688L;
 
@@ -51,7 +51,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
     }
 
     @Override
-    public final LevelSequence createCopy() {
+    public LevelSequence createCopy() {
         List<Level> levelsCopy = new ArrayList<>();
         this.getAllLevels()
                 .forEach(l -> levelsCopy.add(new LevelImpl(new String(l.getName()), new GridImpl(l.getCurrentGrid()))));
@@ -59,51 +59,51 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
     }
 
     @Override
-    public final String getName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public final List<Level> getAllLevels() {
+    public List<Level> getAllLevels() {
         return new ArrayList<>(this.levels);
     }
 
     @Override
-    public final void add(final Level level) {
+    public void add(final Level level) {
         this.levels.add(level);
         this.iterator = levels.iterator();
     }
 
     @Override
-    public final void swap(final int i, final int j) {
+    public void swap(final int i, final int j) {
         Collections.swap(levels, i, j);
         this.iterator = levels.iterator();
     }
 
     @Override
-    public final void remove(final int i) {
+    public void remove(final int i) {
         levels.remove(i);
         this.iterator = levels.iterator();
     }
 
     @Override
-    public final void clear() {
+    public void clear() {
         levels.clear();
         this.iterator = levels.iterator();
     }
 
     @Override
-    public final boolean hasNextLevel() {
+    public boolean hasNextLevel() {
         return iterator.hasNext();
     }
 
     @Override
-    public final void setNextLevelAsCurrent() {
+    public void setNextLevelAsCurrent() {
         this.currentLevel = iterator.next();
     }
 
     @Override
-    public final Level getCurrentLevel() {
+    public Level getCurrentLevel() {
         if (this.currentLevel != null) {
             return this.currentLevel;
         } else {
@@ -112,7 +112,7 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
     }
 
     @Override
-    public final void restartCurrentLevel() {
+    public void restartCurrentLevel() {
         if (this.currentLevel != null) {
             this.currentLevel = new LevelImpl(this.currentLevel.getName(), this.currentLevel.getInitialGrid());
         } else {
@@ -121,17 +121,17 @@ public class LevelSequenceImpl implements LevelSequence, Serializable {
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return "LevelSequenceImpl [name=" + name + ", levels=" + levels + ", iterator=" + iterator + "]";
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(levels, name);
     }
 
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
