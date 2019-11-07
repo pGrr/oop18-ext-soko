@@ -1,13 +1,9 @@
 package model.levelsequence.level.grid;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
-
 import model.levelsequence.level.grid.element.Element;
 import model.levelsequence.level.grid.element.ElementImpl;
 import model.levelsequence.level.grid.element.Position;
@@ -20,14 +16,14 @@ import model.levelsequence.level.grid.element.Type;
 public class GridImpl implements Grid {
 
     private static final long serialVersionUID = -1944841853255090464L;
-    private final Set<Element> elements;
+    private final List<Element> elements;
 
     /**
      * Instantiates an empty GridImpl object.
      */
     public GridImpl() {
         super();
-        this.elements = new HashSet<>();
+        this.elements = new ArrayList<>();
     }
 
     /**
@@ -37,7 +33,7 @@ public class GridImpl implements Grid {
      * @param grid the grid
      */
     public GridImpl(final Grid grid) {
-        this.elements = new HashSet<>();
+        this.elements = new ArrayList<>();
         grid.getAllElements().forEach(e -> this.elements.add(new ElementImpl(e.getType(),
                 new PositionImpl(e.getPosition().getRowIndex(), e.getPosition().getColumnIndex()), this)));
     }
@@ -58,12 +54,12 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public final Collection<Element> getAllElements() {
-        return new ArrayList<>(elements);
+    public final List<Element> getAllElements() {
+        return this.elements;
     }
 
     @Override
-    public final Collection<Element> getBoxesOnTarget() {
+    public final List<Element> getBoxesOnTarget() {
         List<Element> boxes = this.elements.stream().filter(e -> e.getType().equals(Type.BOX))
                 .collect(Collectors.toList());
         List<Element> targets = this.elements.stream().filter(e -> e.getType().equals(Type.TARGET))
@@ -80,7 +76,7 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public final Collection<Element> getElementsAt(final Position position) {
+    public final List<Element> getElementsAt(final Position position) {
         return this.elements.stream().filter(e -> e.getPosition().equals(position)).collect(Collectors.toList());
     }
 
@@ -91,7 +87,7 @@ public class GridImpl implements Grid {
             Position newPosition = direction.computeTargetPosition(element.getPosition());
             if (Integer.max(newPosition.getRowIndex(), newPosition.getColumnIndex()) < N_ROWS
                     && Integer.min(newPosition.getRowIndex(), newPosition.getColumnIndex()) >= 0) {
-                Collection<Element> obstacles = getElementsAt(newPosition);
+                List<Element> obstacles = getElementsAt(newPosition);
                 if (obstacles.isEmpty() || obstacles.stream().allMatch(bo -> bo.getType().equals(Type.TARGET))) {
                     element.setPosition(newPosition);
                     success = true;

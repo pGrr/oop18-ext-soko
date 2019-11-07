@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.GridImpl;
 import model.levelsequence.level.grid.element.Element;
 import model.levelsequence.level.grid.element.Type;
 
@@ -29,8 +30,8 @@ public class LevelImpl implements Level {
     public LevelImpl(final String name, final Grid grid) {
         super();
         this.name = name;
-        this.initialGrid = Grid.createCopyOf(grid);
-        this.currentGrid = Grid.createCopyOf(grid);
+        this.currentGrid = grid;
+        this.initialGrid = new GridImpl(grid);
     }
 
     @Override
@@ -51,8 +52,11 @@ public class LevelImpl implements Level {
     @Override
     public final Element getUser() {
         if (this.user == null) {
-            this.user = this.currentGrid.getAllElements().stream().filter(e -> e.getType().equals(Type.USER))
-                    .findFirst().orElseThrow(IllegalStateException::new);
+            for (Element e : this.currentGrid.getAllElements()) {
+                if (e.getType().equals(Type.USER)) {
+                    this.user = e;
+                }
+            }
         }
         return this.user;
     }

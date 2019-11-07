@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import model.levelsequence.level.Level;
 import model.levelsequence.level.LevelImpl;
-import model.levelsequence.level.grid.Grid;
 import model.levelsequence.level.grid.GridImpl;
 
 /**
@@ -34,7 +33,7 @@ public final class LevelSequenceImpl implements LevelSequence, Serializable {
         this.name = name;
         this.levels = new ArrayList<>();
         this.iterator = this.levels.iterator();
-        this.currentLevel = new LevelImpl("", Grid.createEmpty());
+        this.currentLevel = new LevelImpl("", new GridImpl());
     }
 
     /**

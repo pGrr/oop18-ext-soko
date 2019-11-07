@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import controller.craft.CraftWindowController;
 import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.GridImpl;
 import model.levelsequence.level.grid.element.Position;
 import model.levelsequence.level.grid.element.PositionImpl;
 import model.levelsequence.level.grid.element.Type;
@@ -50,7 +51,7 @@ public class CraftGrid {
     public CraftGrid(final CraftWindowImpl owner) {
         this.guiComponentFactory = new GuiComponentFactoryImpl();
         this.owner = owner;
-        this.levelGrid = Grid.createEmpty();
+        this.levelGrid = new GridImpl();
         this.buttonGrid = createButtonGrid();
         this.resizedIcons = new HashMap<>();
     }

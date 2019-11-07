@@ -1,7 +1,7 @@
 package model.levelsequence.level.grid;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 import model.levelsequence.level.grid.element.Element;
 import model.levelsequence.level.grid.element.Position;
@@ -39,14 +39,14 @@ public interface Grid extends Serializable {
      *
      * @return all the elements of the grid
      */
-    Collection<Element> getAllElements();
+    List<Element> getAllElements();
 
     /**
      * Gets all the boxes that are on the same position of a target.
      * 
      * @return the boxes on target list
      */
-    Collection<Element> getBoxesOnTarget();
+    List<Element> getBoxesOnTarget();
 
     /**
      * Gets all the elements that are currently at the given position. In a given
@@ -57,7 +57,7 @@ public interface Grid extends Serializable {
      * @param position the position to search into
      * @return the elements at the given position
      */
-    Collection<Element> getElementsAt(Position position);
+    List<Element> getElementsAt(Position position);
 
     /**
      * Moves, if possible, the given element to the adjacent position in the given
@@ -87,23 +87,4 @@ public interface Grid extends Serializable {
      */
     @Override
     boolean equals(Object obj);
-
-    /**
-     * Creates an empty grid.
-     *
-     * @return the empty grid
-     */
-    static Grid createEmpty() {
-        return new GridImpl();
-    }
-
-    /**
-     * Creates a copy of the given grid.
-     * 
-     * @param grid the grid to be copied
-     * @return the copied grid
-     */
-    static Grid createCopyOf(Grid grid) {
-        return new GridImpl(grid);
-    }
 }
