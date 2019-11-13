@@ -8,8 +8,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -20,7 +18,7 @@ import model.levelsequence.level.grid.Grid;
 import model.levelsequence.level.grid.MovementDirection;
 import model.levelsequence.level.grid.element.Element;
 import model.levelsequence.level.grid.element.Position;
-import model.levelsequence.level.grid.element.Type;
+import view.ResizedTypeImage;
 
 /**
  * The Class responsible for the canvas where the game played is drawn. It is a
@@ -35,7 +33,7 @@ public class GameCanvas extends JPanel {
     private final GameWindowImpl owner;
     private final Timer timer;
     private final Image boxOnTargetImage;
-    private Map<Type, Image> standardImages;
+    private final ResizedTypeImage standardImages;
     private Graphics graphics;
     private Integer keyPressedCode;
     private GameWindowController controller;
@@ -50,7 +48,9 @@ public class GameCanvas extends JPanel {
         this.keyPressedCode = null;
         this.graphics = null;
         this.owner = owner;
-        this.standardImages = createResizedStandardImages();
+        this.standardImages = new ResizedTypeImage(
+                (int) Math.round(Math.floor(this.getPreferredSize().getWidth() / Grid.N_ROWS)),
+                (int) Math.round(Math.floor(this.getPreferredSize().getHeight() / Grid.N_ROWS)));
         this.boxOnTargetImage = boxOnTargetImage();
         this.setSize(this.getPreferredSize());
         this.setFocusable(true);
@@ -148,8 +148,10 @@ public class GameCanvas extends JPanel {
                 this.graphics.drawImage(boxOnTargetImage, pos.getColumnIndex(), pos.getRowIndex(),
                         this.owner.getFrame());
             } else {
-                this.graphics.drawImage(this.standardImages.get(element.getType()), pos.getColumnIndex(),
-                        pos.getRowIndex(), this.owner.getFrame());
+                if (this.standardImages.get(element.getType()).isPresent()) {
+                    this.graphics.drawImage(this.standardImages.get(element.getType()).get(), pos.getColumnIndex(),
+                            pos.getRowIndex(), this.owner.getFrame());
+                }
             }
         }
     }
@@ -177,22 +179,6 @@ public class GameCanvas extends JPanel {
                 this.keyPressedCode = null;
             }
         });
-    }
-
-    /**
-     * Creates a map holding a resized image for each {@link Type}, in order to not
-     * having to create them each time they are needed, thus improving performance.
-     *
-     * @return the map holding a resized image for each {@link Type}
-     */
-    private Map<Type, Image> createResizedStandardImages() {
-        Map<Type, Image> imageMap = new HashMap<>();
-        for (TypeImage t : TypeImage.values()) {
-            imageMap.put(t.getType(),
-                    t.getImage().getScaledInstance((int) Math.round(this.getPreferredSize().getWidth() / Grid.N_ROWS),
-                            (int) Math.round(this.getPreferredSize().getHeight() / Grid.N_ROWS), Image.SCALE_DEFAULT));
-        }
-        return imageMap;
     }
 
     /**

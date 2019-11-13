@@ -1,7 +1,6 @@
 package view.craft;
 
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,12 +15,13 @@ import javax.swing.SwingUtilities;
 import controller.craft.CraftWindowController;
 import model.levelsequence.level.grid.Grid;
 import model.levelsequence.level.grid.GridImpl;
+import model.levelsequence.level.grid.element.Element;
 import model.levelsequence.level.grid.element.Position;
 import model.levelsequence.level.grid.element.PositionImpl;
 import model.levelsequence.level.grid.element.Type;
 import view.GuiComponentFactory;
 import view.GuiComponentFactoryImpl;
-import view.game.TypeImage;
+import view.ResizedTypeImage;
 
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
@@ -38,15 +38,15 @@ public class CraftGrid {
     private final GuiComponentFactory guiComponentFactory;
     private final CraftWindowImpl owner;
     private final Map<Type, Icon> resizedIcons;
-    private final List<List<JButton>> buttonGrid;
+    private List<List<JButton>> buttonGrid;
     private CraftWindowController controller;
     private Grid levelGrid;
 
     /**
      * Instantiates a new craft grid object.
      *
-     * @param owner      the {@link CraftWindowImpl} object which creates and
-     *                   contains this object
+     * @param owner the {@link CraftWindowImpl} object which creates and contains
+     *              this object
      */
     public CraftGrid(final CraftWindowImpl owner) {
         this.guiComponentFactory = new GuiComponentFactoryImpl();
@@ -66,6 +66,15 @@ public class CraftGrid {
     }
 
     /**
+     * Clears the grid.
+     *
+     */
+    public void clear() {
+        this.levelGrid = new GridImpl();
+        this.buttonGrid.stream().flatMap(List::stream).forEach(b -> b.setIcon(null));
+    }
+
+    /**
      * Gets the grid.
      *
      * @return the {@link Grid} object
@@ -75,13 +84,25 @@ public class CraftGrid {
     }
 
     /**
-     * Sets the grid.
+     * Adds an element to the grid.
      * 
-     * @param grid the grid
+     * @param element the element to be added
      */
-    public void setGrid(final Grid grid) {
-        this.levelGrid = grid;
-        updateButtonGrid();
+    public void add(final Element element) {
+        this.levelGrid.add(element);
+        this.buttonGrid.get(element.getPosition().getRowIndex()).get(element.getPosition().getColumnIndex())
+                .setIcon(this.resizedIcons.get(element.getType()));
+    }
+
+    /**
+     * Removes an element from the grid.
+     * 
+     * @param element the element to be removed
+     */
+    public void remove(final Element element) {
+        this.levelGrid.remove(element);
+        this.buttonGrid.get(element.getPosition().getRowIndex()).get(element.getPosition().getColumnIndex())
+                .setIcon(new ImageIcon());
     }
 
     /**
@@ -100,21 +121,23 @@ public class CraftGrid {
     }
 
     /**
-     * Creates the resized icons images in order to not re-create them at every use.
-     * Since the icon size is relative to the button size which is relative to the
-     * window size, the icons dimensions are known only when the Window is set
-     * visible. Thus, this must be public as it must be called from
-     * {@link CraftWindowImpl} in its show method.
+     * Creates the resized {@link Icon} for each type in order to not re-create them
+     * at every use. Uses a {@link ResizedTypeImage} object to achieve that. Since
+     * the icon size is relative to the button size which is relative to the window
+     * size, the icons dimensions are known only when the Window is set visible.
+     * Thus, this must be public as it must be called from {@link CraftWindowImpl}
+     * in its show method.
      * 
-     * @return a {@link Map} which link every {@link Type} with its own resized
+     * @return a {@link Map} which maps every {@link Type} with its own resized
      *         {@link Icon}
      */
     public Map<Type, Icon> createResizedIcons() {
         int w = (int) Math.round(this.buttonGrid.get(0).get(0).getWidth() * GRIDBUTTON_RELATIVE_ICON_WIDTH);
         int h = (int) Math.round(this.buttonGrid.get(0).get(0).getHeight() * GRIDBUTTON_RELATIVE_ICON_HEIGHT);
-        for (TypeImage typeImage : TypeImage.values()) {
-            this.resizedIcons.put(typeImage.getType(),
-                    new ImageIcon(typeImage.getImage().getScaledInstance(w, h, Image.SCALE_DEFAULT)));
+        ResizedTypeImage images = new ResizedTypeImage(w, h);
+        for (Type type : Type.values()) {
+            this.resizedIcons.put(type,
+                    images.get(type).isPresent() ? new ImageIcon(images.get(type).get()) : new ImageIcon());
         }
         return this.resizedIcons;
     }
@@ -146,7 +169,7 @@ public class CraftGrid {
         return e -> SwingUtilities.invokeLater(() -> {
             JButton clickedButton = (JButton) e.getSource();
             Position position = findButtonPosition(clickedButton);
-            this.controller.insert(this.owner.getSelection().getSelectedType(), position);
+            this.controller.insert(this.levelGrid, this.owner.getSelection().getSelectedType(), position);
         });
     }
 
@@ -164,24 +187,6 @@ public class CraftGrid {
             });
         });
         return grid;
-    }
-
-    /**
-     * Resets the button grid.
-     */
-    private void resetButtonGrid() {
-        this.buttonGrid.stream().flatMap(List::stream).forEach(b -> b.setIcon(new ImageIcon()));
-    }
-
-    /**
-     * Updates the button grid to mirror the level grid state.
-     */
-    private void updateButtonGrid() {
-        resetButtonGrid();
-        this.levelGrid.getAllElements().forEach(element -> {
-            this.buttonGrid.get(element.getPosition().getRowIndex()).get(element.getPosition().getColumnIndex())
-                    .setIcon(resizedIcons.get(element.getType()));
-        });
     }
 
     /**

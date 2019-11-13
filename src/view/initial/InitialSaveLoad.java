@@ -72,8 +72,8 @@ public class InitialSaveLoad {
      */
     private ActionListener saveSequence() {
         return e -> SwingUtilities.invokeLater(() -> {
-            String fileExtension = Controller.LEVEL_SEQUENCE_FILE_DESCRIPTION;
-            String fileDescription = Controller.LEVEL_SEQUENCE_FILE_EXTENSION;
+            String fileExtension = Controller.LEVEL_SEQUENCE_FILE_EXTENSION;
+            String fileDescription = Controller.LEVEL_SEQUENCE_FILE_DESCRIPTION;
             JFileChooser fc = this.guiComponentFactory.createFileChooser(fileDescription, fileExtension);
             fc.showSaveDialog(this.owner.getFrame());
             File selectedFile = fc.getSelectedFile();
@@ -106,15 +106,15 @@ public class InitialSaveLoad {
             String path = new String();
             if (file != null) {
                 path = file.getPath();
-            }
-            try {
-                this.controller.loadLevelSequence(path);
-            } catch (ClassNotFoundException e1) {
-                this.owner.showClassNotFoundErrorDialog();
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                this.owner.showIOErrorDialog();
-                e1.printStackTrace();
+                try {
+                    this.controller.loadLevelSequence(path);
+                } catch (ClassNotFoundException e1) {
+                    this.owner.showClassNotFoundErrorDialog();
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    this.owner.showIOErrorDialog();
+                    e1.printStackTrace();
+                }
             }
         });
     }

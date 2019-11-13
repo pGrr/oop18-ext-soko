@@ -3,7 +3,6 @@ package controller.craft;
 import java.io.IOException;
 import java.util.Collection;
 import controller.Controller;
-import model.Model;
 import model.levelsequence.level.Level;
 import model.levelsequence.level.LevelImpl;
 import model.levelsequence.level.LevelNotValidException;
@@ -21,53 +20,43 @@ public final class CraftWindowControllerImpl implements CraftWindowController {
 
     private final Controller owner;
     private final CraftWindow view;
-    private final Model model;
 
     /**
-     * Instantiates a new craft window controller impl.
+     * Instantiates a new craft window controller with the given controller and
+     * view.
      *
-     * @param owner the {@link Controller} object which created this object
-     * @param view  the view
-     * @param model the model
+     * @param owner the controller, creator of this object
+     * @param view  the view to be controlled
      */
-    public CraftWindowControllerImpl(final Controller owner, final Model model, final CraftWindow view) {
+    public CraftWindowControllerImpl(final Controller owner, final CraftWindow view) {
         this.owner = owner;
         this.view = view;
-        this.model = model;
-    }
-
-    @Override
-    public void updateGrid() {
-        this.view.updateGrid(this.model.getCurrentLevelSequenceCurrentState().getCurrentLevel().getCurrentGrid());
     }
 
     @Override
     public void clearGrid() {
-        this.model.getCurrentLevelSequenceCurrentState().getCurrentLevel().getCurrentGrid().clear();
-        updateGrid();
+        this.view.clearGrid();
     }
 
     @Override
-    public void insert(final Type type, final Position position) {
-        Grid modelGrid = this.model.getCurrentLevelSequenceCurrentState().getCurrentLevel().getCurrentGrid();
-        Collection<Element> elementsInPosition = modelGrid.getElementsAt(position);
-        Element newElement = new ElementImpl(type, position, modelGrid);
+    public void insert(final Grid grid, final Type type, final Position position) {
+        Collection<Element> elementsInPosition = grid.getElementsAt(position);
+        Element newElement = new ElementImpl(type, position, grid);
         if (elementsInPosition.isEmpty()) {
-            modelGrid.add(newElement);
+            this.view.addElement(newElement);
         }
         elementsInPosition.forEach(oldElement -> {
-            modelGrid.remove(oldElement);
+            this.view.removeElement(oldElement);
             if (!oldElement.getType().equals(type)) {
-                modelGrid.add(newElement);
+                this.view.addElement(newElement);
             }
         });
-        updateGrid();
     }
 
     @Override
     public void loadLevel(final String path) throws ClassNotFoundException, LevelNotValidException, IOException {
         Grid grid = this.owner.loadLevel(path).getCurrentGrid();
-        this.view.updateGrid(grid);
+        grid.getAllElements().forEach(this.view::addElement);
     }
 
     @Override

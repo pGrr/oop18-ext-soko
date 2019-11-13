@@ -3,12 +3,13 @@ package controller.initial;
 import java.io.IOException;
 import controller.Controller;
 import model.Model;
+import model.levelsequence.LevelSequence;
 import model.levelsequence.LevelSequenceImpl;
 import model.levelsequence.level.LevelNotValidException;
 import view.initial.InitialWindow;
 
 /**
- * An implementation class for the {@link InitialWindowController} interface.
+ * An implementation of {@link InitialWindowController}.
  */
 public final class InitialWindowControllerImpl implements InitialWindowController {
 
@@ -17,10 +18,10 @@ public final class InitialWindowControllerImpl implements InitialWindowControlle
     private final InitialWindow view;
 
     /**
-     * Initializes a new initial view controller for the given initial window.
+     * Initializes a new instance with the given controller, model and view.
      * 
-     * @param owner         the {@link Controller} object which created this object
-     * @param initialWindow the initial window
+     * @param owner         the controller, creator of this object
+     * @param initialWindow the view to be controlled
      * @param model         the model
      */
     public InitialWindowControllerImpl(final Controller owner, final Model model, final InitialWindow initialWindow) {
@@ -69,19 +70,33 @@ public final class InitialWindowControllerImpl implements InitialWindowControlle
     }
 
     @Override
+    public void updateLevelList() {
+        this.view.updateList(this.model.getLevelNames());
+    }
+
+    @Override
     public void saveLevelSequence(final String name, final String path) throws IOException {
-        this.owner.saveLevelSequence(
-                new LevelSequenceImpl(name, this.model.getCurrentLevelSequenceCurrentState().getAllLevels()), path);
+        LevelSequence ls = this.model.getCurrentLevelSequenceCurrentState();
+        if (ls.getAllLevels().isEmpty()) {
+            this.view.showLevelSequenceEmptyErrorDialog();
+        } else {
+            this.owner.saveLevelSequence(
+                    new LevelSequenceImpl(name, this.model.getCurrentLevelSequenceCurrentState().getAllLevels()), path);
+        }
     }
 
     @Override
     public void loadLevelSequence(final String path) throws ClassNotFoundException, IOException {
-        this.model.setCurrentLevelSequence(this.owner.loadLevelSequence(path));
+        LevelSequence currentLs = this.model.getCurrentLevelSequenceCurrentState();
+        LevelSequence loadedLs = this.owner.loadLevelSequence(path);
+        if (currentLs.getAllLevels().isEmpty()) {
+            // if the current level sequence is empty it is substituted with the loaded one
+            this.model.setCurrentLevelSequence(loadedLs);
+        } else {
+            // if current level sequence is not empty levels are added to it
+            loadedLs.getAllLevels().stream().forEach(currentLs::add);
+            this.model.setCurrentLevelSequence(currentLs);
+        }
         updateLevelList();
-    }
-
-    @Override
-    public void updateLevelList() {
-        this.view.updateList(this.model.getLevelNames());
     }
 }

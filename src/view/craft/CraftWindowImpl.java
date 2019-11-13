@@ -2,9 +2,8 @@ package view.craft;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
-
 import controller.craft.CraftWindowController;
-import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.element.Element;
 import view.GuiComponentFactory;
 import view.GuiComponentFactoryImpl;
 import view.View;
@@ -51,11 +50,22 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
     @Override
     public void setController(final CraftWindowController controller) {
         this.grid.setController(controller);
+        this.options.setController(controller);
     }
 
     @Override
-    public void updateGrid(final Grid grid) {
-        this.grid.setGrid(grid);
+    public void clearGrid() {
+        this.grid.clear();
+    }
+
+    @Override
+    public void addElement(final Element element) {
+        this.grid.add(element);
+    }
+
+    @Override
+    public void removeElement(final Element element) {
+        this.grid.remove(element);
     }
 
     @Override

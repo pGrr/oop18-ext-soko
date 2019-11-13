@@ -1,58 +1,54 @@
 package controller.craft;
 
 import java.io.IOException;
-
 import model.levelsequence.level.LevelNotValidException;
 import model.levelsequence.level.grid.Grid;
 import model.levelsequence.level.grid.element.Position;
 import model.levelsequence.level.grid.element.Type;
 
 /**
- * The craft window controller.
+ * The {@link CraftWindow} controller.
  */
 public interface CraftWindowController {
 
     /**
-     * Clears the model grid and updates the craft view subsequently.
+     * Clears the {@link CraftWindow} grid.
      */
     void clearGrid();
 
     /**
-     * Updates the craft view grid to reflect model's data.
-     */
-    void updateGrid();
-
-    /**
-     * It tries to insert the given type in the given position and then updates the
-     * craft window to reflect the changes. The element is inserted in the given
-     * position only if the latter is empty or contains an element of a different
-     * type. If the position already contains the given type, the position is
-     * cleared.
+     * The element is inserted in the given position of the given the
+     * {@link CraftWindow} grid, but only if the latter is empty or contains an
+     * element of a different type. If the position already contains the given type,
+     * the position is cleared.
      * 
+     * @param grid     the grid in which to insert
      * @param type     the type to be inserted
-     * @param position the position in which to insert the given type
+     * @param position the position in which to insert
      */
-    void insert(Type type, Position position);
+    void insert(Grid grid, Type type, Position position);
 
     /**
-     * Loads a level from the file-system and updates the craft view with it's grid.
+     * Loads a level from the file-system and updates the the {@link CraftWindow}
+     * with it's grid.
      * 
-     * @param path the path of the level on the file-system
-     * @throws IOException            an input output exception
-     * @throws LevelNotValidException a level not valid exception
-     * @throws ClassNotFoundException a class not found exception
+     * @param path the absolute path of the level on the file-system
+     * @throws IOException            if an input/output error occurs
+     * @throws LevelNotValidException if the level is not valid
+     * @throws ClassNotFoundException if the loaded object is not valid (e.g. level
+     *                                is corrupted)
      */
     void loadLevel(String path) throws ClassNotFoundException, LevelNotValidException, IOException;
 
     /**
-     * Creates a level with the given name and grid, validates it and saves it in
+     * Creates a level with the given name and grid, validates it and saves it using
      * the given absolute path in the file-system.
      * 
      * @param name the name of the level
      * @param grid the grid of the level
      * @param path the absolute path to which save the level in the file-system
-     * @throws LevelNotValidException a level not valid exception
-     * @throws IOException a input output exception
+     * @throws LevelNotValidException if the level is not valid
+     * @throws IOException            if an input/output error occurs
      */
     void saveLevel(String name, Grid grid, String path) throws LevelNotValidException, IOException;
 }

@@ -5,48 +5,42 @@ import model.levelsequence.level.Level;
 import model.levelsequence.level.grid.MovementDirection;
 
 /**
- * The Game controller, which is responsible for the operations necessary when
- * playing a level.
+ * The {@link GameWindow} controller.
  */
 public interface GameWindowController {
 
     /**
-     * Performs the action of the user trying to move in a specified direction. It
-     * is called from the view when the player triggers the movement event and it
-     * updates the model subsequently upon the game logics (the movement can result
-     * in a change of element positions or not).
+     * It is called when the player triggers the movement event and it updates the
+     * model subsequently basing upon the game logics (the movement can result in a
+     * change or not).
      *
      * @param direction the direction of the movement
      */
     void move(MovementDirection direction);
 
     /**
-     * Retrieves from the model the current level in order to draw it in
-     * the game canvas.
+     * Retrieves the current level from the model.
      * 
-     * @return the element list
+     * @return the current level
      */
     Level getCurrentLevel();
 
     /**
      * Restarts the current level. Every movement performed since the beginning of
      * the level will be lost and every element will return to the original
-     * position. This is called from the view when the user triggers the
-     * corresponding event.
+     * position.
      */
     void restartCurrentLevel();
 
     /**
-     * This is called when the user accepts the level finished message which is
-     * called when a level is finished and there is another one next. This function
-     * starts the next level.
+     * Starts the next level. This is only called when a level is finished and there
+     * is another one next (after user accepted the corresponding message).
      */
     void levelFinishedAccepted();
 
     /**
-     * This is called when the user accepts the game finished message, wich is
-     * called when the last level of a sequence is finished. This function go back
-     * to the initial view.
+     * Goes back to the initial view. This is only called when the last level of a
+     * sequence is finished (after user accepted the corresponding message).
      */
     void gameFinishedAccepted();
 
@@ -56,12 +50,12 @@ public interface GameWindowController {
      * ordered remaining levels next to it.
      *
      * @param path the absolute path of the file to be saved
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException if an I/O exception occurred.
      */
     void saveGame(String path) throws IOException;
 
     /**
-     * Resets the current level sequence and goes back to initial view.
+     * Goes back to initial view.
      */
     void backToInitialView();
 }

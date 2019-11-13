@@ -21,10 +21,10 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
  */
 public final class InitialWindowImpl extends WindowAbstract implements InitialWindow {
 
-    private static final double HEIGHT_TO_SCREENSIZE_RATIO = 0.9;
+    private static final double HEIGHT_TO_SCREENSIZE_RATIO = 1;
     private static final double WIDTH_TO_HEIGHT_RATIO = 1;
     private static final String TITLE = "SOKOBAN - InitialView";
-    private static final String LABEL_WELCOME_TEXT = "Welcome to Sokoban! What would you like to do?";
+    private static final String LABEL_WELCOME_TEXT = "Welcome to Extendible Sokoban! Play or edit your levels and level sequences as you like!";
     private static final String DIALOG_ERROR_TITLE = "ERROR";
     private static final String DIALOG_LEVEL_NOT_CORRECT_TEXT = "Oops! One or more levels in the sequence seems to be incorrect!";
     private static final String DIALOG_DEFAULT_LEVEL_SEQUENCE_LOAD_ERROR_TEXT = "Oops! An error occurred while loading the default level sequence... Don't worry, you can still create your own levels, organize them in a sequence and play!";

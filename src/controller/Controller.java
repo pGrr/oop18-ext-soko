@@ -1,20 +1,17 @@
 package controller;
 
+import java.io.IOException;
+import java.util.Optional;
 import controller.initial.InitialWindowController;
 import model.levelsequence.LevelSequence;
 import model.levelsequence.level.Level;
 import model.levelsequence.level.LevelNotValidException;
-
-import java.io.IOException;
-import java.util.Optional;
-
 import controller.craft.CraftWindowController;
 import controller.game.GameWindowController;
 
 /**
- * The main controller interface, it is the entry point to get any controller
- * function. It is responsible to start the application and to get a reference
- * to more specific controllers.
+ * The main controller interface, it is the entry point to get any specific
+ * controller.
  */
 public interface Controller {
 
@@ -31,18 +28,17 @@ public interface Controller {
     String LEVEL_FILE_EXTENSION = ".sokolevel";
 
     /** The default level sequence file name. */
-    String DEFAULT_LEVEL_SEQUENCE = "default.sokolevelsequence";
+    String DEFAULT_LEVEL_SEQUENCE = "defaultlevelsequence/default.sokolevelsequence";
 
     /**
-     * Loads a level from the given path in the file-system and, if successful, it
-     * returns it.
+     * Loads a level from the given path in the file-system and returns it.
      *
-     * @param path the path of the file to be loaded
+     * @param path the path of the level in the file-system
      * @return the level read from the file-system
-     * @throws LevelNotValidException an application-specific exception thrown when
-     *                                a level is not valid
-     * @throws ClassNotFoundException the class not found exception
-     * @throws IOException            Signals that an I/O exception has occurred.
+     * @throws LevelNotValidException if the loaded level is not valid
+     * @throws ClassNotFoundException if the loaded object is not recognized (e.g.
+     *                                level is corrupted)
+     * @throws IOException            if an I/O exception has occurred.
      */
     Level loadLevel(String path) throws LevelNotValidException, IOException, ClassNotFoundException;
 
@@ -51,40 +47,40 @@ public interface Controller {
      *
      * @param path  the absolute path to which save the file
      * @param level the level to be saved
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException if an I/O exception has occurred.
      */
     void saveLevel(String path, Level level) throws IOException;
 
     /**
-     * Saves the given level sequence to the given path in the file-system.
-     *
-     * @param levelSequence the level sequence
-     * @param path          the absolute path to which save the file
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    void saveLevelSequence(LevelSequence levelSequence, String path) throws IOException;
-
-    /**
-     * Loads a level sequence from the given path in the file-system and, if
-     * successful, it returns it.
+     * Loads a level sequence from the given path in the file-system and returns it.
      * 
      * @param path the absolute path of the file to be loaded in the file-system
      * @return the loaded level sequence
-     * @throws IOException            Signals that an I/O exception has occurred.
-     * @throws ClassNotFoundException the class not found exception
+     * @throws IOException            if an I/O exception has occurred.
+     * @throws ClassNotFoundException if the loaded object is not recognized (e.g.
+     *                                level is corrupted)
      */
     LevelSequence loadLevelSequence(String path) throws IOException, ClassNotFoundException;
 
     /**
-     * Tries to load from the file-system the default level sequence.
+     * Saves the given level sequence to the given path in the file-system.
      *
-     * @return the optional of the default level sequence if the loading is
-     *         successful, else returns an empty optional
+     * @param levelSequence the level sequence to be saved
+     * @param path          the absolute path to which save the level sequence
+     * @throws IOException            if an I/O exception has occurred.
+     */
+    void saveLevelSequence(LevelSequence levelSequence, String path) throws IOException;
+
+    /**
+     * Attempts the loading of the default level sequence.
+     *
+     * @return an optional containing the default level sequence if the loading is
+     *         successful, else an empty optional
      */
     Optional<LevelSequence> loadDefaultLevelSequence();
 
     /**
-     * Gets the initial window controller.
+     * Gets the {@link InitialWindow} controller.
      *
      * @return the initial window controller
      * @throws IllegalStateException if the model and view have not been set for
@@ -93,16 +89,16 @@ public interface Controller {
     InitialWindowController getInitialWindowController() throws IllegalStateException;
 
     /**
-     * Gets the craft window controller.
+     * Gets the {@link CraftWindow} controller.
      *
-     * @return the game controller
+     * @return the craft window controller
      * @throws IllegalStateException if the model and view have not been set for
      *                               this controller prior to this call
      */
     CraftWindowController getCraftWindowController() throws IllegalStateException;
 
     /**
-     * Gets the game window controller.
+     * Gets the {@link GameWindow} controller.
      *
      * @return the game window controller
      * @throws IllegalStateException if the model and view have not been set for

@@ -1,6 +1,7 @@
 package view.initial;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -48,9 +49,7 @@ public final class InitialOptions {
      * @return the j panel
      */
     public JPanel createPanel() {
-        int littlePadding = Math.round(DEFAULT_PADDING / 2);
-        JPanel p = new JPanel(new BorderLayout(littlePadding, littlePadding));
-        p.setBorder(this.guiComponentFactory.createEmptyPaddingBorder(DEFAULT_PADDING));
+        JPanel p = new JPanel(new GridLayout(1, 2, DEFAULT_PADDING, DEFAULT_PADDING));
         JButton craftButton = this.guiComponentFactory.createButton(BUTTON_CRAFT_TEXT, ICON_CRAFT, craft());
         p.add(craftButton, BorderLayout.PAGE_START);
         JButton playButton = this.guiComponentFactory.createButton(BUTTON_PLAY_TEXT, ICON_PLAY, play());

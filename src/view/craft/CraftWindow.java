@@ -1,7 +1,7 @@
 package view.craft;
 
 import controller.craft.CraftWindowController;
-import model.levelsequence.level.grid.Grid;
+import model.levelsequence.level.grid.element.Element;
 import view.Window;
 
 /**
@@ -17,11 +17,23 @@ public interface CraftWindow extends Window {
     void setController(CraftWindowController controller);
 
     /**
-     * Updates the craft window grid with the given list of elements.
-     *
-     * @param grid the new grid
+     * Clears the craft view grid.
      */
-    void updateGrid(Grid grid);
+    void clearGrid();
+
+    /**
+     * Updates the craft window grid with the given element.
+     *
+     * @param element the element to be added to the craft window grid
+     */
+    void addElement(Element element);
+
+    /**
+     * Removes the given element from the craft window grid.
+     *
+     * @param element the element to be removed from the craft window grid
+     */
+    void removeElement(Element element);
 
     /**
      * Hides game window and shows initial window.

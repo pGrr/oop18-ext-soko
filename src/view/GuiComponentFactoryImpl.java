@@ -29,7 +29,8 @@ import javax.swing.filechooser.FileFilter;
 public final class GuiComponentFactoryImpl implements GuiComponentFactory {
 
     /** The default padding size in pixels. */
-    public static final int DEFAULT_PADDING = 20;
+    public static final int DEFAULT_PADDING = (int) Math.round(
+            GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight() / 50);
 
     /**
      * Instantiates a new GUI component factory object.
@@ -48,7 +49,7 @@ public final class GuiComponentFactoryImpl implements GuiComponentFactory {
         panel.add(b);
         dialog.add(panel);
         dialog.setLocationByPlatform(true);
-        dialog.setSize(dialog.getPreferredSize());
+        dialog.pack();
         return dialog;
     }
 
@@ -65,7 +66,7 @@ public final class GuiComponentFactoryImpl implements GuiComponentFactory {
         panel.add(b);
         dialog.add(panel);
         dialog.setLocationByPlatform(true);
-        dialog.setSize(dialog.getPreferredSize());
+        dialog.pack();
         return dialog;
     }
 
@@ -123,7 +124,6 @@ public final class GuiComponentFactoryImpl implements GuiComponentFactory {
     public JToggleButton createToggleButton(final String text, final ImageIcon icon,
             final ActionListener actionListener) {
         JToggleButton b = new JToggleButton(text, icon);
-        b.setBorder(createEmptyPaddingBorder(DEFAULT_PADDING));
         b.addActionListener(actionListener);
         return b;
     }

@@ -71,21 +71,19 @@ public class LevelImpl implements Level {
 
     @Override
     public final void validate() throws LevelNotValidException {
-        if (!arePositionsValid(currentGrid)) {
+        long nUsers = countElements(Type.USER, currentGrid.getAllElements());
+        long nBoxes = countElements(Type.BOX, currentGrid.getAllElements());
+        long nTargets = countElements(Type.TARGET, currentGrid.getAllElements());
+        if (nUsers <= 0) {
+            throw new LevelNotValidException.NoInitialPointException();
+        } else if (nUsers > 1) {
+            throw new LevelNotValidException.MultipleInitialPointException();
+        } else if (nTargets <= 0) {
+            throw new LevelNotValidException.NoTargetException();
+        } else if (nTargets != nBoxes) {
+            throw new LevelNotValidException.UnequalBoxAndTargetNumberException();
+        } else if (!arePositionsValid(currentGrid)) {
             throw new LevelNotValidException.UncorrectPositionException();
-        } else {
-            long nUsers = countElements(Type.USER, currentGrid.getAllElements());
-            long nBoxes = countElements(Type.BOX, currentGrid.getAllElements());
-            long nTargets = countElements(Type.TARGET, currentGrid.getAllElements());
-            if (nUsers <= 0) {
-                throw new LevelNotValidException.NoInitialPointException();
-            } else if (nUsers > 1) {
-                throw new LevelNotValidException.MultipleInitialPointException();
-            } else if (nTargets <= 0) {
-                throw new LevelNotValidException.NoTargetException();
-            } else if (nTargets != nBoxes) {
-                throw new LevelNotValidException.UnequalBoxAndTargetNumberException();
-            }
         }
     }
 

@@ -34,8 +34,8 @@ public class InitialLevelList {
     private static final String PANEL_EDIT_LEVEL_SEQUENCE_TITLE = "Load levels, remove them or change their orders into the sequence";
     private static final String ICON_UP = "icons/arrow-up.png";
     private static final String ICON_DOWN = "icons/arrow-down.png";
-    private static final String ICON_PLUS = "icons/plus-30px.png";
-    private static final String ICON_MINUS = "icons/minus-30px.png";
+    private static final String ICON_PLUS = "icons/plus.png";
+    private static final String ICON_MINUS = "icons/minus.png";
     private static final String ICON_RESET = "icons/cross.png";
 
     private final GuiComponentFactory guiComponentFactory;

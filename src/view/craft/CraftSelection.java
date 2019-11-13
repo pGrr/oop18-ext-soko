@@ -21,7 +21,7 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
  */
 public class CraftSelection {
 
-    private static final String LABEL_WELCOME_TEXT = "Welcome! Click on a element to select it and then the cell's grid to mark them.";
+    private static final String LABEL_WELCOME_TEXT = "Welcome! Select an element and insert it into the grid (same type will erase).";
     private static final String ICON_WALL = "icons/wall.png";
     private static final String ICON_BOX = "icons/box.png";
     private static final String ICON_TARGET = "icons/target.png";

@@ -69,6 +69,7 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
     @Override
     public void setController(final GameWindowController controller) {
         this.controller = controller;
+        this.canvas.setController(controller);
         this.getFrame().setTitle(this.controller.getCurrentLevel().getName());
     }
 

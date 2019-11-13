@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Optional;
-
 import controller.craft.CraftWindowController;
 import controller.craft.CraftWindowControllerImpl;
 import controller.game.GameWindowController;
@@ -34,7 +33,7 @@ public final class ControllerImpl implements Controller {
     private View view;
 
     /**
-     * Instantiates a new controller with the given model and view.
+     * Instantiates a new instance with the given model and view.
      *
      * @param model the model
      * @param view  the view
@@ -43,7 +42,7 @@ public final class ControllerImpl implements Controller {
         this.model = model;
         this.view = view;
         this.gameWindowController = new GameWindowControllerImpl(this, this.view, this.model);
-        this.craftWindowController = new CraftWindowControllerImpl(this, this.model, this.view.getCraftWindow());
+        this.craftWindowController = new CraftWindowControllerImpl(this, this.view.getCraftWindow());
         this.initialWindowController = new InitialWindowControllerImpl(this, this.model, this.view.getInitialWindow());
     }
 
@@ -65,14 +64,6 @@ public final class ControllerImpl implements Controller {
     }
 
     @Override
-    public void saveLevelSequence(final LevelSequence levelSequence, final String path) throws IOException {
-        try (ObjectOutputStream o = new ObjectOutputStream(
-                new BufferedOutputStream(new FileOutputStream(new File(path))))) {
-            o.writeObject(levelSequence);
-        }
-    }
-
-    @Override
     public LevelSequence loadLevelSequence(final String path) throws IOException, ClassNotFoundException {
         try (ObjectInputStream o = new ObjectInputStream(
                 new BufferedInputStream(new FileInputStream(new File(path))))) {
@@ -81,12 +72,19 @@ public final class ControllerImpl implements Controller {
     }
 
     @Override
+    public void saveLevelSequence(final LevelSequence levelSequence, final String path) throws IOException {
+        try (ObjectOutputStream o = new ObjectOutputStream(
+                new BufferedOutputStream(new FileOutputStream(new File(path))))) {
+            o.writeObject(levelSequence);
+        }
+    }
+
+    @Override
     public Optional<LevelSequence> loadDefaultLevelSequence() {
         Optional<LevelSequence> ls = Optional.empty();
-        try {
-            ls = Optional.of(
-                    this.loadLevelSequence(ClassLoader.getSystemResource(Controller.DEFAULT_LEVEL_SEQUENCE).getPath()));
-
+        try (ObjectInputStream o = new ObjectInputStream(
+                new BufferedInputStream(ClassLoader.getSystemResourceAsStream(Controller.DEFAULT_LEVEL_SEQUENCE)))) {
+            ls = Optional.of((LevelSequence) o.readObject());
         } catch (Exception e) {
             // if the default sequence can't be loaded, there will just be an initial empty
             // level sequence
@@ -113,7 +111,7 @@ public final class ControllerImpl implements Controller {
     }
 
     /**
-     * Throws an illegal state exception if the model and view have not been set for
+     * Throws an illegal state exception if model and view have not been set for
      * this controller prior to this call.
      * 
      * @throws IllegalStateException if the model and view have not been set for
