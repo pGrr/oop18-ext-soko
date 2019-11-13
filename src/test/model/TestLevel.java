@@ -76,6 +76,7 @@ public final class TestLevel {
         Element user2 = new ElementImpl(Type.USER, new PositionImpl(0, 0), g2);
         g2.add(this.user);
         Level l = new LevelImpl("My level", g2);
+        assertEquals(l.getUser(), user2);
         l.getUser().move(MovementDirection.RIGHT);
         assertEquals(l.getUser().getType(), Type.USER);
         assertTrue(l.getUser().getPosition().equals(new PositionImpl(0, 1)));
