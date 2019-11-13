@@ -61,30 +61,26 @@ public final class CraftOptions {
      */
     public JPanel createPanel() {
         JPanel choicesPanel = new JPanel(new GridLayout(1, 4, DEFAULT_PADDING, DEFAULT_PADDING));
-        choicesPanel.setBorder(
-                this.guiComponentFactory.createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
-        choicesPanel.add(this.guiComponentFactory.createButton(BUTTON_SAVE_TEXT, ICON_SAVE,
-                saveButtonActionListener()));
-        choicesPanel.add(this.guiComponentFactory.createButton(BUTTON_LOAD_TEXT, ICON_LOAD,
-                loadButtonActionListener()));
+        choicesPanel
+                .setBorder(this.guiComponentFactory.createTitledPaddingBorder(PANEL_OPTIONS_TITLE, DEFAULT_PADDING));
+        choicesPanel
+                .add(this.guiComponentFactory.createButton(BUTTON_SAVE_TEXT, ICON_SAVE, saveButtonActionListener()));
+        choicesPanel
+                .add(this.guiComponentFactory.createButton(BUTTON_LOAD_TEXT, ICON_LOAD, loadButtonActionListener()));
         choicesPanel.add(this.guiComponentFactory.createButton(BUTTON_RESET_TEXT, ICON_CANCEL,
                 this.owner.getGrid().resetButtonActionListener()));
-        choicesPanel.add(this.guiComponentFactory.createButton(BUTTON_BACK_TEXT, ICON_BACK,
-                backButtonActionListener()));
+        choicesPanel
+                .add(this.guiComponentFactory.createButton(BUTTON_BACK_TEXT, ICON_BACK, backButtonActionListener()));
         return choicesPanel;
     }
 
     /**
-     * This is the action listener of the save button. It does the following: 1) It
-     * gets the {@link Grid} object representing the current state of the edited
-     * grid from the {@link CraftGrid} object 2) it shows a save file-chooser dialog
-     * asking the user to input a target file 3) it creates a new Level with the
-     * file name as level name and the created grid object as its grid.
+     * This is the action listener of the save button. It shows a file chooser and
+     * tells the controller to save the selected file.
      */
     private ActionListener saveButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = this.guiComponentFactory.createFileChooser(
-                    Controller.LEVEL_FILE_DESCRIPTION,
+            JFileChooser fc = this.guiComponentFactory.createFileChooser(Controller.LEVEL_FILE_DESCRIPTION,
                     Controller.LEVEL_FILE_EXTENSION);
             fc.showSaveDialog(this.owner.getFrame());
             String path = fc.getSelectedFile().getAbsolutePath() + Controller.LEVEL_FILE_EXTENSION;
@@ -102,18 +98,14 @@ public final class CraftOptions {
     }
 
     /**
-     * This is the action listener of the load button. It does the following: 1) it
-     * shows an open file-chooser to ask the user to select a target file 2) it
-     * opens the target file using the controller 3) if the loading succeeded, it
-     * sets the loaded leve's grid as the current grid in the {@link CraftGrid}
-     * object.
+     * This is the action listener of the load button. It shows a file-chooser and
+     * tells the controller to load the selected file.
      *
      * @return the load button action listener
      */
     private ActionListener loadButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = this.guiComponentFactory.createFileChooser(
-                    Controller.LEVEL_FILE_DESCRIPTION,
+            JFileChooser fc = this.guiComponentFactory.createFileChooser(Controller.LEVEL_FILE_DESCRIPTION,
                     Controller.LEVEL_FILE_EXTENSION);
             fc.showOpenDialog(this.owner.getFrame());
             try {
@@ -132,7 +124,7 @@ public final class CraftOptions {
     }
 
     /**
-     * This is the action listener of the back button. It asks the controller to go
+     * This is the action listener of the back button. It tells the controller to go
      * back to the initial view.
      *
      * @return the back button action listener

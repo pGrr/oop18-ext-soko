@@ -43,7 +43,7 @@ public final class CraftGrid {
     private Grid levelGrid;
 
     /**
-     * Instantiates a new instance with the given {@link CraftWindowImpl} owner.
+     * Creates a new instance with the given {@link CraftWindowImpl} owner.
      *
      * @param owner the {@link CraftWindowImpl} object which creates and contains
      *              this object
@@ -143,8 +143,8 @@ public final class CraftGrid {
     }
 
     /**
-     * Resets the current state of this object to the initial empty-grid state. It
-     * is the action listener of the "reset" button.
+     * This is the action listener of the "reset" button. It tells the controller to
+     * clear the grid.
      *
      * @return the reset button action listener
      */
@@ -155,9 +155,9 @@ public final class CraftGrid {
     }
 
     /**
-     * The action listener invoked when the user clicks on the button grid. It tells
-     * the controller to insert the selected type into the selected grid button, if
-     * possible.
+     * This is the action listener invoked when the user clicks on the button grid.
+     * It tells the controller to insert the selected type into the selected grid
+     * button, if possible.
      *
      * @return the button grid action listener
      */
@@ -170,7 +170,7 @@ public final class CraftGrid {
     }
 
     /**
-     * Creates an empty button grid, i.e. a 2D list of JButtons.
+     * Creates an empty button grid, i.e. a 2D squared list of JButtons.
      * 
      * @return the button grid i.e. a 2D list of JButtons
      */
