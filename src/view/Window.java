@@ -11,7 +11,7 @@ public interface Window {
     void show();
 
     /**
-     * Hides the window, i.e. unsets the frame of the window visible.
+     * Hides the window, i.e. sets the frame of the window not visible.
      */
     void hide();
 

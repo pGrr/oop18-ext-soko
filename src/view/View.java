@@ -12,6 +12,16 @@ import view.initial.InitialWindow;
 public interface View {
 
     /**
+     * Sets the controller.
+     *
+     * @param controller the controller
+     * @throws IllegalStateException if the controller was not set using
+     *                               {@link #setController(Controller)} prior to
+     *                               this call
+     */
+    void setController(Controller controller);
+
+    /**
      * Gets the initial window.
      * 
      * @return the initialWindow
@@ -32,7 +42,7 @@ public interface View {
     CraftWindow getCraftWindow() throws IllegalStateException;
 
     /**
-     * gets the game window.
+     * Gets the game window.
      * 
      * @return the gameWindow
      * @throws IllegalStateException if the controller was not set using
@@ -42,8 +52,7 @@ public interface View {
     GameWindow getGameWindow() throws IllegalStateException;
 
     /**
-     * Shows the initial view, which contains the level sequence editor and the main
-     * navigation options (craft, play and save/load sequence).
+     * Shows the initial view.
      * 
      * @throws IllegalStateException if the controller was not set using
      *                               {@link #setController(Controller)} prior to
@@ -69,14 +78,4 @@ public interface View {
      *                               this call
      */
     void toGameLevelView(Level level) throws IllegalStateException;
-
-    /**
-     * Sets the controller.
-     *
-     * @param controller the controller
-     * @throws IllegalStateException if the controller was not set using
-     *                               {@link #setController(Controller)} prior to
-     *                               this call
-     */
-    void setController(Controller controller);
 }

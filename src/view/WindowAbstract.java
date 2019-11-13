@@ -4,8 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * An abstract class for the {@link Window} interface which implements the
- * Template-method design pattern. It implements the behavior and the
+ * An abstract class for the {@link Window} interface.Implements the
+ * Template-method design pattern. It provides the behavior and the
  * initialization steps which are common to all windows and leaves abstract the
  * {@link #createMainPanel()} method which is responsible for the creation of
  * the main panel and all of its components.
@@ -68,7 +68,7 @@ public abstract class WindowAbstract implements Window {
     }
 
     /**
-     * Creates and populates the main panel.
+     * Creates the main panel.
      *
      * @return the j panel
      */

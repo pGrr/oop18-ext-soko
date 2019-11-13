@@ -13,7 +13,7 @@ import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 
 /**
- * A factory for creating GUI components.
+ * An abstract factory for creating GUI components.
  */
 public interface GuiComponentFactory {
 

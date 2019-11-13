@@ -1,7 +1,6 @@
 package view;
 
 import java.util.Objects;
-
 import controller.Controller;
 import model.levelsequence.level.Level;
 import view.craft.CraftWindow;
@@ -12,7 +11,7 @@ import view.initial.InitialWindow;
 import view.initial.InitialWindowImpl;
 
 /**
- * The default implementation of the {@link View} interface.
+ * An implementation of {@link View}.
  */
 public final class ViewImpl implements View {
 
@@ -22,9 +21,9 @@ public final class ViewImpl implements View {
     private Controller controller;
 
     /**
-     * Instantiates a new View, containing a new initial window, a new craft level
-     * window and a new game window. A controller must be set afterwards
-     * construction before the first use.
+     * Creates a new instance containing a new {@link InitialWindow}, a new
+     * {@link CraftWindow} and a new {@link GameWindow}. A controller must be set
+     * afterwards construction before the first use.
      */
     public ViewImpl() {
         this.initialWindow = new InitialWindowImpl(this);

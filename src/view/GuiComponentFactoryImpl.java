@@ -24,13 +24,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
 /**
- * An implementation for the {@link GuiComponentFactory} interface.
+ * An implementation of {@link GuiComponentFactory}.
  */
 public final class GuiComponentFactoryImpl implements GuiComponentFactory {
 
     /** The default padding size in pixels. */
-    public static final int DEFAULT_PADDING = (int) Math.round(
-            GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight() / 50);
+    public static final int DEFAULT_PADDING = (int) Math
+            .round(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight() / 50);
 
     /**
      * Instantiates a new GUI component factory object.
@@ -181,8 +181,8 @@ public final class GuiComponentFactoryImpl implements GuiComponentFactory {
     }
 
     /**
-     * Finds out the screen dimensions and then it computes the absolute dimension
-     * with the given height-to-screen-size-ratio and width-to-height-ratio.
+     * Computes an absolute dimension considering the current screen dimensions and
+     * the given height-to-screen-size-ratio and width-to-height-ratio.
      *
      * @param heightToScreenSizeRatio the height to screen size ratio
      * @param widthToHeightRatio      the width to height ratio

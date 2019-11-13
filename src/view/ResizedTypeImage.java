@@ -13,7 +13,7 @@ import model.levelsequence.level.grid.element.Type;
  * order to not having to scale the same images again and again each time they
  * are needed, thus improving performance.
  */
-public class ResizedTypeImage {
+public final class ResizedTypeImage {
 
     private final Map<Type, Image> typeImageMap;
 
@@ -41,7 +41,7 @@ public class ResizedTypeImage {
     }
 
     /**
-     * Creates the map associating each type with its associated scaled image.
+     * Creates the map associating each type with its scaled image.
      *
      * @param imageWidth  the image width
      * @param imageHeight the image height
