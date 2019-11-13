@@ -80,7 +80,7 @@ public interface Controller {
     Optional<LevelSequence> loadDefaultLevelSequence();
 
     /**
-     * Gets the {@link InitialWindow} controller.
+     * Gets the {@link view.initial.InitialWindow} controller.
      *
      * @return the initial window controller
      * @throws IllegalStateException if the model and view have not been set for
@@ -89,7 +89,7 @@ public interface Controller {
     InitialWindowController getInitialWindowController() throws IllegalStateException;
 
     /**
-     * Gets the {@link CraftWindow} controller.
+     * Gets the {@link view.craft.CraftWindow} controller.
      *
      * @return the craft window controller
      * @throws IllegalStateException if the model and view have not been set for
@@ -98,7 +98,7 @@ public interface Controller {
     CraftWindowController getCraftWindowController() throws IllegalStateException;
 
     /**
-     * Gets the {@link GameWindow} controller.
+     * Gets the {@link view.game.GameWindow} controller.
      *
      * @return the game window controller
      * @throws IllegalStateException if the model and view have not been set for

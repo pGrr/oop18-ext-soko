@@ -31,7 +31,7 @@ public interface GameWindow extends Window {
     /**
      * Shows the level invalid dialog.
      *
-     * @param cause the message of the {@link LevelNotValidException}
+     * @param cause the message of the {@link model.levelsequence.level.LevelNotValidException}
      */
     void showLevelInvalidDialog(String cause);
 

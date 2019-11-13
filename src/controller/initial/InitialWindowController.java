@@ -4,7 +4,7 @@ import java.io.IOException;
 import model.levelsequence.level.LevelNotValidException;
 
 /**
- * The {@link InitialWindow} controller.
+ * The {@link view.initial.InitialWindow} controller.
  */
 public interface InitialWindowController {
 

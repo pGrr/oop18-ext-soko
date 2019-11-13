@@ -39,7 +39,7 @@ public interface InitialWindow extends Window {
     /**
      * Shows a level invalid dialog.
      *
-     * @param cause the message of the {@link LevelNotValidException}
+     * @param cause the message of the {@link model.levelsequence.level.LevelNotValidException}
      */
     void showLevelInvalidErrorDialog(String cause);
 

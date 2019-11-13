@@ -5,7 +5,7 @@ import model.levelsequence.level.Level;
 import model.levelsequence.level.grid.MovementDirection;
 
 /**
- * The {@link GameWindow} controller.
+ * The {@link view.game.GameWindow} controller.
  */
 public interface GameWindowController {
 

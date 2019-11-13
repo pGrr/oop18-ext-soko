@@ -97,7 +97,7 @@ public final class GameCanvas extends JPanel {
 
     /**
      * Computes the width of a single element in pixels, considering the width of
-     * the panel and the {@link #Grid.N_ROWS} number of rows.
+     * the panel and the number of rows.
      * 
      * @return the single element absolute width in pixels
      */
@@ -107,7 +107,7 @@ public final class GameCanvas extends JPanel {
 
     /**
      * Computes the height of a single element in pixels, considering the height of
-     * the panel and the {@link #Grid.N_ROWS} number of rows.
+     * the panel and the number of rows.
      * 
      * @return the single element absolute height in pixels
      */

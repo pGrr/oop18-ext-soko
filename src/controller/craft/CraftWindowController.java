@@ -7,18 +7,18 @@ import model.levelsequence.level.grid.element.Position;
 import model.levelsequence.level.grid.element.Type;
 
 /**
- * The {@link CraftWindow} controller.
+ * The {@link view.craft.CraftWindow} controller.
  */
 public interface CraftWindowController {
 
     /**
-     * Clears the {@link CraftWindow} grid.
+     * Clears the {@link view.craft.CraftWindow} grid.
      */
     void clearGrid();
 
     /**
      * The element is inserted in the given position of the given the
-     * {@link CraftWindow} grid, but only if the latter is empty or contains an
+     * {@link view.craft.CraftWindow} grid, but only if the latter is empty or contains an
      * element of a different type. If the position already contains the given type,
      * the position is cleared.
      * 
@@ -29,8 +29,7 @@ public interface CraftWindowController {
     void insert(Grid grid, Type type, Position position);
 
     /**
-     * Loads a level from the file-system and updates the the {@link CraftWindow}
-     * with it's grid.
+     * Loads a level from the file-system and updates the model and the view subsequently.
      * 
      * @param path the absolute path of the level on the file-system
      * @throws IOException            if an input/output error occurs

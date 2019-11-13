@@ -53,7 +53,7 @@ public interface CraftWindow extends Window {
     /**
      * Shows level invalid dialog.
      *
-     * @param cause the message of the {@link LevelNotValidException}
+     * @param cause the message of the {@link model.levelsequence.level.LevelNotValidException}
      */
     void showLevelInvalidDialog(String cause);
 }

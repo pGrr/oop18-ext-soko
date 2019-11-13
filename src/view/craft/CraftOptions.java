@@ -77,6 +77,8 @@ public final class CraftOptions {
     /**
      * This is the action listener of the save button. It shows a file chooser and
      * tells the controller to save the selected file.
+     * 
+     * @return the save button action listener
      */
     private ActionListener saveButtonActionListener() {
         return e -> SwingUtilities.invokeLater(() -> {
