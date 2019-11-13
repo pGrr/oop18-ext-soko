@@ -17,7 +17,7 @@ public interface Element extends Serializable {
     Type getType();
 
     /**
-     * Gets the position of the element, which can change in time.
+     * Gets the position of the element, which can change.
      *
      * @return the current position of the element
      */
@@ -31,7 +31,7 @@ public interface Element extends Serializable {
     void setPosition(Position position);
 
     /**
-     * Checks if the element is movable (e.g. user or box).
+     * Checks if the element is movable (i.e. user or box).
      *
      * @return true, if is type movable
      */
@@ -53,7 +53,7 @@ public interface Element extends Serializable {
     int hashCode();
 
     /**
-     * Elements are compared basing upon their position and type.
+     * Two Elements are equal if they have equal position and type.
      *
      * @param obj the object to be compared with the element
      * @return true, if successful

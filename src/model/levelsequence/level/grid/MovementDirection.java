@@ -1,12 +1,12 @@
 package model.levelsequence.level.grid;
 
 import java.util.function.Function;
-
 import model.levelsequence.level.grid.element.Position;
 import model.levelsequence.level.grid.element.PositionImpl;
 
 /**
- * The directions of movement.
+ * The directions of movement. Each direction is associated with a function that
+ * computes the target position given the initial position.
  */
 public enum MovementDirection {
 
@@ -30,11 +30,11 @@ public enum MovementDirection {
      */
     RIGHT(position -> new PositionImpl(position.getRowIndex(), position.getColumnIndex() + 1));
 
-    /** The compute target position. */
     private final transient Function<Position, Position> computeTargetPosition;
 
     /**
-     * Instantiates a new direction constant object.
+     * Instantiates each direction constant object. Each direction is associated
+     * with a function that computes the target position given the initial position.
      *
      * @param computeTargetPosition a function that given the current position
      *                              computes the target position basing upon the
@@ -45,10 +45,10 @@ public enum MovementDirection {
     }
 
     /**
-     * Given the current position, it computes the target position basing on this
-     * direction.
+     * Computes the target position given an initial position basing on the
+     * MovementDirection type it is called on.
      *
-     * @param currentPosition the current position
+     * @param currentPosition the initial position
      * @return the target position
      */
     public final Position computeTargetPosition(final Position currentPosition) {

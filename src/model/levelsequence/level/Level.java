@@ -1,47 +1,46 @@
 package model.levelsequence.level;
 
 import java.io.Serializable;
-
 import model.levelsequence.level.grid.Grid;
 import model.levelsequence.level.grid.element.Element;
 
 /**
- * A Level of the game. Has a name and a grid, it can be validated and played.
+ * A Level of the game, which has a name and a validated {@link Grid}.
  */
 public interface Level extends Serializable {
 
     /**
-     * Gets the name of the level.
+     * Gets the name.
      *
-     * @return the name of the level
+     * @return the name
      */
     String getName();
 
     /**
-     * Gets the grid of the level in its initial state.
+     * Gets the grid in its initial state.
      * 
-     * @return the grid of the level in its initial state
+     * @return the grid in its initial state
      */
     Grid getInitialGrid();
 
     /**
-     * Gets the grid of the level in its current state.
+     * Gets the grid in its current state.
      *
-     * @return the current grid of the level
+     * @return the grid in its current state
      */
     Grid getCurrentGrid();
 
     /**
-     * Gets the user element.
+     * Gets the user {@link Element}.
      *
-     * @return the user element
+     * @return the user
      */
     Element getUser();
 
     /**
      * Checks if the level is finished, i.e. all the boxes are on a target.
      *
-     * @return true, if is finished
+     * @return true, if finished
      */
     boolean isFinished();
 
@@ -50,15 +49,14 @@ public interface Level extends Serializable {
      * one target and an equal number of targets and boxes. If not correct, it
      * throws a {@link LevelNotValidException}.
      *
-     * @throws LevelNotValidException an application-specific exception meaning the
-     *                                level is not correct
+     * @throws LevelNotValidException if level is not correct
      */
     void validate() throws LevelNotValidException;
 
     /**
      * The hash code of a level is computed on its name and grid.
      *
-     * @return the computed hashcode
+     * @return the computed hash code
      */
     @Override
     int hashCode();

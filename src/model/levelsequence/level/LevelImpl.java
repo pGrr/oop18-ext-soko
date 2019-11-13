@@ -3,14 +3,13 @@ package model.levelsequence.level;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
-
 import model.levelsequence.level.grid.Grid;
 import model.levelsequence.level.grid.GridImpl;
 import model.levelsequence.level.grid.element.Element;
 import model.levelsequence.level.grid.element.Type;
 
 /**
- * An implementation class for the {@link Level} interface.
+ * An implementation of {@link Level}.
  */
 public class LevelImpl implements Level {
 
@@ -22,10 +21,10 @@ public class LevelImpl implements Level {
     private Element user;
 
     /**
-     * Instantiates a new LevelImpl with the given name and grid.
+     * Creates a new instance with the given name and grid.
      *
-     * @param name the name of the level
-     * @param grid the grid of the level
+     * @param name the name
+     * @param grid the grid
      */
     public LevelImpl(final String name, final Grid grid) {
         super();
@@ -36,17 +35,17 @@ public class LevelImpl implements Level {
 
     @Override
     public final String getName() {
-        return name;
+        return this.name;
     }
 
     @Override
     public final Grid getInitialGrid() {
-        return initialGrid;
+        return this.initialGrid;
     }
 
     @Override
     public final Grid getCurrentGrid() {
-        return currentGrid;
+        return this.currentGrid;
     }
 
     @Override
@@ -71,9 +70,9 @@ public class LevelImpl implements Level {
 
     @Override
     public final void validate() throws LevelNotValidException {
-        long nUsers = countElements(Type.USER, currentGrid.getAllElements());
-        long nBoxes = countElements(Type.BOX, currentGrid.getAllElements());
-        long nTargets = countElements(Type.TARGET, currentGrid.getAllElements());
+        long nUsers = countElements(Type.USER, this.currentGrid.getAllElements());
+        long nBoxes = countElements(Type.BOX, this.currentGrid.getAllElements());
+        long nTargets = countElements(Type.TARGET, this.currentGrid.getAllElements());
         if (nUsers <= 0) {
             throw new LevelNotValidException.NoInitialPointException();
         } else if (nUsers > 1) {
@@ -82,14 +81,14 @@ public class LevelImpl implements Level {
             throw new LevelNotValidException.NoTargetException();
         } else if (nTargets != nBoxes) {
             throw new LevelNotValidException.UnequalBoxAndTargetNumberException();
-        } else if (!arePositionsValid(currentGrid)) {
+        } else if (!arePositionsValid(this.currentGrid)) {
             throw new LevelNotValidException.UncorrectPositionException();
         }
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(currentGrid, name);
+        return Objects.hash(this.currentGrid, this.name);
     }
 
     @Override
@@ -104,12 +103,12 @@ public class LevelImpl implements Level {
             return false;
         }
         LevelImpl other = (LevelImpl) obj;
-        return Objects.equals(currentGrid, other.currentGrid) && Objects.equals(name, other.name);
+        return Objects.equals(this.currentGrid, other.currentGrid) && Objects.equals(this.name, other.name);
     }
 
     @Override
     public final String toString() {
-        return "LevelImpl [name=" + name + ", grid=" + currentGrid + "]";
+        return "LevelImpl [name=" + this.name + ", grid=" + this.currentGrid + "]";
     }
 
     /**

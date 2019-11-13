@@ -11,7 +11,7 @@ import model.levelsequence.level.grid.element.PositionImpl;
 import model.levelsequence.level.grid.element.Type;
 
 /**
- * An implementation class for the {@link Grid} interface.
+ * An implementation for {@link Grid}.
  */
 public class GridImpl implements Grid {
 
@@ -19,7 +19,7 @@ public class GridImpl implements Grid {
     private final List<Element> elements;
 
     /**
-     * Instantiates an empty GridImpl object.
+     * Creates an empty instance.
      */
     public GridImpl() {
         super();
@@ -27,8 +27,7 @@ public class GridImpl implements Grid {
     }
 
     /**
-     * Instantiates a GridImpl object creating a new grid which is a copy of the
-     * given grid.
+     * Creates a new grid which is the copy of the given grid.
      * 
      * @param grid the grid
      */
@@ -83,11 +82,15 @@ public class GridImpl implements Grid {
     @Override
     public final boolean moveAttempt(final Element element, final MovementDirection direction) {
         boolean success = false;
+        // only users and box can move
         if (element.getType().equals(Type.USER) || element.getType().equals(Type.BOX)) {
+            // continue only if target position is inside the grid
             Position newPosition = direction.computeTargetPosition(element.getPosition());
             if (Integer.max(newPosition.getRowIndex(), newPosition.getColumnIndex()) < N_ROWS
                     && Integer.min(newPosition.getRowIndex(), newPosition.getColumnIndex()) >= 0) {
+                // find what obstacles are in the target position
                 List<Element> obstacles = getElementsAt(newPosition);
+                // no obstacles, move
                 if (obstacles.isEmpty() || obstacles.stream().allMatch(bo -> bo.getType().equals(Type.TARGET))) {
                     element.setPosition(newPosition);
                     success = true;
@@ -95,8 +98,11 @@ public class GridImpl implements Grid {
                     for (Element obstacle : obstacles) {
                         if (element.getType().equals(Type.USER)) {
                             if (obstacle.getType().equals(Type.BOX)) {
+                                // this is the user and a box is the obstacle, try to move it
                                 boolean boxHasMoved = moveAttempt(obstacle, direction);
+                                // the box will move only if its target position is empty
                                 if (boxHasMoved) {
+                                    // if the box moved, move the user also
                                     element.setPosition(newPosition);
                                     success = true;
                                 }
@@ -111,7 +117,7 @@ public class GridImpl implements Grid {
 
     @Override
     public final int hashCode() {
-        return Objects.hash(elements);
+        return Objects.hash(this.elements);
     }
 
     @Override
@@ -126,11 +132,11 @@ public class GridImpl implements Grid {
             return false;
         }
         GridImpl other = (GridImpl) obj;
-        return Objects.equals(elements, other.elements);
+        return Objects.equals(this.elements, other.elements);
     }
 
     @Override
     public final String toString() {
-        return "GridImpl [elements=" + elements + "]";
+        return "GridImpl [elements=" + this.elements + "]";
     }
 }

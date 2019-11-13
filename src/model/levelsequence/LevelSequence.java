@@ -2,7 +2,6 @@ package model.levelsequence;
 
 import java.io.Serializable;
 import java.util.List;
-
 import model.levelsequence.level.Level;
 
 /**
@@ -11,9 +10,9 @@ import model.levelsequence.level.Level;
 public interface LevelSequence extends Serializable {
 
     /**
-     * Gets the name of the level sequence.
+     * Gets the name.
      *
-     * @return the name of the level sequence
+     * @return the name
      */
     String getName();
 
@@ -32,19 +31,19 @@ public interface LevelSequence extends Serializable {
     void add(Level level);
 
     /**
+     * Removes the level with the given index from the sequence.
+     *
+     * @param i the index of the level to be removed
+     */
+    void remove(int i);
+
+    /**
      * Swap the levels with the specified indexes in the sequence.
      *
      * @param i an element index
      * @param j another element index
      */
     void swap(int i, int j);
-
-    /**
-     * Removes the level with the given index from the sequence.
-     *
-     * @param i the index of the level to be removed
-     */
-    void remove(int i);
 
     /**
      * Clears the list removing all the levels.
@@ -71,12 +70,12 @@ public interface LevelSequence extends Serializable {
     Level getCurrentLevel();
 
     /**
-     * Restarts the current level bringing back its initial state.
+     * Restarts the current level restoring its initial state.
      */
     void restartCurrentLevel();
 
     /**
-     * Creates the copy of the level sequence object.
+     * Creates a copy of the level sequence.
      *
      * @return the level sequence copy
      */

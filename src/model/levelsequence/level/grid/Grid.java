@@ -2,12 +2,11 @@ package model.levelsequence.level.grid;
 
 import java.io.Serializable;
 import java.util.List;
-
 import model.levelsequence.level.grid.element.Element;
 import model.levelsequence.level.grid.element.Position;
 
 /**
- * The squared-grid-world in which the elements are.
+ * The squared grid in which the elements are.
  */
 public interface Grid extends Serializable {
 
@@ -15,27 +14,27 @@ public interface Grid extends Serializable {
     int N_ROWS = 20;
 
     /**
-     * Adds the given element to the grid. The position information is held inside
-     * the element itself.
+     * Adds the given element to the grid. The position information is held by the
+     * element itself.
      *
-     * @param element the element to be added to the grid
+     * @param element the element to be added
      */
     void add(Element element);
 
     /**
      * Removes the given element from the grid.
      *
-     * @param element the element to be removed from the grid
+     * @param element the element to be removed
      */
     void remove(Element element);
 
     /**
-     * Clears the grid removing all the elements.
+     * Removes all the elements.
      */
     void clear();
 
     /**
-     * Gets all the elements of the grid.
+     * Gets all the elements.
      *
      * @return all the elements of the grid
      */
@@ -44,18 +43,18 @@ public interface Grid extends Serializable {
     /**
      * Gets all the boxes that are on the same position of a target.
      * 
-     * @return the boxes on target list
+     * @return the list of the boxes which are on target
      */
     List<Element> getBoxesOnTarget();
 
     /**
      * Gets all the elements that are currently at the given position. In a given
      * position there can be at most two elements at a given time (e.g. box over
-     * target or user over target). So the returned list can contain at most 0 to 2
+     * target or user over target). So the returned list can contain 0 to 2
      * elements.
      *
      * @param position the position to search into
-     * @return the elements at the given position
+     * @return the elements in the given position
      */
     List<Element> getElementsAt(Position position);
 
@@ -67,7 +66,7 @@ public interface Grid extends Serializable {
      *
      * @param element   the element to be moved
      * @param direction the direction of the movement
-     * @return true, if the movement succeeded
+     * @return true, if there has been movement
      */
     boolean moveAttempt(Element element, MovementDirection direction);
 

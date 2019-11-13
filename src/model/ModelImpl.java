@@ -7,7 +7,7 @@ import model.levelsequence.LevelSequenceImpl;
 import model.levelsequence.level.Level;
 
 /**
- * The default implementation of the {@link Model} interface.
+ * An implementation of {@link Model}.
  */
 public final class ModelImpl implements Model {
 
@@ -15,7 +15,7 @@ public final class ModelImpl implements Model {
     private LevelSequence lsInitialState;
 
     /**
-     * Initializes a new model object with an empty level sequence.
+     * Creates a new instance containing an empty level sequence.
      */
     public ModelImpl() {
         this.lsCurrentState = new LevelSequenceImpl("");
@@ -35,8 +35,8 @@ public final class ModelImpl implements Model {
 
     @Override
     public LevelSequence getCurrentLevelSequenceCurrentState() {
-        if (lsCurrentState != null) {
-            return lsCurrentState;
+        if (this.lsCurrentState != null) {
+            return this.lsCurrentState;
         } else {
             throw new IllegalArgumentException();
         }
@@ -44,8 +44,8 @@ public final class ModelImpl implements Model {
 
     @Override
     public LevelSequence getCurrentLevelSequenceInitialState() {
-        if (lsInitialState != null) {
-            return lsInitialState;
+        if (this.lsInitialState != null) {
+            return this.lsInitialState;
         } else {
             throw new IllegalArgumentException();
         }

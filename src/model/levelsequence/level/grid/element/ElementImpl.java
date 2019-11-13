@@ -5,7 +5,7 @@ import model.levelsequence.level.grid.Grid;
 import model.levelsequence.level.grid.MovementDirection;
 
 /**
- * An implementation class for the {@link Element} interface.
+ * An implementation of {@link Element}.
  */
 public class ElementImpl implements Element {
 
@@ -16,8 +16,7 @@ public class ElementImpl implements Element {
     private Position position;
 
     /**
-     * Instantiates a new ElementImpl object with a given type and position and
-     * specifying the grid to which the element belongs.
+     * Creates a new element using the given type and position, which belongs to the given grid.
      *
      * @param type     the type of the element
      * @param position the position of the element
@@ -31,12 +30,12 @@ public class ElementImpl implements Element {
 
     @Override
     public final Type getType() {
-        return type;
+        return this.type;
     }
 
     @Override
     public final Position getPosition() {
-        return position;
+        return this.position;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class ElementImpl implements Element {
 
     @Override
     public final boolean isTypeMovable() {
-        return type.equals(Type.USER) || type.equals(Type.BOX);
+        return this.type.equals(Type.USER) || this.type.equals(Type.BOX);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class ElementImpl implements Element {
 
     @Override
     public final int hashCode() {
-        return Objects.hash(position, type);
+        return Objects.hash(this.position, this.type);
     }
 
     @Override
@@ -73,11 +72,11 @@ public class ElementImpl implements Element {
             return false;
         }
         ElementImpl other = (ElementImpl) obj;
-        return Objects.equals(position, other.position) && type == other.type;
+        return Objects.equals(this.position, other.position) && this.type == other.type;
     }
 
     @Override
     public final String toString() {
-        return "ElementImpl [type=" + type + ", position=" + position + ", grid=" + grid + "]";
+        return "ElementImpl [type=" + this.type + ", position=" + this.position + ", grid=" + this.grid + "]";
     }
 }

@@ -3,7 +3,7 @@ package model.levelsequence.level.grid.element;
 import java.io.Serializable;
 
 /**
- * The Position in the grid-like world, expressed as row index and column index.
+ * A grid position, which has a row index and a column index.
  */
 public interface Position extends Serializable {
 

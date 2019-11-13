@@ -1,10 +1,9 @@
 package model.levelsequence.level;
 
 /**
- * The exception meaning a level is not valid. It's thrown when a level is
- * validated or created if the level is not correct. A level is correct if and
- * only if contains exactly one user, at least one target and an equal number of
- * targets and boxes.
+ * The exception thrown when a level is not correct and thus cannot be
+ * validated. A level is correct if and only if contains exactly one user, at
+ * least one target and an equal number of targets and boxes.
  */
 public class LevelNotValidException extends Exception {
 
@@ -17,9 +16,8 @@ public class LevelNotValidException extends Exception {
     private static final String UNEQUAL_BOX_AND_TARGET_MESSAGE = "Boxes and targets quantity is not equal.";
 
     /**
-     * Returns the base error message saying the level is not valid. Sub-classes
-     * will include this message at the start of their own and more specific
-     * message.
+     * Returns the base error message. Sub-classes will include this message at the
+     * start of their own and more specific message.
      */
     @Override
     public String toString() {
@@ -27,8 +25,7 @@ public class LevelNotValidException extends Exception {
     }
 
     /**
-     * The exception meaning that one or more positions are not in the correct range
-     * allowed by the grid.
+     * The exception meaning that one or more positions are not in the grid.
      */
     public static class UncorrectPositionException extends LevelNotValidException {
 
@@ -41,7 +38,7 @@ public class LevelNotValidException extends Exception {
     }
 
     /**
-     * The exception meaning no initial position of the user was found.
+     * The exception meaning no initial position was found.
      */
     public static class NoInitialPointException extends LevelNotValidException {
 
@@ -54,8 +51,7 @@ public class LevelNotValidException extends Exception {
     }
 
     /**
-     * The exception meaning that more than one initial position of the user were
-     * found.
+     * The exception meaning that more than one initial position were found.
      */
     public static class MultipleInitialPointException extends LevelNotValidException {
 

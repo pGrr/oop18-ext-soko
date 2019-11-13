@@ -13,28 +13,28 @@ public interface Model {
     /**
      * Sets the current level sequence.
      *
-     * @param levelSequence the new current level sequence
+     * @param levelSequence the new level sequence
      */
     void setCurrentLevelSequence(LevelSequence levelSequence);
 
     /**
-     * Returns the names of the levels of the current level sequence.
+     * Returns the names of the levels.
      * 
      * @return the level names list
      */
     List<String> getLevelNames();
 
     /**
-     * Gets the current level sequence in its current state.
-     *
-     * @return the current level sequence
+     * Gets the level sequence in its current state.
+     * 
+     * @return the level sequence in its current state
      */
     LevelSequence getCurrentLevelSequenceCurrentState();
 
     /**
-     * Gets the current level sequence in its initial state.
+     * Gets the level sequence in its initial state.
      *
-     * @return the current level sequence in its initial state
+     * @return the level sequence in its initial state
      */
     LevelSequence getCurrentLevelSequenceInitialState();
 }

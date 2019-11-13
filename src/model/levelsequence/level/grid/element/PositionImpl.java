@@ -3,7 +3,7 @@ package model.levelsequence.level.grid.element;
 import java.util.Objects;
 
 /**
- * An implementation of the {@link Position} interface.
+ * An implementation of {@link Position}.
  */
 public class PositionImpl implements Position {
 
@@ -13,7 +13,7 @@ public class PositionImpl implements Position {
     private final int columnIndex;
 
     /**
-     * Instantiates a new position with the given row and column indexes.
+     * Creates a new instance with the given row and column indexes.
      *
      * @param rowIndex    the row index
      * @param columnIndex the column index
@@ -25,22 +25,22 @@ public class PositionImpl implements Position {
 
     @Override
     public final int getRowIndex() {
-        return rowIndex;
+        return this.rowIndex;
     }
 
     @Override
     public final int getColumnIndex() {
-        return columnIndex;
+        return this.columnIndex;
     }
 
     @Override
     public final String toString() {
-        return "PositionImpl [rowIndex=" + rowIndex + ", columnIndex=" + columnIndex + "]";
+        return "PositionImpl [rowIndex=" + this.rowIndex + ", columnIndex=" + this.columnIndex + "]";
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(columnIndex, rowIndex);
+        return Objects.hash(this.columnIndex, this.rowIndex);
     }
 
     @Override
@@ -55,6 +55,6 @@ public class PositionImpl implements Position {
             return false;
         }
         PositionImpl other = (PositionImpl) obj;
-        return columnIndex == other.columnIndex && rowIndex == other.rowIndex;
+        return this.columnIndex == other.columnIndex && this.rowIndex == other.rowIndex;
     }
 }
