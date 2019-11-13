@@ -14,8 +14,7 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
 /**
  * The class responsible for the navigation options in the
- * {@link InitialWindowImpl} window, e.g. "save", "craft a level", "play"
- * buttons.
+ * {@link InitialWindowImpl} window, i.e. "craft a level" and "play" buttons.
  */
 public final class InitialOptions {
 
@@ -28,7 +27,7 @@ public final class InitialOptions {
     private InitialWindowController controller;
 
     /**
-     * Initializes a new initial options object.
+     * Creates a new instance.
      */
     public InitialOptions() {
         this.guiComponentFactory = new GuiComponentFactoryImpl();
@@ -58,8 +57,8 @@ public final class InitialOptions {
     }
 
     /**
-     * This is the action listener for the "craft a level" button. It shows the
-     * "craft a level" view.
+     * This is the action listener for the "craft a level" button. It tells the
+     * controller to show the "craft a level" view.
      *
      * @return the action listener for the "craft a level" button
      */
@@ -70,8 +69,8 @@ public final class InitialOptions {
     }
 
     /**
-     * This is the action listener for the "play level sequence" button. It starts
-     * the level sequence and shows the game view of the first level.
+     * This is the action listener for the "play level sequence" button. It tells
+     * the controller to start the level sequence.
      *
      * @return the action listener for the "play level sequence" button
      */

@@ -18,7 +18,7 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
  * The class responsible for the options of the {@link CraftWindowImpl} window,
  * i.e. save, load, reset and go back to initial view.
  */
-public class CraftOptions {
+public final class CraftOptions {
 
     private static final String PANEL_OPTIONS_TITLE = "Edit level options";
     private static final String BUTTON_SAVE_TEXT = "SAVE";
@@ -35,7 +35,7 @@ public class CraftOptions {
     private CraftWindowController controller;
 
     /**
-     * Instantiates a new craft options object.
+     * Creates a new instance with the given {@link CraftWindowImpl} owner.
      *
      * @param owner the {@link CraftWindowImpl} object which creates and contains
      *              this object

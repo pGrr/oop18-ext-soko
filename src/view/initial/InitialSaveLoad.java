@@ -18,7 +18,7 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
  * The class responsible for the "save or load a sequence" panel in the
  * {@link InitialWindowImpl} window.
  */
-public class InitialSaveLoad {
+public final class InitialSaveLoad {
 
     private static final String PANEL_SAVE_OR_LOAD_SEQUENCE_TITLE = "Save current sequence or load one";
     private static final String ICON_UPLOAD = "icons/upload.png";
@@ -29,7 +29,7 @@ public class InitialSaveLoad {
     private InitialWindowController controller;
 
     /**
-     * Instantiates a new initial save load object.
+     * Creates a new instance using the given {@link InitialWindowImpl} owner.
      *
      * @param owner the {@link InitialWindowImpl} object which creates and contains
      *              this object
@@ -65,9 +65,10 @@ public class InitialSaveLoad {
     }
 
     /**
-     * This is the action listener for the "save sequence" button. It shows the save
-     * file dialog and saves the selected file to the file-system.
-     *
+     * This is the action listener for the "save sequence" button. 
+     * It shows the save file dialog and tells the controller to save the current level sequence to the chosen path. 
+     * If the controller throws an exception, this will show the corresponding error dialog.
+     * 
      * @return the action listener for the "save sequence" button
      */
     private ActionListener saveSequence() {
@@ -93,7 +94,8 @@ public class InitialSaveLoad {
 
     /**
      * This is the action listener for the "load sequence" button. It shows the load
-     * file dialog and loads the selected file from the file-system.
+     * file dialog and tells the controller to load the selected file from the file-system.
+     * If the controller throws an exception, this will show the corresponding error dialog.
      *
      * @return the action listener for the "load sequence" button
      */

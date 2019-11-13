@@ -21,8 +21,8 @@ import view.View;
 import view.WindowAbstract;
 
 /**
- * An implementation for the {@link GameWindow} interface. It creates uses a
- * {@link GameCanvas} object to manage the canvas drawings.
+ * An implementation of {@link GameWindow}. It uses a {@link GameCanvas} object
+ * to manage the canvas drawings.
  */
 public final class GameWindowImpl extends WindowAbstract implements GameWindow {
 
@@ -46,7 +46,7 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
     private GameWindowController controller;
 
     /**
-     * Instantiates a new game window.
+     * Creates a new instance using the given {@link GameWindowImpl} owner.
      * 
      * @param owner the {@link View} object which created this object
      */
@@ -99,14 +99,14 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
     public void showLevelFinishedDialog() {
         this.guiComponentFactory
                 .createActionDialog(this.getFrame(), LEVEL_FINISHED_TITLE, LEVEL_FINISHED_MESSAGE, e -> {
-                    controller.levelFinishedAccepted();
+                    this.controller.levelFinishedAccepted();
                 }).setVisible(true);
     }
 
     @Override
     public void showGameFinishedDialog() {
         this.guiComponentFactory.createActionDialog(this.getFrame(), LEVEL_FINISHED_TITLE, GAME_FINISHED_MESSAGE, e -> {
-            controller.gameFinishedAccepted();
+            this.controller.gameFinishedAccepted();
         }).setVisible(true);
     }
 
@@ -120,6 +120,19 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
     public void showIOErrorDialog() {
         this.guiComponentFactory.createNotifyDialog(this.getFrame(), DIALOG_ERROR_TITLE, DIALOG_IOERROR_TEXT)
                 .setVisible(true);
+    }
+
+    /**
+     * Converts a relative position expressed in indexes to an absolute position
+     * expressed in pixels.
+     * It has package-private visibility as it is used by {@link GameCanvas}.
+     *
+     * @param position the relative position expressed in indexes
+     * @return the absolute position expressed in pixels
+     */
+    Position convertRelativeToAbsolute(final Position position) {
+        return new PositionImpl(position.getRowIndex() * Integer.divideUnsigned(this.canvas.getHeight(), Grid.N_ROWS),
+                position.getColumnIndex() * Integer.divideUnsigned(this.canvas.getWidth(), Grid.N_ROWS));
     }
 
     /**
@@ -145,8 +158,7 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
 
     /**
      * This is the action listener for the "go back to initial view" menu item. It
-     * Goes back to initial view calling the appropriate
-     * {@link GameWindowController} function.
+     * tells the controller to go back to the initial view.
      *
      * @return the action listener for the back button
      */
@@ -155,21 +167,20 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
     }
 
     /**
-     * This is the action listener for "restart current level" menu item. It
-     * restarts the current level calling the appropriate
-     * {@link GameWindowController} function.
+     * This is the action listener for "restart current level" menu item. It tells
+     * the controller to restart the current level.
      *
-     * @return the action listener
+     * @return the action listener for "restart current level"
      */
     private ActionListener restartCurrentLevel() {
         return e -> SwingUtilities.invokeLater(() -> this.controller.restartCurrentLevel());
     }
 
     /**
-     * This is the action listener for the "save game" menu item. It saves the
-     * current game calling the appropriate {@link GameWindowController} function.
+     * This is the action listener for the "save game" menu item. It tells the
+     * controller to save the game.
      *
-     * @return the action listener
+     * @return the action listener for "save game"
      */
     private ActionListener saveGame() {
         return e -> {
@@ -195,17 +206,5 @@ public final class GameWindowImpl extends WindowAbstract implements GameWindow {
                 Controller.LEVEL_SEQUENCE_FILE_EXTENSION);
         fc.showOpenDialog(this.getFrame());
         return fc.getSelectedFile();
-    }
-
-    /**
-     * Converts a relative position expressed in indexes to an absolute position
-     * expressed in pixels.
-     *
-     * @param position the relative position expressed in indexes
-     * @return the absolute position expressed in pixels
-     */
-    Position convertRelativeToAbsolute(final Position position) {
-        return new PositionImpl(position.getRowIndex() * Integer.divideUnsigned(this.canvas.getHeight(), Grid.N_ROWS),
-                position.getColumnIndex() * Integer.divideUnsigned(this.canvas.getWidth(), Grid.N_ROWS));
     }
 }

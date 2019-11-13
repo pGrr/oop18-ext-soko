@@ -7,7 +7,7 @@ import model.levelsequence.level.grid.MovementDirection;
 /**
  * An implementation of {@link Element}.
  */
-public class ElementImpl implements Element {
+public final class ElementImpl implements Element {
 
     private static final long serialVersionUID = 477897545325345634L;
 
@@ -29,39 +29,39 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public final Type getType() {
+    public Type getType() {
         return this.type;
     }
 
     @Override
-    public final Position getPosition() {
+    public Position getPosition() {
         return this.position;
     }
 
     @Override
-    public final void setPosition(final Position position) {
+    public void setPosition(final Position position) {
         this.position = position;
     }
 
     @Override
-    public final boolean isTypeMovable() {
+    public boolean isTypeMovable() {
         return this.type.equals(Type.USER) || this.type.equals(Type.BOX);
     }
 
     @Override
-    public final void move(final MovementDirection direction) {
+    public void move(final MovementDirection direction) {
         if (isTypeMovable()) {
             this.grid.moveAttempt(this, direction);
         }
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(this.position, this.type);
     }
 
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -76,7 +76,7 @@ public class ElementImpl implements Element {
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return "ElementImpl [type=" + this.type + ", position=" + this.position + ", grid=" + this.grid + "]";
     }
 }

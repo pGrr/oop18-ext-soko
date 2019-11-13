@@ -1,6 +1,3 @@
-/*
- * 
- */
 package view.initial;
 
 import java.awt.BorderLayout;
@@ -28,7 +25,7 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
  * The class responsible for the level list in the {@link InitialWindowImpl}
  * window.
  */
-public class InitialLevelList {
+public final class InitialLevelList {
 
     private static final String PANEL_LEVEL_SEQUENCE_TITLE = "Level sequence";
     private static final String PANEL_EDIT_LEVEL_SEQUENCE_TITLE = "Load levels, remove them or change their orders into the sequence";
@@ -78,13 +75,13 @@ public class InitialLevelList {
     }
 
     /**
-     * Syncs the list-model with the model data.
+     * Updates the list to reflect the given level names.
      * 
-     * @param levelNames the current levels in the level sequence
+     * @param levelNames the level names to be displayed
      */
     public void updateList(final List<String> levelNames) {
         this.listModel.removeAllElements();
-        levelNames.forEach(listModel::addElement);
+        levelNames.forEach(this.listModel::addElement);
     }
 
     /**
@@ -96,8 +93,8 @@ public class InitialLevelList {
         JPanel p = new JPanel(new BorderLayout());
         // level list panel
         JPanel levelListPanel = new JPanel(new BorderLayout());
-        levelListPanel.setBorder(this.guiComponentFactory.createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE,
-                DEFAULT_PADDING));
+        levelListPanel.setBorder(
+                this.guiComponentFactory.createTitledPaddingBorder(PANEL_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
         JScrollPane scrollPane = new JScrollPane(this.levelList);
         levelListPanel.add(scrollPane);
         p.add(levelListPanel, BorderLayout.CENTER);
@@ -108,8 +105,8 @@ public class InitialLevelList {
         editListPanel.add(addLevelButton);
         JButton removeLevelButton = this.guiComponentFactory.createButton("", ICON_MINUS, removeSelected());
         editListPanel.add(removeLevelButton);
-        editListPanel.setBorder(this.guiComponentFactory
-                .createTitledPaddingBorder(PANEL_EDIT_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
+        editListPanel.setBorder(
+                this.guiComponentFactory.createTitledPaddingBorder(PANEL_EDIT_LEVEL_SEQUENCE_TITLE, DEFAULT_PADDING));
         JButton upButton = this.guiComponentFactory.createButton("", ICON_UP, move(i -> i - 1));
         editListPanel.add(upButton);
         JButton downButton = this.guiComponentFactory.createButton("", ICON_DOWN, move(i -> i + 1));
@@ -125,15 +122,15 @@ public class InitialLevelList {
     }
 
     /**
-     * This is the action listener for the "add a level" button. It adds a level to
-     * the model and then syncs the list.
+     * This is the action listener for the "add a level" button. It shows the file
+     * chooser and then tells the controller to load the chosen file. If the
+     * controller throws an exception it shows the corresponding error dialog.
      *
      * @return the action listener for the "add a level" button
      */
     private ActionListener addLevel() {
         return e -> SwingUtilities.invokeLater(() -> {
-            JFileChooser fc = this.guiComponentFactory.createFileChooser(
-                    Controller.LEVEL_FILE_DESCRIPTION,
+            JFileChooser fc = this.guiComponentFactory.createFileChooser(Controller.LEVEL_FILE_DESCRIPTION,
                     Controller.LEVEL_FILE_EXTENSION);
             fc.showOpenDialog(this.owner.getFrame());
             String path = fc.getSelectedFile().getAbsolutePath();
@@ -154,8 +151,8 @@ public class InitialLevelList {
 
     /**
      * This is the action listener for the "move level up" and "move level down"
-     * buttons. It changes the order of the elements accordingly in the model and
-     * then it syncs the list.
+     * buttons. It tells the controller to move the element up or down (the
+     * controller will take care of updating the model and the view subsequently).
      *
      * @return the action listener for the "move level up" and "move level down"
      *         buttons
@@ -166,15 +163,16 @@ public class InitialLevelList {
             int newIndex = computeNewIndex.apply(selectedIndex);
             if (newIndex >= 0 && newIndex < this.listModel.getSize()) {
                 this.controller.swap(selectedIndex, newIndex);
-                levelList.setSelectedIndex(newIndex);
+                this.levelList.setSelectedIndex(newIndex);
             }
         });
     }
 
     /**
-     * This is the action listener for the "remove level" button. It removes the
-     * level from the sequence in the model and then syncs the list.
-     *
+     * This is the action listener for the "remove level" button. It tells the
+     * controller to remove the level. (the controller will take care of updating
+     * the model and the view subsequently).
+     * 
      * @return the action listener for the "remove level" button
      */
     private ActionListener removeSelected() {
@@ -184,8 +182,9 @@ public class InitialLevelList {
     }
 
     /**
-     * This is the action listener for the "reset list" button. It clears the
-     * sequence in the model and then syncs the list.
+     * This is the action listener for the "reset list" button. It tells the
+     * controller to clear the list. (the controller will take care of updating the
+     * model and the view subsequently).
      *
      * @return the action listener for the "reset list" button
      */

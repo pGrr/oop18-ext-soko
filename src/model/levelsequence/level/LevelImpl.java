@@ -11,7 +11,7 @@ import model.levelsequence.level.grid.element.Type;
 /**
  * An implementation of {@link Level}.
  */
-public class LevelImpl implements Level {
+public final class LevelImpl implements Level {
 
     private static final long serialVersionUID = 2437234480030228409L;
 
@@ -34,22 +34,22 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public final String getName() {
+    public String getName() {
         return this.name;
     }
 
     @Override
-    public final Grid getInitialGrid() {
+    public Grid getInitialGrid() {
         return this.initialGrid;
     }
 
     @Override
-    public final Grid getCurrentGrid() {
+    public Grid getCurrentGrid() {
         return this.currentGrid;
     }
 
     @Override
-    public final Element getUser() {
+    public Element getUser() {
         if (this.user == null) {
             for (Element e : this.currentGrid.getAllElements()) {
                 if (e.getType().equals(Type.USER)) {
@@ -61,7 +61,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public final boolean isFinished() {
+    public boolean isFinished() {
         long uncoveredTargets = this.currentGrid.getAllElements().stream()
                 .filter(e -> e.getType().equals(Type.BOX) || e.getType().equals(Type.TARGET)).map(Element::getPosition)
                 .distinct().count() - countElements(Type.TARGET, this.currentGrid.getAllElements());
@@ -69,7 +69,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public final void validate() throws LevelNotValidException {
+    public void validate() throws LevelNotValidException {
         long nUsers = countElements(Type.USER, this.currentGrid.getAllElements());
         long nBoxes = countElements(Type.BOX, this.currentGrid.getAllElements());
         long nTargets = countElements(Type.TARGET, this.currentGrid.getAllElements());
@@ -87,12 +87,12 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(this.currentGrid, this.name);
     }
 
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -107,7 +107,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return "LevelImpl [name=" + this.name + ", grid=" + this.currentGrid + "]";
     }
 

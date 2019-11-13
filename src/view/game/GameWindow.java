@@ -24,7 +24,7 @@ public interface GameWindow extends Window {
     void draw(Element element);
 
     /**
-     * Hides game window and shows initial window.
+     * Goes back to initial view.
      */
     void toInitialView();
 

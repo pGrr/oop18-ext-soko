@@ -8,7 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
-
 import model.levelsequence.level.grid.element.Type;
 import view.GuiComponentFactory;
 import view.GuiComponentFactoryImpl;
@@ -19,7 +18,7 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
  * The class responsible for the {@link Type} selection in the
  * {@link CraftWindowImpl} window, i.e. the toggle buttons.
  */
-public class CraftSelection {
+public final class CraftSelection {
 
     private static final String LABEL_WELCOME_TEXT = "Welcome! Select an element and insert it into the grid (same type will erase).";
     private static final String ICON_WALL = "icons/wall.png";
@@ -32,8 +31,7 @@ public class CraftSelection {
     private final Map<Type, JToggleButton> toggleButtons;
 
     /**
-     * Instantiates a new craft selection object.
-     *
+     * Creates a new instance.
      */
     public CraftSelection() {
         this.guiComponentFactory = new GuiComponentFactoryImpl();
@@ -41,8 +39,7 @@ public class CraftSelection {
     }
 
     /**
-     * Creates the panel containing the toggle buttons for the {@link Type}
-     * selection.
+     * Creates the panel containing the toggle buttons.
      *
      * @return the created JPanel
      */

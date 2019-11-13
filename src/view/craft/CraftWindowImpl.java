@@ -12,9 +12,9 @@ import view.WindowAbstract;
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
 /**
- * An implementation for the {@link CraftWindow} interface. It is composed by a
+ * An implementation of {@link CraftWindow}. It is composed by a
  * {@link CraftGrid}, a {@link CraftSelection} and a {@link CraftOptions} object
- * which are responsible for specific responsibilities.
+ * each with specific responsibilities.
  */
 public final class CraftWindowImpl extends WindowAbstract implements CraftWindow {
 
@@ -33,7 +33,7 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
     private final CraftOptions options;
 
     /**
-     * Instantiates a new CraftWindowImpl object with an initially empty grid.
+     * Creates a new instance with an empty grid.
      *
      * @param owner the {@link View} which created this object
      */
@@ -74,16 +74,6 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
     }
 
     @Override
-    protected JPanel createMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(this.guiComponentFactory.createEmptyPaddingBorder(DEFAULT_PADDING));
-        mainPanel.add(this.selection.createPanel(), BorderLayout.PAGE_START);
-        mainPanel.add(grid.createPanel(), BorderLayout.CENTER);
-        mainPanel.add(this.options.createPanel(), BorderLayout.PAGE_END);
-        return mainPanel;
-    }
-
-    @Override
     public void show() {
         this.getFrame().setVisible(true);
         this.grid.createResizedIcons();
@@ -108,6 +98,16 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
                 .setVisible(true);
     }
 
+    @Override
+    protected JPanel createMainPanel() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBorder(this.guiComponentFactory.createEmptyPaddingBorder(DEFAULT_PADDING));
+        mainPanel.add(this.selection.createPanel(), BorderLayout.PAGE_START);
+        mainPanel.add(this.grid.createPanel(), BorderLayout.CENTER);
+        mainPanel.add(this.options.createPanel(), BorderLayout.PAGE_END);
+        return mainPanel;
+    }
+
     /**
      * Gets the reference to the {@link CraftGrid} object. It has package-private
      * visibility as it is used by the other objects of the {@link view.craft}
@@ -122,7 +122,7 @@ public final class CraftWindowImpl extends WindowAbstract implements CraftWindow
     /**
      * Gets the reference to the {@link CraftSelection} object. It has
      * package-private visibility as it is used by the other objects of the
-     * {@link view.craft} package. *
+     * {@link view.craft} package.
      * 
      * @return the {@link CraftSelection} object
      */

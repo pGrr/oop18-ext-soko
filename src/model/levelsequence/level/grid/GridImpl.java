@@ -13,7 +13,7 @@ import model.levelsequence.level.grid.element.Type;
 /**
  * An implementation for {@link Grid}.
  */
-public class GridImpl implements Grid {
+public final class GridImpl implements Grid {
 
     private static final long serialVersionUID = -1944841853255090464L;
     private final List<Element> elements;
@@ -38,27 +38,27 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public final void add(final Element element) {
+    public void add(final Element element) {
         this.elements.add(element);
     }
 
     @Override
-    public final void remove(final Element element) {
+    public void remove(final Element element) {
         this.elements.remove(element);
     }
 
     @Override
-    public final void clear() {
+    public void clear() {
         this.elements.clear();
     }
 
     @Override
-    public final List<Element> getAllElements() {
+    public List<Element> getAllElements() {
         return this.elements;
     }
 
     @Override
-    public final List<Element> getBoxesOnTarget() {
+    public List<Element> getBoxesOnTarget() {
         List<Element> boxes = this.elements.stream().filter(e -> e.getType().equals(Type.BOX))
                 .collect(Collectors.toList());
         List<Element> targets = this.elements.stream().filter(e -> e.getType().equals(Type.TARGET))
@@ -75,12 +75,12 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public final List<Element> getElementsAt(final Position position) {
+    public List<Element> getElementsAt(final Position position) {
         return this.elements.stream().filter(e -> e.getPosition().equals(position)).collect(Collectors.toList());
     }
 
     @Override
-    public final boolean moveAttempt(final Element element, final MovementDirection direction) {
+    public boolean moveAttempt(final Element element, final MovementDirection direction) {
         boolean success = false;
         // only users and box can move
         if (element.getType().equals(Type.USER) || element.getType().equals(Type.BOX)) {
@@ -116,12 +116,12 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(this.elements);
     }
 
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -136,7 +136,7 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return "GridImpl [elements=" + this.elements + "]";
     }
 }

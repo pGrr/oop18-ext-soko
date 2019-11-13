@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * An implementation of {@link Position}.
  */
-public class PositionImpl implements Position {
+public final class PositionImpl implements Position {
 
     private static final long serialVersionUID = 8528254874754254096L;
 
@@ -24,27 +24,27 @@ public class PositionImpl implements Position {
     }
 
     @Override
-    public final int getRowIndex() {
+    public int getRowIndex() {
         return this.rowIndex;
     }
 
     @Override
-    public final int getColumnIndex() {
+    public int getColumnIndex() {
         return this.columnIndex;
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return "PositionImpl [rowIndex=" + this.rowIndex + ", columnIndex=" + this.columnIndex + "]";
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(this.columnIndex, this.rowIndex);
     }
 
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

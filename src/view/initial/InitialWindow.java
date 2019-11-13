@@ -1,13 +1,12 @@
 package view.initial;
 
 import java.util.List;
-
 import controller.initial.InitialWindowController;
 import model.levelsequence.level.Level;
 import view.Window;
 
 /**
- * The initial window.
+ * The initial view.
  */
 public interface InitialWindow extends Window {
 
@@ -19,19 +18,19 @@ public interface InitialWindow extends Window {
     void setController(InitialWindowController controller);
 
     /**
-     * Syncs the windows (e.g. the level list) with the model.
+     * Updates the level list.
      * 
      * @param levelNames the names of the current levels in the level sequence
      */
     void updateList(List<String> levelNames);
 
     /**
-     * Hides initial window and shows craft level window.
+     * Goes to craft view.
      */
     void toCraftLevelView();
 
     /**
-     * Hides initial window and shows game window.
+     * Goes to the game view of the given level.
      * 
      * @param level the level to be played
      */
@@ -40,12 +39,12 @@ public interface InitialWindow extends Window {
     /**
      * Shows a level invalid dialog.
      *
-     * @param cause the cause
+     * @param cause the message of the {@link LevelNotValidException}
      */
     void showLevelInvalidErrorDialog(String cause);
 
     /**
-     * Show level sequence load-error dialog.
+     * Show the default level sequence load-error dialog.
      */
     void showDefaultLevelSequenceLoadErrorDialog();
 
@@ -55,12 +54,12 @@ public interface InitialWindow extends Window {
     void showLevelSequenceEmptyErrorDialog();
 
     /**
-     * Shows an input output error dialog.
+     * Shows the input output error dialog.
      */
     void showIOErrorDialog();
 
     /**
-     * Shows a class not found error dialog.
+     * Shows the class not found error dialog.
      */
     void showClassNotFoundErrorDialog();
 }

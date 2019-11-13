@@ -29,7 +29,7 @@ import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
  * The class responsible for the button grid of the {@link CraftWindowImpl}
  * window.
  */
-public class CraftGrid {
+public final class CraftGrid {
 
     private static final String PANEL_GRID_TITLE = "Level grid";
     private static final double GRIDBUTTON_RELATIVE_ICON_WIDTH = 0.5;
@@ -43,7 +43,7 @@ public class CraftGrid {
     private Grid levelGrid;
 
     /**
-     * Instantiates a new craft grid object.
+     * Instantiates a new instance with the given {@link CraftWindowImpl} owner.
      *
      * @param owner the {@link CraftWindowImpl} object which creates and contains
      *              this object
@@ -106,11 +106,11 @@ public class CraftGrid {
     }
 
     /**
-     * Creates the panel containing the empty squared button-grid.
+     * Creates the panel containing the empty button-grid.
      *
      * @return the created JPanel
      */
-    public final JPanel createPanel() {
+    public JPanel createPanel() {
         JPanel panel = new JPanel(new GridLayout(Grid.N_ROWS, Grid.N_ROWS));
         panel.setBorder(this.guiComponentFactory.createTitledPaddingBorder(PANEL_GRID_TITLE, DEFAULT_PADDING));
         this.buttonGrid.stream().flatMap(List::stream).forEach(button -> {
@@ -155,13 +155,9 @@ public class CraftGrid {
     }
 
     /**
-     * The action listener invoked when the user clicks on the button grid. It
-     * inserts the currently selected toggle button (representing a Type) in the
-     * level grid at that specific position and then updates the button grid to
-     * reflect the changes. If the selected position already contains the selected
-     * Type, it erases it making the position empty. If the selected position
-     * already contains a Type different from the selected one, the selected one
-     * substitutes the old one.
+     * The action listener invoked when the user clicks on the button grid. It tells
+     * the controller to insert the selected type into the selected grid button, if
+     * possible.
      *
      * @return the button grid action listener
      */
@@ -174,7 +170,7 @@ public class CraftGrid {
     }
 
     /**
-     * Creates the button grid.
+     * Creates an empty button grid, i.e. a 2D list of JButtons.
      * 
      * @return the button grid i.e. a 2D list of JButtons
      */
@@ -199,7 +195,7 @@ public class CraftGrid {
         for (List<JButton> row : this.buttonGrid) {
             for (JButton b : row) {
                 if (b == button) {
-                    return new PositionImpl(buttonGrid.indexOf(row), row.indexOf(b));
+                    return new PositionImpl(this.buttonGrid.indexOf(row), row.indexOf(b));
 
                 }
             }

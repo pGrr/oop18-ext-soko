@@ -17,41 +17,41 @@ public interface CraftWindow extends Window {
     void setController(CraftWindowController controller);
 
     /**
-     * Clears the craft view grid.
+     * Clears the grid.
      */
     void clearGrid();
 
     /**
-     * Updates the craft window grid with the given element.
+     * Updates the grid with the given element.
      *
      * @param element the element to be added to the craft window grid
      */
     void addElement(Element element);
 
     /**
-     * Removes the given element from the craft window grid.
+     * Removes the given element from the grid.
      *
-     * @param element the element to be removed from the craft window grid
+     * @param element the element to be removed from the grid
      */
     void removeElement(Element element);
 
     /**
-     * Hides game window and shows initial window.
+     * Goes back to initial view.
      */
     void toInitialView();
 
     /**
-     * Show IO error dialog.
+     * Shows IO error dialog.
      */
     void showIOErrorDialog();
 
     /**
-     * Show class not found error dialog.
+     * Shows class not found error dialog.
      */
     void showClassNotFoundErrorDialog();
 
     /**
-     * Show level invalid dialog.
+     * Shows level invalid dialog.
      *
      * @param cause the message of the {@link LevelNotValidException}
      */

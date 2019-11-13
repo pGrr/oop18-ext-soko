@@ -25,7 +25,7 @@ import view.ResizedTypeImage;
  * JPanel with an override of {@link #paintComponents(Graphics)} method which
  * takes care of the drawing.
  */
-public class GameCanvas extends JPanel {
+public final class GameCanvas extends JPanel {
 
     private static final long serialVersionUID = 8149893762262015513L;
     private static final int TIMER_DELAY_MS = 50;

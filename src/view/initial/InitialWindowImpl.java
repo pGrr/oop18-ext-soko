@@ -14,10 +14,9 @@ import view.WindowAbstract;
 import static view.GuiComponentFactoryImpl.DEFAULT_PADDING;
 
 /**
- * An implementation for the {@link InitialWindow} interface. It is composed by
- * a {@link InitialLevelList}, a {@link InitialOptions} and a
- * {@link InitialSaveLoad} object which are responsible for specific
- * responsibilities.
+ * An implementation of {@link InitialWindow}. It is composed by a
+ * {@link InitialLevelList}, a {@link InitialOptions} and a
+ * {@link InitialSaveLoad} object which have specific responsibilities.
  */
 public final class InitialWindowImpl extends WindowAbstract implements InitialWindow {
 
@@ -40,7 +39,7 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
     private InitialWindowController controller;
 
     /**
-     * Instantiates a new initial window object.
+     * Creates a new instance using the given {@link View} owner.
      * 
      * @param owner the {@link View} which created this object.
      */
@@ -55,7 +54,8 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
     }
 
     /**
-     * {@inheritDoc} Then, it syncs the level list with the model.
+     * {@inheritDoc} Then, it tells the controller update the level list to reflect
+     * the current level sequence.
      */
     @Override
     public void show() {
@@ -119,6 +119,16 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
                 .setVisible(true);
     }
 
+    @Override
+    protected JPanel createMainPanel() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBorder(this.guiComponentFactory.createEmptyPaddingBorder(DEFAULT_PADDING));
+        mainPanel.add(welcomePanel(), BorderLayout.PAGE_START);
+        mainPanel.add(levelSequencePanel(), BorderLayout.CENTER);
+        mainPanel.add(this.choices.createPanel(), BorderLayout.PAGE_END);
+        return mainPanel;
+    }
+
     /**
      * Gets the {@link InitialLevelList} object.
      *
@@ -144,16 +154,6 @@ public final class InitialWindowImpl extends WindowAbstract implements InitialWi
      */
     protected InitialOptions getChoices() {
         return this.choices;
-    }
-
-    @Override
-    protected JPanel createMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(this.guiComponentFactory.createEmptyPaddingBorder(DEFAULT_PADDING));
-        mainPanel.add(welcomePanel(), BorderLayout.PAGE_START);
-        mainPanel.add(levelSequencePanel(), BorderLayout.CENTER);
-        mainPanel.add(this.choices.createPanel(), BorderLayout.PAGE_END);
-        return mainPanel;
     }
 
     /**
