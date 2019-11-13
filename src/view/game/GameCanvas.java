@@ -39,7 +39,7 @@ public final class GameCanvas extends JPanel {
     private GameWindowController controller;
 
     /**
-     * Instantiates a new game canvas object. Also, it creates and starts the timer.
+     * Creates a new instance with the given {@link GameWindowImpl} owner.
      *
      * @param owner the {@link GameWindowImpl} object which creates and contains
      *              this object
@@ -116,24 +116,6 @@ public final class GameCanvas extends JPanel {
     }
 
     /**
-     * This is the key listener for when a user presses a button. It saves the
-     * button key code in the {@link #keyPressedCode} variable. When the timer will
-     * fire, it will take care of converting the code to movement, if appropriate,
-     * using the {@link #timerAction()} method.
-     *
-     * @return the key listener for when a user presses a button
-     */
-    private KeyListener buttonPressed() {
-        return new KeyAdapter() {
-
-            @Override
-            public void keyPressed(final KeyEvent e) {
-                SwingUtilities.invokeLater(() -> GameCanvas.this.keyPressedCode = e.getKeyCode());
-            }
-        };
-    }
-
-    /**
      * Draw all the elements into the canvas. It is used by the overridden
      * {@link #paintComponent(Graphics)} method.
      *
@@ -157,9 +139,26 @@ public final class GameCanvas extends JPanel {
     }
 
     /**
-     * This is the action listener for when the timer fires. It converts, if
-     * recognized, the saved key code into movement using the appropriate
-     * {@link GameWindowController} function.
+     * This is the key listener for when a user presses a button. It saves the
+     * button key code in the {@link #keyPressedCode} variable. When the timer will
+     * fire, it will take care of converting the code to movement, if appropriate,
+     * using the {@link #timerAction()} method.
+     *
+     * @return the key listener for when a user presses a button
+     */
+    private KeyListener buttonPressed() {
+        return new KeyAdapter() {
+
+            @Override
+            public void keyPressed(final KeyEvent e) {
+                SwingUtilities.invokeLater(() -> GameCanvas.this.keyPressedCode = e.getKeyCode());
+            }
+        };
+    }
+
+    /**
+     * This is the action listener for when the timer fires. It tells the controller
+     * to convert the saved key code into movement, if recognized.
      *
      * @return the action listener for when the timer fires
      */
@@ -182,9 +181,10 @@ public final class GameCanvas extends JPanel {
     }
 
     /**
-     * Creates a scaled instant of the box on target image (i.e. a darker box).
+     * Creates a scaled instance of the box on target image (i.e. a darker box), to
+     * be reused each time without having to scale it for performance reasons.
      * 
-     * @return a scaled instant of the box on target image
+     * @return a scaled instance of the box on target image
      */
     private Image boxOnTargetImage() {
         return new ImageIcon(ClassLoader.getSystemResource("icons/box-on-target.png")).getImage()
