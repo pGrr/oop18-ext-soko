@@ -28,7 +28,7 @@ The aim is to recreate the popular Sokoban game and make it extendible by users,
 Extendible Sokoban - IT
 =======================
 
-## Applicazione Java che riproduce il gioco Sokoban e lo rende estendibile. Un progetto per l'esame di programmazione ad oggetti nel corso di laurea triennale in Ingegneria e Scienze informatiche.
+## Applicazione Java che riproduce il gioco Sokoban e lo rende estendibile. Un progetto per il corso di programmazione ad oggetti nel corso di laurea triennale in Ingegneria e Scienze informatiche.
 
 ### ext-soko
 
