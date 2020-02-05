@@ -1,25 +1,26 @@
 Extendible Sokoban - EN
 =======================
 
-ext-soko
---------
+## A Java app that reproduces the Sokoban game and makes it extendible. Assignment project for the OOP course's exam in my CS bachelors' degree.
+
+### ext-soko
 
 The aim is to recreate the popular Sokoban game and make it extendible by users, making possible creating custom levels and saving, importing and ordering them into custo level sequences.
 
-### Minimal functionalities:
+#### Minimal functionalities:
 
 * Classic implementation of Sokoban game with some default levels of increasing difficulty
 * User interface that makes possible to create a custom level and save it
 * User interface that makes possible loading one or more saved levels, ordering and playing them.
 * Initial menu to access the features
 
-### Optional functionalities:
+#### Optional functionalities:
 * Appealing graphics and sounds
 * Saving and importing level sequences
 * Score system based on the time used to complete a level and eventually a ranking of the best results (resettable)
 * Game saving and loading
 
-### Main challenges
+#### Main challenges
 * Design and implementation of the system for the creation and management of levels
 * MVC pattern use
 * Observance of best practices of programming in Java using the OOP paradigm.
@@ -27,26 +28,27 @@ The aim is to recreate the popular Sokoban game and make it extendible by users,
 Extendible Sokoban - IT
 =======================
 
-ext-soko
---------
+## Applicazione Java che riproduce il gioco Sokoban e lo rende estendibile. Un progetto per l'esame di programmazione ad oggetti nel corso di laurea triennale in Ingegneria e Scienze informatiche.
+
+### ext-soko
 
 L’obiettivo è ricreare il videogioco Sokoban e renderlo estendibile dagli stessi utenti, offrendo la possibilità di creare livelli personalizzati, salvarli, importarli e ordinarli in sequenze di livelli personalizzate.
 
-### Funzionalità minime:
+#### Funzionalità minime:
 
 * Implementazione del gioco Sokoban classico con alcuni livelli di base a difficoltà crescente
 * Interfaccia utente che consenta di creare un proprio livello e salvarlo
 * Interfaccia utente che consenta di caricare uno o più livelli esistenti, ordinarli e giocarci
 * Menu iniziale che consenta le funzionalità previste
 
-### Funzionalità opzionali:
+#### Funzionalità opzionali:
 
 * Aggiunta di grafiche accattivanti e di suoni
 * Salvataggio e importazione di sequenze di livelli
 * Sistema di punteggi basati sul tempo di risoluzione di un livello con eventuale classifica dei punteggi migliori (e possibilità di reset)
 * Possibilità di salvare la partita per riprenderla in un secondo momento
 
-### Challenge principali
+#### Challenge principali
 
 * Progettazione e implementazione del sistema di creazione e gestione dei livelli
 * Uso del pattern MVC
