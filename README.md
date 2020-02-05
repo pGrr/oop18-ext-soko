@@ -1,9 +1,9 @@
 Extendible Sokoban - EN
 =======================
 
-## A Java app that reproduces the Sokoban game and makes it extendible. Assignment project for the OOP course's exam in my CS bachelors' degree.
+## A Java app that reproduces the Sokoban game and makes it extendible. 
 
-### ext-soko
+### Assignment project for the OOP course's exam in my CS bachelors' degree.
 
 The aim is to recreate the popular Sokoban game and make it extendible by users, making possible creating custom levels and saving, importing and ordering them into custo level sequences.
 
@@ -28,9 +28,9 @@ The aim is to recreate the popular Sokoban game and make it extendible by users,
 Extendible Sokoban - IT
 =======================
 
-## Applicazione Java che riproduce il gioco Sokoban e lo rende estendibile. Un progetto per il corso di programmazione ad oggetti nel corso di laurea triennale in Ingegneria e Scienze informatiche.
+## Applicazione Java che riproduce il gioco Sokoban e lo rende estendibile. 
 
-### ext-soko
+### Un progetto per il corso di programmazione ad oggetti nel corso di laurea triennale in Ingegneria e Scienze informatiche.
 
 L’obiettivo è ricreare il videogioco Sokoban e renderlo estendibile dagli stessi utenti, offrendo la possibilità di creare livelli personalizzati, salvarli, importarli e ordinarli in sequenze di livelli personalizzate.
 
